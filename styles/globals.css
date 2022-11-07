@@ -4,7 +4,7 @@
 
 .bg-primary {
     @apply bg-white dark:bg-slate-800;
-    font-family: InkLipquidFonts
+    font-family: NotoSansKR-Medium
 }
 .btn-project {
     @apply inline-flex text-white dark:text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg
@@ -43,7 +43,7 @@ p {
     @apply text-slate-500 dark:text-slate-400
 }
 @font-face {
-    font-family: InkLipquidFonts;
+    font-family: NotoSansKR-Medium;
     font-weight: 200;
-    src: url(../public/fonts/InkLipquidFonts.ttf);
+    src: url(../public/fonts/Noto_Sans_KR/NotoSansKR-Medium.otf);
 }

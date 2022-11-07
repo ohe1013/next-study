@@ -1,11 +1,19 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import Layout from 'components/layout'
+import Programmer from 'components/programmer'
+import { Client } from '@notionhq/client'
+import { TOKEN, DATABASE_ID, DATABASE_ID_USER } from '../config/index'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
-
-export default function Home() {
+export default function Home({ userNames }) {
+  const [userName, setUserName] = useState('')
+  const onChangeUserName = (e) => {
+    console.log(userNames.includes(e.target.value) ? 1 : 0)
+    setUserName(e.target.value)
+  }
   return (
-    <div className='bg-primary'>
+    <div className="bg-primary">
       <Layout>
         <Head>
           <title>Create Next App</title>
@@ -14,9 +22,71 @@ export default function Home() {
         </Head>
         <section className="flex min-h-screen flex-col items-center text-gray-600 body-font">
           <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+            <section className="text-gray-600 body-font">
+              <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+                <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
+                  <Programmer></Programmer>
+                </div>
+                <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
+                  <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+                    다온소프트 DV팀 회식
+                  </h1>
+                  <div className="leading-relaxed">
+                    추천 1회, 비추천 1회 가능합니다.
+                  </div>
+                  <div className="mb-8 leading-relaxed text-red-300">
+                    *추천은 필수지만, 비추천은 안하셔도 괜찮습니다.
+                  </div>
+                  <div className="flex w-full md:justify-start justify-center items-end">
+                    <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4">
+                      <label
+                        htmlFor="hero-field"
+                        className="leading-7 text-sm text-gray-600"
+                      >
+                        이름
+                      </label>
+                      <input
+                        type="text"
+                        id="hero-field"
+                        name="hero-field"
+                        className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        required
+                        value={userName}
+                        onChange={onChangeUserName}
+                      />
+                    </div>
+                    <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                      {userNames.includes(userName) ? (
+                        <Link rel="preload" href="./main">
+                          입장
+                        </Link>
+                      ) : (
+                        '입장'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-      </section>
+        </section>
       </Layout>
     </div>
   )
+}
+export async function getServerSideProps() {
+  const notion = new Client({ auth: TOKEN })
+  const result = await notion.databases.query({
+    database_id: DATABASE_ID_USER!,
+  })
+  const users = result.results
+  const userNames = []
+  users.forEach((item) => {
+    userNames.push(item.properties.name.title[0].plain_text)
+  })
+  return {
+    props: {
+      userNames: userNames,
+    },
+  }
 }
