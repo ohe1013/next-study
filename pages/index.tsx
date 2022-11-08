@@ -6,9 +6,9 @@ import { TOKEN, DATABASE_ID, DATABASE_ID_USER } from '../config/index'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-export default function Home({ userNames }) {
+export default function Home({ userNames }: any) {
   const [userName, setUserName] = useState('')
-  const onChangeUserName = (e) => {
+  const onChangeUserName = (e: any) => {
     console.log(userNames.includes(e.target.value) ? 1 : 0)
     setUserName(e.target.value)
   }
@@ -80,8 +80,8 @@ export async function getServerSideProps() {
     database_id: DATABASE_ID_USER!,
   })
   const users = result.results
-  const userNames = []
-  users.forEach((item) => {
+  const userNames: any = []
+  users.forEach((item: any) => {
     userNames.push(item.properties.name.title[0].plain_text)
   })
   return {
