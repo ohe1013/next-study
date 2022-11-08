@@ -1,13 +1,36 @@
 import Layout from 'components/layout'
 import { Client } from '@notionhq/client'
-import { TOKEN, DATABASE_ID, DATABASE_ID_MENU } from '../config/index'
-import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import {
+  TOKEN,
+  DATABASE_ID,
+  DATABASE_ID_MENU,
+  DATABASE_ID_USER,
+} from '../config/index'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
 
-export default function Main({ results }) {
-  useEffect(() => {
-    console.log(results)
+export default function Main({ results, allUser }) {
+  const notion = new Client({
+    auth: TOKEN,
   })
+  const router = useRouter()
+  const { user } = router.query
+  const currentUser = {}
+  for (let u of allUser) {
+    if (u.properties.name.title[0].plain_text == user) {
+      currentUser.name = user
+      currentUser.up = u.properties.up.number
+      currentUser.down = u.properties.down.number
+      currentUser.id = u.id
+    }
+  }
+
+  const [Selected, setSelected] = useState('')
+  const handleSelect = (e) => {
+    setSelected(e.target.value)
+  }
   const getDatabaseDisplay = () => {
     let jsx = []
     results.forEach((menu) => {
@@ -98,49 +121,73 @@ export default function Main({ results }) {
                     <path d="M12 5l7 7-7 7"></path>
                   </svg>
                 </a>
-                <span className="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                  1.2K
-                </span>
-                <span className="text-gray-400 inline-flex items-center leading-none text-sm">
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
-                  </svg>
-                  6
-                </span>
               </div>
             </div>
           </div>
         </div>,
       )
     })
-    jsx.push()
+
     return jsx
+  }
+  const getUpDataVote = () => {
+    let votes = []
+    results.forEach((menu) => {
+      votes.push(
+        <>
+          <option key={menu.id} value={menu.id}>
+            {menu.properties.name.title[0].plain_text}
+          </option>
+        </>,
+      )
+    })
+    return votes
+  }
+  const getDownDataVote = () => {
+    let votes = []
+    votes.push(<option value={null}>없음</option>)
+    results.forEach((menu) => {
+      votes.push(
+        <>
+          <option key={menu.id} value={menu.id}>
+            {menu.properties.name.title[0].plain_text}
+          </option>
+        </>,
+      )
+    })
+    return votes
   }
   return (
     <Layout>
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-wrap -m-4">{getDatabaseDisplay()}</div>
+        </div>
+        <div className="container px-5 mx-auto">
+          <div className="flex flex-wrap -m-4">
+            <label
+              htmlFor="getUpData"
+              className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+            >
+              추천
+            </label>
+            <select
+              id="getUpData"
+              name="getUpData"
+              onChange={handleSelect}
+              value={Selected}
+              className="ml-5 w-72 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              {getUpDataVote()}
+            </select>
+            {currentUser.up === 1 ? (
+              <span className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                입장
+              </span>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
       </section>
     </Layout>
@@ -149,27 +196,17 @@ export default function Main({ results }) {
 // 빌드 타임에 호출
 export async function getServerSideProps() {
   const notion = new Client({ auth: TOKEN })
-  const resultUpdate = await notion.pages.update({
-    page_id: 'fe82004e-dbba-4bd3-a0d5-0af18f924497',
-    properties: {
-      설명: {
-        rich_text: [
-          {
-            text: {
-              content: '업데이트중입니다 ',
-              link: null,
-            },
-          },
-        ],
-      },
-    },
+  const resultUser = await notion.databases.query({
+    database_id: DATABASE_ID_USER,
   })
   const result = await notion.databases.query({
     database_id: DATABASE_ID_MENU,
   })
+  const users = resultUser.results
   return {
     props: {
       results: result.results,
+      allUser: users,
     },
   }
 }

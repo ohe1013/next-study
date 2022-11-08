@@ -21,7 +21,7 @@ export default function Home({ userNames }: any) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <section className="flex min-h-screen flex-col items-center text-gray-600 body-font">
-          <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+          <div className="container mx-auto flex px-5 py-24 flex-col items-center">
             <section className="text-gray-600 body-font">
               <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
@@ -55,15 +55,25 @@ export default function Home({ userNames }: any) {
                         onChange={onChangeUserName}
                       />
                     </div>
-                    <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                      {userNames.includes(userName) ? (
-                        <Link rel="preload" href="./main">
-                          입장
-                        </Link>
-                      ) : (
-                        '입장'
-                      )}
-                    </button>
+                    {userNames.includes(userName) ? (
+                      <Link
+                        className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                        rel="preload"
+                        href={{
+                          pathname: './main',
+                          query: { user: userName },
+                        }}
+                      >
+                        입장
+                      </Link>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                      >
+                        입장
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
