@@ -6,10 +6,19 @@ import { TOKEN, DATABASE_ID, DATABASE_ID_USER } from '../config/index'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-export default function Home({ userNames }: any) {
-  const [userName, setUserName] = useState('')
+type User = {
+  [name:string] : {
+    up : number
+  }
+}
+
+
+export default function Home( {users} :{users : User} ) {
+  const uesrNameArr = Object.keys(users)
+  const [userName, setUserName] = useState<string>('')
   const onChangeUserName = (e: any) => {
-    console.log(userNames.includes(e.target.value) ? 1 : 0)
+    console.log(uesrNameArr)
+    console.log(uesrNameArr.includes(e.target.value) ? 1 : 0)
     setUserName(e.target.value)
   }
   return (
@@ -55,13 +64,13 @@ export default function Home({ userNames }: any) {
                         onChange={onChangeUserName}
                       />
                     </div>
-                    {userNames.includes(userName) ? (
+                    {uesrNameArr.includes(userName) ? (
                       <Link
                         className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                         rel="preload"
                         href={{
                           pathname: './main',
-                          query: { user: userName },
+                          query: { name: userName, up : users[userName].up},
                         }}
                       >
                         입장
@@ -89,14 +98,16 @@ export async function getServerSideProps() {
   const result = await notion.databases.query({
     database_id: DATABASE_ID_USER!,
   })
-  const users = result.results
-  const userNames: any = []
-  users.forEach((item: any) => {
-    userNames.push(item.properties.name.title[0].plain_text)
+  const _users = result.results
+  const users: User = {}
+  _users.forEach((_user: any) => {
+    users[ _user.properties.name.title[0].plain_text] = {
+      up:_user.properties.up.number
+    }
   })
   return {
     props: {
-      userNames: userNames,
+      users,
     },
   }
 }

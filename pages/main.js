@@ -10,22 +10,12 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import axios from 'axios'
 
-export default function Main({ results, allUser }) {
-  const notion = new Client({
-    auth: TOKEN,
-  })
+export default function Main({ results, currentUser }) {
+
   const router = useRouter()
-  const { user } = router.query
-  const currentUser = {}
-  for (let u of allUser) {
-    if (u.properties.name.title[0].plain_text == user) {
-      currentUser.name = user
-      currentUser.up = u.properties.up.number
-      currentUser.down = u.properties.down.number
-      currentUser.id = u.id
-    }
-  }
+
 
   const [Selected, setSelected] = useState('')
   const handleSelect = (e) => {
@@ -130,15 +120,14 @@ export default function Main({ results, allUser }) {
 
     return jsx
   }
-  const getUpDataVote = () => {
+  const GetUpDataVote = () => {
     let votes = []
     results.forEach((menu) => {
       votes.push(
-        <>
           <option key={menu.id} value={menu.id}>
             {menu.properties.name.title[0].plain_text}
           </option>
-        </>,
+        ,
       )
     })
     return votes
@@ -178,12 +167,15 @@ export default function Main({ results, allUser }) {
               value={Selected}
               className="ml-5 w-72 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              {getUpDataVote()}
+              <GetUpDataVote></GetUpDataVote>
             </select>
-            {currentUser.up === 1 ? (
-              <span className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                입장
-              </span>
+            {currentUser.up >0 ? (
+              <button
+                onClick={()=> {s4(DATABASE_ID_MENU)}}
+                className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+              >
+                추천
+              </button>
             ) : (
               ''
             )}
@@ -194,19 +186,28 @@ export default function Main({ results, allUser }) {
   )
 }
 // 빌드 타임에 호출
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  
   const notion = new Client({ auth: TOKEN })
-  const resultUser = await notion.databases.query({
-    database_id: DATABASE_ID_USER,
-  })
   const result = await notion.databases.query({
     database_id: DATABASE_ID_MENU,
   })
-  const users = resultUser.results
   return {
     props: {
       results: result.results,
-      allUser: users,
+      currentUser: {name : context.query.name,up : context.query.up}
     },
   }
+}
+
+const s4 = async function () {
+  console.log(DATABASE_ID_MENU)
+  console.log(await fetch('api/menu'))
+  fetch('/api/menu')  
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.error(error);
+  });
 }
