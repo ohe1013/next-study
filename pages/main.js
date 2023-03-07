@@ -11,19 +11,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import axios from 'axios'
+import { useQuery, QueryClient, dehydrate } from 'react-query'
 
-export default function Main({ results, currentUser }) {
-
+export default function Main({ currentUser }) {
   const router = useRouter()
-
-
-  const [Selected, setSelected] = useState('')
+  const { data, isLoading } = useQuery(['menus'], queryFN, {
+    staleTime: 20 * 1000,
+  })
+  console.log(data)
+  const [selected, setSelected] = useState('')
   const handleSelect = (e) => {
     setSelected(e.target.value)
   }
   const getDatabaseDisplay = () => {
     let jsx = []
-    results.forEach((menu) => {
+    data.results.forEach((menu) => {
       jsx.push(
         <div key={menu.id} className="p-4 md:w-1/3">
           <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -122,12 +124,11 @@ export default function Main({ results, currentUser }) {
   }
   const GetUpDataVote = () => {
     let votes = []
-    results.forEach((menu) => {
+    data.results.forEach((menu) => {
       votes.push(
-          <option key={menu.id} value={menu.id}>
-            {menu.properties.name.title[0].plain_text}
-          </option>
-        ,
+        <option key={menu.id} value={menu.id}>
+          {menu.properties.name.title[0].plain_text}
+        </option>,
       )
     })
     return votes
@@ -135,7 +136,7 @@ export default function Main({ results, currentUser }) {
   const getDownDataVote = () => {
     let votes = []
     votes.push(<option value={null}>없음</option>)
-    results.forEach((menu) => {
+    data.results.forEach((menu) => {
       votes.push(
         <>
           <option key={menu.id} value={menu.id}>
@@ -148,66 +149,99 @@ export default function Main({ results, currentUser }) {
   }
   return (
     <Layout>
-      <section className="text-gray-600 body-font">
-        <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-wrap -m-4">{getDatabaseDisplay()}</div>
-        </div>
-        <div className="container px-5 mx-auto">
-          <div className="flex flex-wrap -m-4">
-            <label
-              htmlFor="getUpData"
-              className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
-            >
-              추천
-            </label>
-            <select
-              id="getUpData"
-              name="getUpData"
-              onChange={handleSelect}
-              value={Selected}
-              className="ml-5 w-72 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <GetUpDataVote></GetUpDataVote>
-            </select>
-            {currentUser.up >0 ? (
-              <button
-                onClick={()=> {s4(DATABASE_ID_MENU)}}
-                className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+      {isLoading ? (
+        <div>로딩중</div>
+      ) : (
+        <section className="text-gray-600 body-font">
+          <div className="container px-5 py-24 mx-auto">
+            <div className="flex flex-wrap -m-4">{getDatabaseDisplay()}</div>
+          </div>
+          <div className="container px-5 mx-auto">
+            <div className="flex flex-wrap -m-4">
+              <label
+                htmlFor="getUpData"
+                className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
               >
                 추천
-              </button>
-            ) : (
-              ''
-            )}
+              </label>
+              <select
+                id="getUpData"
+                name="getUpData"
+                onChange={handleSelect}
+                value={selected}
+                className="ml-5 w-72 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <GetUpDataVote></GetUpDataVote>
+              </select>
+              {currentUser.up > 0 ? (
+                <button
+                  onClick={() => {
+                    recommend(selected)
+                  }}
+                  className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                >
+                  추천
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </Layout>
   )
 }
 // 빌드 타임에 호출
+
+const queryFn = async () => {
+  const options = {
+    method: 'post',
+    url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
+    headers: {
+      Authorization: TOKEN,
+      accept: 'application/json',
+      'Notion-Version': '2022-06-28',
+      'content-type': 'application/json',
+    },
+  }
+  const res = await axios.request(options)
+  return res.data
+}
+const queryFN = async () => {
+  return (await fetch('/api/menu/')).json()
+}
 export async function getServerSideProps(context) {
-  
-  const notion = new Client({ auth: TOKEN })
-  const result = await notion.databases.query({
-    database_id: DATABASE_ID_MENU,
-  })
+  //   const options = {
+  //     method: 'post',
+  //     url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
+  //     headers: {
+  //       Authorization: TOKEN,
+  //       accept: 'application/json',
+  //       'Notion-Version': '2022-06-28',
+  //       'content-type': 'application/json',
+  //     },
+  //   }
+  // const fetchMenu = async () => {
+  //   const res = await axios.request(options)
+  //   return res.data;
+  // }
+  const queryClient = new QueryClient(['menus'], queryFN)
+  await queryClient.prefetchQuery(['menu', queryFN])
   return {
     props: {
-      results: result.results,
-      currentUser: {name : context.query.name,up : context.query.up}
+      dehydratedProps: dehydrate(queryClient),
+      currentUser: { name: context.query.name, up: context.query.up },
     },
   }
 }
 
-const s4 = async function () {
-  console.log(DATABASE_ID_MENU)
-  console.log(await fetch('api/menu'))
-  fetch('/api/menu')  
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.error(error);
-  });
+const recommend = async function (selectId) {
+  fetch('/api/menu/' + selectId + '?up=5')
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.error(error)
+    })
 }
