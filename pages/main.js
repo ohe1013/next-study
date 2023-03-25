@@ -116,6 +116,7 @@ export default function Main({ currentUser }) {
   }
   const GetUpDataVote = () => {
     let votes = []
+    votes.push(<option key={1}>-선택-</option>)
     data.results.forEach((menu) => {
       votes.push(
         <option
@@ -134,6 +135,7 @@ export default function Main({ currentUser }) {
   const getDownDataVote = () => {
     let votes = []
     votes.push(<option value={null}>없음</option>)
+
     data.results.forEach((menu) => {
       votes.push(
         <>
