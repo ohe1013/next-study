@@ -1,16 +1,8 @@
 import Layout from 'components/layout'
-import { Client } from '@notionhq/client'
 import { useRouter } from 'next/router'
-import {
-  TOKEN,
-  DATABASE_ID,
-  DATABASE_ID_MENU,
-  DATABASE_ID_USER,
-} from '../config/index'
+
 import Image from 'next/image'
-import Link from 'next/link'
 import { useState } from 'react'
-import axios from 'axios'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 
 export default function Main({ currentUser }) {
@@ -18,7 +10,7 @@ export default function Main({ currentUser }) {
   const { data, isLoading } = useQuery(['menus'], queryFN, {
     staleTime: 20 * 1000,
   })
-  console.log(data)
+
   const [selected, setSelected] = useState('')
   const handleSelect = (e) => {
     setSelected(e.target.value)
@@ -126,7 +118,13 @@ export default function Main({ currentUser }) {
     let votes = []
     data.results.forEach((menu) => {
       votes.push(
-        <option key={menu.id} value={menu.id}>
+        <option
+          key={menu.id}
+          value={JSON.stringify({
+            menuId: menu.id,
+            up: menu.properties.up.number,
+          })}
+        >
           {menu.properties.name.title[0].plain_text}
         </option>,
       )
@@ -175,8 +173,14 @@ export default function Main({ currentUser }) {
               </select>
               {currentUser.up > 0 ? (
                 <button
-                  onClick={() => {
-                    recommend(selected)
+                  onClick={async () => {
+                    if (!confirm('정말 선택하시겠습니까?')) {
+                      return
+                    }
+                    await recommend(selected)
+                    await reduceUp(currentUser.id)
+
+                    router.push('/')
                   }}
                   className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                 >
@@ -194,54 +198,34 @@ export default function Main({ currentUser }) {
 }
 // 빌드 타임에 호출
 
-const queryFn = async () => {
-  const options = {
-    method: 'post',
-    url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
-    headers: {
-      Authorization: TOKEN,
-      accept: 'application/json',
-      'Notion-Version': '2022-06-28',
-      'content-type': 'application/json',
-    },
-  }
-  const res = await axios.request(options)
-  return res.data
-}
 const queryFN = async () => {
   return (await fetch('/api/menu/')).json()
 }
 export async function getServerSideProps(context) {
-  //   const options = {
-  //     method: 'post',
-  //     url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
-  //     headers: {
-  //       Authorization: TOKEN,
-  //       accept: 'application/json',
-  //       'Notion-Version': '2022-06-28',
-  //       'content-type': 'application/json',
-  //     },
-  //   }
-  // const fetchMenu = async () => {
-  //   const res = await axios.request(options)
-  //   return res.data;
-  // }
   const queryClient = new QueryClient(['menus'], queryFN)
   await queryClient.prefetchQuery(['menu', queryFN])
   return {
     props: {
       dehydratedProps: dehydrate(queryClient),
-      currentUser: { name: context.query.name, up: context.query.up },
+      currentUser: {
+        name: context.query.name,
+        up: context.query.up,
+        id: context.query.id,
+      },
     },
   }
 }
 
-const recommend = async function (selectId) {
-  fetch('/api/menu/' + selectId + '?up=5')
-    .then(function (response) {
-      console.log(response)
-    })
-    .catch(function (error) {
-      console.error(error)
-    })
+const recommend = async function (item) {
+  const { menuId, up } = JSON.parse(item)
+  try {
+    const res = await fetch('/api/menu/' + menuId + `?up=${up}`)
+    if (res.status != 200) throw Error('it has error')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const reduceUp = async function (id) {
+  await fetch('/api/user/' + id)
 }

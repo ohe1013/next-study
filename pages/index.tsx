@@ -7,18 +7,16 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 type User = {
-  [name:string] : {
-    up : number
+  [name: string]: {
+    up: number
+    id: string
   }
 }
 
-
-export default function Home( {users} :{users : User} ) {
+export default function Home({ users }: { users: User }) {
   const uesrNameArr = Object.keys(users)
   const [userName, setUserName] = useState<string>('')
   const onChangeUserName = (e: any) => {
-    console.log(uesrNameArr)
-    console.log(uesrNameArr.includes(e.target.value) ? 1 : 0)
     setUserName(e.target.value)
   }
   return (
@@ -34,17 +32,17 @@ export default function Home( {users} :{users : User} ) {
             <section className="text-gray-600 body-font">
               <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
-                  <Programmer></Programmer>
+                  <img height={200} src="/assets/isu.jpeg"></img>
                 </div>
                 <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
                   <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-                    다온소프트 DV팀 회식
+                    신나는 이수 모임
                   </h1>
                   <div className="leading-relaxed">
                     추천 1회, 비추천 1회 가능합니다.
                   </div>
                   <div className="mb-8 leading-relaxed text-red-300">
-                    *추천은 필수지만, 비추천은 안하셔도 괜찮습니다.
+                    *추천은 1회만 가능하며, 한번 선택하시고 무를 수 없습니다.
                   </div>
                   <div className="flex w-full md:justify-start justify-center items-end">
                     <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4">
@@ -70,7 +68,11 @@ export default function Home( {users} :{users : User} ) {
                         rel="preload"
                         href={{
                           pathname: './main',
-                          query: { name: userName, up : users[userName].up},
+                          query: {
+                            name: userName,
+                            up: users[userName].up,
+                            id: users[userName].id,
+                          },
                         }}
                       >
                         입장
@@ -101,8 +103,9 @@ export async function getServerSideProps() {
   const _users = result.results
   const users: User = {}
   _users.forEach((_user: any) => {
-    users[ _user.properties.name.title[0].plain_text] = {
-      up:_user.properties.up.number
+    users[_user.properties.name.title[0].plain_text] = {
+      up: _user.properties.up.number,
+      id: _user.id,
     }
   })
   return {
