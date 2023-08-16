@@ -1,38 +1,45 @@
-import {TOKEN, DATABASE_ID} from '../config/index'
-
+import { useInView } from 'react-intersection-observer'
+import { useInfiniteQuery } from 'react-query'
+import fetchTodosList from './api/todos'
+import React, { useEffect } from 'react'
 
 export default function Vote() {
-  return( 
-      <>
-      </>
-  )
-}
+  const { ref, inView } = useInView()
 
-export async function getServerSideProps() {
-  const options = {
-      method: 'PATCH',
-      headers: {
-        accept: 'application/json',
-        'Notion-Version': '2022-06-28',
-        'content-type': 'application/json',
-        Authorization: `Bearer ${TOKEN}`
+  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    'todos',
+    ({ pageParam = 1 }) => fetchTodosList(pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage.nextId !== 200 ? lastPage.nextId : undefined
       },
-      body: JSON.stringify({
-        
-          'id' : 'fd6bf268-1b6c-43a4-80d8-0b015db58f60',
-          'properties' :{
-            "J@cT": null,
-          }
-        })
-    };
-    
-    const res = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}`, options)
-    
-    const result = await res.json();
-    console.log(result)
-  return {
-    props: {
-      result
     },
-  }
+  )
+  useEffect(() => {
+    if (inView) fetchNextPage()
+  }, [inView, fetchNextPage])
+  if (status === 'loading') return <div>loading</div>
+  if (status === 'error') return <div> Error</div>
+  return (
+    <>
+      <div>
+        {data?.pages.map((page, index) => (
+          <React.Fragment key={index}>
+            <div
+              style={{
+                height: 500,
+                width: 200,
+                color: 'white',
+                background: 'black',
+              }}
+            >
+              {' '}
+              {page.id} {page.title}
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+      {isFetchingNextPage ? <div>로딩중</div> : <div ref={ref}></div>}
+    </>
+  )
 }

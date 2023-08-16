@@ -1,17 +1,10 @@
 import Layout from 'components/layout'
-import { Client } from '@notionhq/client'
 import { useRouter } from 'next/router'
-import {
-  TOKEN,
-  DATABASE_ID,
-  DATABASE_ID_MENU,
-  DATABASE_ID_USER,
-} from '../config/index'
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
-import axios from 'axios'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
+import styled from 'styled-components'
 
 export default function Main({ currentUser }) {
   const router = useRouter()
@@ -29,7 +22,7 @@ export default function Main({ currentUser }) {
       jsx.push(
         <div key={menu.id} className="p-4 md:w-1/3">
           <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-            <a
+            <Link
               href={
                 menu.properties.search.rich_text[0]
                   ? menu.properties.search.rich_text[0].href
@@ -45,7 +38,7 @@ export default function Main({ currentUser }) {
                 src={menu.cover ? menu.cover.file.url : ''}
                 alt="blog"
               />
-            </a>
+            </Link>
             <div className="p-6">
               <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
                 {menu.properties.category.rich_text[0]
@@ -194,38 +187,10 @@ export default function Main({ currentUser }) {
 }
 // 빌드 타임에 호출
 
-const queryFn = async () => {
-  const options = {
-    method: 'post',
-    url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
-    headers: {
-      Authorization: TOKEN,
-      accept: 'application/json',
-      'Notion-Version': '2022-06-28',
-      'content-type': 'application/json',
-    },
-  }
-  const res = await axios.request(options)
-  return res.data
-}
 const queryFN = async () => {
   return (await fetch('/api/menu/')).json()
 }
 export async function getServerSideProps(context) {
-  //   const options = {
-  //     method: 'post',
-  //     url: `https://api.notion.com/v1/databases/${DATABASE_ID_MENU}/query`,
-  //     headers: {
-  //       Authorization: TOKEN,
-  //       accept: 'application/json',
-  //       'Notion-Version': '2022-06-28',
-  //       'content-type': 'application/json',
-  //     },
-  //   }
-  // const fetchMenu = async () => {
-  //   const res = await axios.request(options)
-  //   return res.data;
-  // }
   const queryClient = new QueryClient(['menus'], queryFN)
   await queryClient.prefetchQuery(['menu', queryFN])
   return {

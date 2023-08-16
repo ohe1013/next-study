@@ -46,11 +46,9 @@ async function ss({ userId, itemId }) {
   }
   console.log(options.headers)
 
-  fetch(
-    `https://api.notion.com/v1/pages/`,
-    options,
-  )
+  fetch(`https://api.notion.com/v1/pages/`, options)
     .then((response) => response.json())
     .then((response) => console.log(response))
     .catch((err) => console.error(err))
 }
+

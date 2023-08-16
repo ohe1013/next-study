@@ -27,5 +27,10 @@
     "pages/main.js",
     "pages/api/[id].js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "plugins": [
+    {
+      "name": "typescript-styled-plugin"
+    }
+  ]
 }

@@ -11,3 +11,7 @@ export default function Layout ({children} :any) {
         </div>
     )
 }
+
+// export async function getServerSideProps(context) {
+//     return 'asd'
+// } 
