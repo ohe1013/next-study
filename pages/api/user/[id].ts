@@ -1,11 +1,12 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 import { TOKEN } from '../../../config'
-import { NextApiRequest, NextApiResponse } from 'next'
-
-export default async function menu(req: NextApiRequest, res: NextApiResponse) {
+export default async function userHandler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const { query } = req
   const { id } = query
-  const { up } = query
   const options = {
     method: 'patch',
     url: `https://api.notion.com/v1/pages/${id}`,
@@ -16,7 +17,7 @@ export default async function menu(req: NextApiRequest, res: NextApiResponse) {
     },
     data: {
       properties: {
-        up: parseInt(up as string) + 1,
+        up: 0,
       },
     },
   }
