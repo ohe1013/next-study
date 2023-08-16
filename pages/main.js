@@ -226,7 +226,8 @@ const fetchUser = async (id) => {
   // const res = await import(`./api/person/${id}`)
   // console.log(res)
   // return await (await res.GET()).json()
-  return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/person/${id}`)
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || ''
+  return await fetch(`${baseUrl}/api/person/${id}`)
 }
 export async function getServerSideProps(context) {
   // const host = headers().get('host');
