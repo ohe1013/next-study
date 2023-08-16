@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
-import styled from 'styled-components'
+import Link from 'next/dist/client/link'
 
 export default function Main({ currentUser }) {
   const router = useRouter()
