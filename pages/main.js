@@ -226,7 +226,9 @@ const fetchUser = async (id) => {
   // const res = await import(`./api/person/${id}`)
   // console.log(res)
   // return await (await res.GET()).json()
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/' || ''
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL + '/' ||
+    'https://next-study-ochre.vercel.app/'
   return await fetch(`${baseUrl}api/person/${id}`)
 }
 export async function getServerSideProps(context) {
