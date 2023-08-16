@@ -4,8 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function menu(req: NextApiRequest, res: NextApiResponse) {
   const { query } = req
-  const { id } = query
-  const { up } = query
+  const { id, up } = query
   const options = {
     method: 'patch',
     url: `https://api.notion.com/v1/pages/${id}`,
@@ -16,7 +15,7 @@ export default async function menu(req: NextApiRequest, res: NextApiResponse) {
     },
     data: {
       properties: {
-        up: parseInt(up as string) + 1,
+        up: parseInt(up as string),
       },
     },
   }
