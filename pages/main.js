@@ -4,16 +4,20 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import Link from 'next/dist/client/link'
-
+import { headers } from 'next/headers'
 export default function Main({ currentUser }) {
   const router = useRouter()
   const { data, isLoading } = useQuery(['menus'], queryFN, {
-    staleTime: 20 * 1000,
+    staleTime: 5 * 1000,
   })
 
-  const [selected, setSelected] = useState('')
-  const handleSelect = (e) => {
-    setSelected(e.target.value)
+  const [selected1st, setSelected1st] = useState('')
+  const [selected2nd, setSelected2nd] = useState('')
+  const handleSelect1st = (e) => {
+    setSelected1st(e.target.value)
+  }
+  const handleSelect2nd = (e) => {
+    setSelected2nd(e.target.value)
   }
   const getDatabaseDisplay = () => {
     let jsx = []
@@ -152,24 +156,39 @@ export default function Main({ currentUser }) {
       {isLoading ? (
         <div>로딩중</div>
       ) : (
-        <section className="text-gray-600 body-font">
-          <div className="container px-5 py-24 mx-auto">
+        <section className="text-gray-600 pt-10 body-font">
+          <div className="container px-5  mx-auto">
             <div className="flex flex-wrap -m-4">{getDatabaseDisplay()}</div>
           </div>
-          <div className="container px-5 mx-auto">
-            <div className="flex flex-wrap -m-4">
+          <div className="container w-9/12 px-5 mx-auto ">
+            <div className="flex py-12 -m-4 gap-2">
               <label
-                htmlFor="getUpData"
-                className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+                htmlFor="getUpData1st"
+                className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400 break-keep"
               >
-                추천
+                추천 1순위
               </label>
               <select
-                id="getUpData"
-                name="getUpData"
-                onChange={handleSelect}
-                value={selected}
-                className="ml-5 w-72 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                id="getUpData1st"
+                name="getUpData1st"
+                onChange={handleSelect1st}
+                value={selected1st}
+                className="ml-5 h-12 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <GetUpDataVote></GetUpDataVote>
+              </select>
+              <label
+                htmlFor="getUpData2nd"
+                className="content-center block mb-2 text-sm font-medium text-gray-900 break-keep dark:text-gray-400"
+              >
+                추천 2순위
+              </label>
+              <select
+                id="getUpData2nd"
+                name="getUpData2nd"
+                onChange={handleSelect2nd}
+                value={selected2nd}
+                className="ml-5 h-12 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500  focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <GetUpDataVote></GetUpDataVote>
               </select>
@@ -179,12 +198,12 @@ export default function Main({ currentUser }) {
                     if (!confirm('정말 선택하시겠습니까?')) {
                       return
                     }
-                    await recommend(selected)
+                    await recommend(selected1st, selected2nd)
                     await reduceUp(currentUser.id)
 
                     router.push('/')
                   }}
-                  className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                  className="inline-flex h-12 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg break-keep"
                 >
                   추천
                 </button>
@@ -203,15 +222,25 @@ export default function Main({ currentUser }) {
 const queryFN = async () => {
   return (await fetch('/api/menu/')).json()
 }
+const fetchUser = async (id) => {
+  // const res = await import(`./api/person/${id}`)
+  // console.log(res)
+  // return await (await res.GET()).json()
+  return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/person/${id}`)
+}
 export async function getServerSideProps(context) {
-  const queryClient = new QueryClient(['menus'], queryFN)
+  // const host = headers().get('host');
+  const queryClient = new QueryClient(['menus'], (host) => queryFN)
   await queryClient.prefetchQuery(['menu', queryFN])
+  const fetchedUser = await fetchUser(context.query.id)
+
+  const user = await fetchedUser.json()
   return {
     props: {
       dehydratedProps: dehydrate(queryClient),
       currentUser: {
         name: context.query.name,
-        up: context.query.up,
+        up: user.properties.up.number,
         id: context.query.id,
       },
     },

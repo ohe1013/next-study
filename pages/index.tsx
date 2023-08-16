@@ -73,7 +73,6 @@ export default function Home({ users }: { users: User }) {
                           pathname: './main',
                           query: {
                             name: userName,
-                            up: users[userName].up,
                             id: users[userName].id,
                           },
                         }}
