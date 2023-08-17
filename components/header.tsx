@@ -12,8 +12,8 @@ export default function Header() {
           <span className="ml-3 dark:text-white text-xl">Jungdo</span>
         </Link>
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <Link href="/" className="mr-5 hover:text-gray-900">
-            홈
+          <Link href="/result" className="mr-5 hover:text-gray-900">
+            결과보기
           </Link>
         </nav>
         <DarkModeToggleButton></DarkModeToggleButton>
