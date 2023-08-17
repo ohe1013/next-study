@@ -211,6 +211,12 @@ export default function Main({ currentUser }) {
               )}
             </div>
           </div>
+          <div className="flex justify-center text-red-600">
+            <span>
+              1순위는 2점, 2순위는 1점이 들어갑니다. <br />
+              중복선택 가능합니다.
+            </span>
+          </div>
         </section>
       )}
     </Layout>
