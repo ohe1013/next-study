@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import Link from 'next/dist/client/link'
+import LoadingModal from '../components/LoadingModal'
+import { type } from 'os'
 export default function Main({ currentUser }) {
   const router = useRouter()
   const { data, isLoading } = useQuery(['menus'], queryFN, {
@@ -203,8 +205,8 @@ export default function Main({ currentUser }) {
                       return
                     }
                     if (
-                      typeof selected1st === 'string' ||
-                      typeof selected2nd === 'string'
+                      selected1st.startsWith('-') ||
+                      selected2nd.startsWith('-')
                     ) {
                       alert('선택을 비울 수 없습니다.')
                       return
@@ -230,6 +232,7 @@ export default function Main({ currentUser }) {
               중복선택 가능합니다.
             </span>
           </div>
+          <LoadingModal isLoading={disable} />
         </section>
       )}
     </Layout>
