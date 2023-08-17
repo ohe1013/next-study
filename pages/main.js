@@ -198,6 +198,17 @@ export default function Main({ currentUser }) {
                     if (!confirm('정말 선택하시겠습니까?')) {
                       return
                     }
+                    if (!selected1st || !selected2nd) {
+                      alert('선택을 비울 수 없습니다.')
+                      return
+                    }
+                    if (
+                      typeof selected1st === 'string' ||
+                      typeof selected2nd === 'string'
+                    ) {
+                      alert('선택을 비울 수 없습니다.')
+                      return
+                    }
                     setDisable(!disable)
                     await recommend(selected1st, selected2nd)
                     await reduceUp(currentUser.id)
@@ -259,6 +270,7 @@ export async function getServerSideProps(context) {
 }
 
 const recommend = async function (item1, item2) {
+  console.log(item1, item2)
   const parseItem1 = JSON.parse(item1)
   const parseItem2 = JSON.parse(item2)
   try {
