@@ -196,9 +196,9 @@ export default function Main({ currentUser }) {
                 <button
                   onClick={async () => {
                     if (!confirm('정말 선택하시겠습니까?')) {
-                      setDisable(!disable)
                       return
                     }
+                    setDisable(!disable)
                     await recommend(selected1st, selected2nd)
                     await reduceUp(currentUser.id)
                     alert('추천이 완료되었습니다.')
