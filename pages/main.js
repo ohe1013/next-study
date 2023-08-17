@@ -7,11 +7,12 @@ import Link from 'next/dist/client/link'
 export default function Main({ currentUser }) {
   const router = useRouter()
   const { data, isLoading } = useQuery(['menus'], queryFN, {
-    staleTime: 5 * 1000,
+    staleTime: 2 * 1000,
   })
 
   const [selected1st, setSelected1st] = useState('')
   const [selected2nd, setSelected2nd] = useState('')
+  const [disable, setDisable] = useState(false)
   const handleSelect1st = (e) => {
     setSelected1st(e.target.value)
   }
@@ -191,10 +192,11 @@ export default function Main({ currentUser }) {
               >
                 <GetUpDataVote></GetUpDataVote>
               </select>
-              {currentUser.up > 0 ? (
+              {currentUser.up > 0 && disable === false ? (
                 <button
                   onClick={async () => {
                     if (!confirm('정말 선택하시겠습니까?')) {
+                      setDisable(!disable)
                       return
                     }
                     await recommend(selected1st, selected2nd)
@@ -260,14 +262,22 @@ const recommend = async function (item1, item2) {
   const parseItem1 = JSON.parse(item1)
   const parseItem2 = JSON.parse(item2)
   try {
-    const res = await fetch(
-      '/api/menu/' + parseItem1.menuId + `?up=${parseItem1.up + 2}`,
-    )
-    const res2 = await fetch(
-      '/api/menu/' + parseItem2.menuId + `?up=${parseItem2.up + 1}`,
-    )
-    if (res.status != 200) throw Error('it has error')
-    if (res2.status != 200) throw Error('it has error')
+    if (parseItem1.menuId === parseItem2.menuId) {
+      const res = await fetch(
+        '/api/menu/' + parseItem1.menuId + `?up=${parseItem1.up + 3}`,
+      )
+      if (res.status != 200) throw Error('it has error')
+    } else {
+      const res = await fetch(
+        '/api/menu/' + parseItem1.menuId + `?up=${parseItem1.up + 2}`,
+      )
+      const res2 = await fetch(
+        '/api/menu/' + parseItem2.menuId + `?up=${parseItem2.up + 1}`,
+      )
+
+      if (res.status != 200) throw Error('it has error')
+      if (res2.status != 200) throw Error('it has error')
+    }
   } catch (error) {
     console.log(error)
   }
