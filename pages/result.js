@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import Chart from 'chart.js/auto' // chartjs의 차트 클래스를 가져옴
 import Link from 'next/dist/client/link'
+import LoadingModal from '../components/LoadingModal'
 export default function Main() {
   const chartRef = useRef(null)
   const { data, isLoading } = useQuery(['menus'], queryFN, {
@@ -51,7 +52,7 @@ export default function Main() {
   return (
     <Layout>
       {isLoading ? (
-        <div>로딩중</div>
+        <LoadingModal isLoading={true} />
       ) : (
         <section className="text-gray-600 pt-10 body-font">
           <div className="container px-5  mx-auto">
