@@ -156,7 +156,7 @@ export default function Main({ currentUser }) {
   return (
     <Layout>
       {isLoading ? (
-        <div>로딩중</div>
+        <LoadingModal isLoading={true} />
       ) : (
         <section className="text-gray-600 pt-10 body-font">
           <div className="container px-5  mx-auto">
