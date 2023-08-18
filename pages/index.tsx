@@ -5,6 +5,7 @@ import { Client } from '@notionhq/client'
 import { TOKEN, DATABASE_ID, DATABASE_ID_USER } from '../config/index'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 type User = {
   [name: string]: {
@@ -32,10 +33,13 @@ export default function Home({ users }: { users: User }) {
             <section className="text-gray-600 body-font">
               <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
-                  <img
+                  <Image
+                    unoptimized
                     height={200}
-                    src="/assets/IMG_COMP_LOGIN_BANNER_A_uitgis.png"
-                  ></img>
+                    width={600}
+                    alt="jungo"
+                    src="../assets/IMG_COMP_LOGIN_BANNER_A_uitgis.png"
+                  ></Image>
                 </div>
                 <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
                   <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
