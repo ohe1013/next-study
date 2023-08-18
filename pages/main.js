@@ -39,6 +39,7 @@ export default function Main({ currentUser }) {
               <Image
                 width={200}
                 height={200}
+                unoptimized
                 className="lg:h-48 md:h-36 w-full object-cover object-center"
                 src={menu.cover ? menu.cover.file.url : ''}
                 alt="blog"
