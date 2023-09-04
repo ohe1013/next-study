@@ -56,7 +56,7 @@ export default function Main({ currentUser }) {
                   ? menu.properties.name.title[0].text.content
                   : ''}
               </h1>
-              <span> 대표메뉴 </span>
+              <span> 컨텐츠 </span>
               <div className="leading-relaxed mb-3">
                 {menu.properties.mainmenu.multi_select.length > 0
                   ? menu.properties.mainmenu.multi_select.map((element) => (
@@ -69,7 +69,7 @@ export default function Main({ currentUser }) {
                     ))
                   : ''}
               </div>
-              <span> 대표후기 </span>
+              <span> 블로그 및 후기 </span>
               <div className="leading-relaxed mb-3">
                 {menu.properties.detail.multi_select.length > 0
                   ? menu.properties.detail.multi_select.map(

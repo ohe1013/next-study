@@ -43,13 +43,19 @@ export default function Home({ users }: { users: User }) {
                 </div>
                 <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
                   <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-                    플랫폼 개발부 회식
+                    플랫폼개발본부
                   </h1>
+                  <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+                    펀데이 장소 투표
+                  </h1>
+                  <h2 className="title-font sm:text-xl text-l mb-4 font-medium text-gray-900">
+                    10월 19일 ~ 20일
+                  </h2>
                   <div className="leading-relaxed">
-                    추천 1회, 비추천 1회 가능합니다.
+                    추천 2회 가능합니다. [1순위, 2순위]
                   </div>
-                  <div className="mb-8 leading-relaxed text-red-300">
-                    *추천은 1회만 가능하며, 한번 선택하시고 무를 수 없습니다.
+                  <div className="mb-8 leading-relaxed text-red-500">
+                    *추천은 1회만 가능하며, 변경은 불가능합니다.*
                   </div>
                   <div className="flex w-full md:justify-start justify-center items-end">
                     <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4">

@@ -19,7 +19,7 @@ export default function Footer() {
               className="text-gray-600 ml-1"
               target="_blank"
             >
-              회식
+              펀데이
             </Link>
           </p>
         </div>
