@@ -46,7 +46,7 @@ export default function Home({ users }: { users: User }) {
                     플랫폼개발본부
                   </h1>
                   <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-                    펀데이 장소 투표
+                    부서워크샵 & 펀데이 장소 투표
                   </h1>
                   <h2 className="title-font sm:text-xl text-l mb-4 font-medium text-gray-900">
                     10월 19일 ~ 20일
