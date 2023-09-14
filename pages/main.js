@@ -23,6 +23,20 @@ export default function Main({ currentUser }) {
   const getDatabaseDisplay = () => {
     let jsx = []
     data.results.forEach((menu) => {
+      let rooms = []
+      if (menu.properties.category.rich_text[0]) {
+        const menuRooms = JSON.parse(
+          menu.properties.category.rich_text[0].text.content.slice(
+            1,
+            menu.properties.category.rich_text[0].text.content.length - 1,
+          ),
+        )
+        console.log(Object.keys(menuRooms))
+        Object.keys(menuRooms).forEach((key) => {
+          console.log(menuRooms[key])
+          rooms.push(menuRooms[key])
+        })
+      }
       jsx.push(
         <div key={menu.id} className="p-4 md:w-1/3">
           <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -52,8 +66,18 @@ export default function Main({ currentUser }) {
               </h1>
               <span> 예약 예정 숙소 </span>
               <h2 className="ml-2 tracking-widest title-font font-medium mb-1">
-                {menu.properties.category.rich_text[0]
-                  ? menu.properties.category.rich_text[0].text.content
+                {rooms
+                  ? rooms.map((room) => (
+                      <a
+                        className="text-sm inline-flex items-center ml-2 uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
+                        key={room.src}
+                        href={'http://www.' + room.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {room.name} [{room.count}개]{' '}
+                      </a>
+                    ))
                   : ''}
               </h2>
               <span className="text-green-600"> 장점 </span>
@@ -75,7 +99,7 @@ export default function Main({ currentUser }) {
                       (element, index) => (
                         <a
                           key={element.id}
-                          className="ml-2 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-orange-200 text-orange-700 rounded-full"
+                          className="ml-2 text-xs inline-flex items-center  leading-sm uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
                           href={element.name}
                           target="_blank"
                           rel="noreferrer"
