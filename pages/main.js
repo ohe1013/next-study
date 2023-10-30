@@ -8,7 +8,7 @@ import LoadingModal from '../components/LoadingModal'
 export default function Main({ currentUser }) {
   const router = useRouter()
   const { data, isLoading } = useQuery(['menus'], queryFN, {
-    staleTime: 5000,
+    staleTime: 1000,
   })
   useEffect(() => {
     console.log(data)
@@ -26,6 +26,20 @@ export default function Main({ currentUser }) {
   const getDatabaseDisplay = () => {
     let jsx = []
     data.results.forEach((menu) => {
+      let rooms = []
+      if (menu.properties.category.rich_text[0]) {
+        const menuRooms = JSON.parse(
+          menu.properties.category.rich_text[0].text.content.slice(
+            1,
+            menu.properties.category.rich_text[0].text.content.length - 1,
+          ),
+        )
+        console.log(Object.keys(menuRooms))
+        Object.keys(menuRooms).forEach((key) => {
+          console.log(menuRooms[key])
+          rooms.push(menuRooms[key])
+        })
+      }
       jsx.push(
         <div key={menu.id} className="p-4 md:w-1/3">
           <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -48,27 +62,37 @@ export default function Main({ currentUser }) {
               />
             </Link>
             <div className="p-6">
-              <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
-                {menu.properties.category.rich_text[0]
-                  ? menu.properties.category.rich_text[0].text.content
-                  : ''}
-              </h2>
               <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
                 {menu.properties.name.title[0]
                   ? menu.properties.name.title[0].text.content
                   : ''}
               </h1>
-              <span> 컨텐츠 </span>
-              <div className="leading-relaxed mb-3">
-                {menu.properties.mainmenu.multi_select.length > 0
-                  ? menu.properties.mainmenu.multi_select.map((element) => (
-                      <div
-                        key={element.id}
-                        className="ml-2 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border-2"
+              <span> 예약 예정 숙소 </span>
+              <h2 className="ml-2 tracking-widest title-font font-medium mb-1">
+                {rooms
+                  ? rooms.map((room) => (
+                      <a
+                        className="text-sm inline-flex items-center ml-2 uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
+                        key={room.src}
+                        href={'http://www.' + room.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        {element.name}
-                      </div>
+                        {room.name} [{room.count}개]{' '}
+                      </a>
                     ))
+                  : ''}
+              </h2>
+              <span className="text-green-600"> 장점 </span>
+              <div className="ml-2 leading-relaxed mb-3">
+                {menu.properties.good.rich_text[0]
+                  ? menu.properties.good.rich_text[0].text.content
+                  : ''}
+              </div>
+              <span className="text-red-600"> 단점 </span>
+              <div className="ml-2 leading-relaxed mb-3">
+                {menu.properties.bad.rich_text[0]
+                  ? menu.properties.bad.rich_text[0].text.content
                   : ''}
               </div>
               <span> 블로그 및 후기 </span>
@@ -78,7 +102,7 @@ export default function Main({ currentUser }) {
                       (element, index) => (
                         <a
                           key={element.id}
-                          className="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-orange-200 text-orange-700 rounded-full"
+                          className="ml-2 text-xs inline-flex items-center  leading-sm uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
                           href={element.name}
                           target="_blank"
                           rel="noreferrer"
@@ -274,6 +298,7 @@ export async function getServerSideProps(context) {
     },
   }
 }
+const fetchMenu = async (id) => {}
 
 const recommend = async function (item1, item2) {
   console.log(item1, item2)
@@ -281,17 +306,11 @@ const recommend = async function (item1, item2) {
   const parseItem2 = JSON.parse(item2)
   try {
     if (parseItem1.menuId === parseItem2.menuId) {
-      const res = await fetch(
-        '/api/menu/' + parseItem1.menuId + `?up=${parseItem1.up + 3}`,
-      )
+      const res = await fetch('/api/menu/' + parseItem1.menuId + `?up=3`)
       if (res.status != 200) throw Error('it has error')
     } else {
-      const res = await fetch(
-        '/api/menu/' + parseItem1.menuId + `?up=${parseItem1.up + 2}`,
-      )
-      const res2 = await fetch(
-        '/api/menu/' + parseItem2.menuId + `?up=${parseItem2.up + 1}`,
-      )
+      const res = await fetch('/api/menu/' + parseItem1.menuId + `?up=2`)
+      const res2 = await fetch('/api/menu/' + parseItem2.menuId + `?up=1`)
 
       if (res.status != 200) throw Error('it has error')
       if (res2.status != 200) throw Error('it has error')
