@@ -25,7 +25,8 @@
     "pages/main.js",
     "pages/index.tsx",
     "pages/main.js",
-    "pages/api/[id].js"
+    "pages/api/[id].js",
+    "pages/result.js"
   ],
   "exclude": ["node_modules"],
   "plugins": [

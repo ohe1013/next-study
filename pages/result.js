@@ -13,6 +13,7 @@ export default function Main() {
   const [result, setResult] = useState({})
 
   useEffect(() => {
+    console.log(data)
     if (chartRef.current && data) {
       if (chartRef.current.chart) {
         chartRef.current.chart.destroy()

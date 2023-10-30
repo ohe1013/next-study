@@ -1,7 +1,6 @@
 import React from 'react'
 
 const LoadingModal = ({ isLoading }) => {
-  console.log(isLoading)
   if (!isLoading) return null
 
   return (
