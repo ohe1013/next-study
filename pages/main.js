@@ -1,16 +1,18 @@
 import Layout from 'components/layout'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import Link from 'next/dist/client/link'
 import LoadingModal from '../components/LoadingModal'
-import { type } from 'os'
 export default function Main({ currentUser }) {
   const router = useRouter()
   const { data, isLoading } = useQuery(['menus'], queryFN, {
-    staleTime: 2 * 1000,
+    staleTime: 5000,
   })
+  useEffect(() => {
+    console.log(data)
+  }, [data, isLoading])
 
   const [selected1st, setSelected1st] = useState('')
   const [selected2nd, setSelected2nd] = useState('')
