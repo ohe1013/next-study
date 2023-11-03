@@ -13,7 +13,7 @@ export default function Header() {
         </Link>
         <nav className="ml-auto flex flex-wrap items-center text-base justify-center">
           <Link href="/result" className="mr-5 hover:text-gray-900">
-            OHK
+            결과보기
           </Link>
         </nav>
         <DarkModeToggleButton></DarkModeToggleButton>
