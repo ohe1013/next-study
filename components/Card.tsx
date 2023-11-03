@@ -42,7 +42,7 @@ export default function Card({ menu }: { menu: any }) {
               ? menu.properties.name.title[0].text.content
               : ''}
           </h1>
-          <span className="dark:text-white"> 예약 예정 숙소 </span>
+          <span className="dark:text-white"> 예약 예정 숙소(링크) </span>
           <h2 className="ml-2 tracking-widest title-font font-medium mb-1">
             {rooms
               ? rooms.map((room) => (
