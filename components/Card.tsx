@@ -42,7 +42,7 @@ export default function Card({ menu }: { menu: any }) {
               ? menu.properties.name.title[0].text.content
               : ''}
           </h1>
-          <span> 예약 예정 숙소 </span>
+          <span className="dark:text-white"> 예약 예정 숙소 </span>
           <h2 className="ml-2 tracking-widest title-font font-medium mb-1">
             {rooms
               ? rooms.map((room) => (
@@ -60,17 +60,21 @@ export default function Card({ menu }: { menu: any }) {
           </h2>
           <span className="text-green-600"> 장점 </span>
           <div className="ml-2 leading-relaxed mb-3">
-            {menu.properties.good.rich_text[0]
-              ? menu.properties.good.rich_text[0].text.content
-              : ''}
+            <span className="dark:text-white">
+              {menu.properties.good.rich_text[0]
+                ? menu.properties.good.rich_text[0].text.content
+                : ''}
+            </span>
           </div>
           <span className="text-red-600"> 단점 </span>
           <div className="ml-2 leading-relaxed mb-3">
-            {menu.properties.bad.rich_text[0]
-              ? menu.properties.bad.rich_text[0].text.content
-              : ''}
+            <span className="dark:text-white">
+              {menu.properties.bad.rich_text[0]
+                ? menu.properties.bad.rich_text[0].text.content
+                : ''}
+            </span>
           </div>
-          <span> 블로그 및 후기 </span>
+          <span className="dark:text-white">블로그 및 후기 </span>
           <div className="leading-relaxed mb-3">
             {menu.properties.detail.multi_select.length > 0
               ? menu.properties.detail.multi_select.map(
