@@ -6,11 +6,13 @@ export default function SelectBox({
   onChange,
   selectValue,
   selectBoxItemList,
+  label,
 }: {
   selectProps: { id: string }
   onChange: ChangeEventHandler<HTMLSelectElement>
   selectValue: string
   selectBoxItemList: SelectBoxItem[]
+  label: string
 }) {
   return (
     <>
@@ -18,7 +20,7 @@ export default function SelectBox({
         htmlFor={selectProps.id}
         className="content-center block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400 break-keep"
       >
-        추천 1순위
+        {label}
       </label>
       <select
         id={selectProps.id}

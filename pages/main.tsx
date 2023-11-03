@@ -49,14 +49,16 @@ export default function Main({
     alert('추천이 완료되었습니다.')
     router.push('/')
   }
-  const selectBoxItemList: SelectBoxItem[] = [
-    { id: '-', up: 0, plainText: '선택하세요' },
-    ...data?.results?.map((menu: SelectMenu) => ({
-      id: menu.id,
-      up: menu.properties.up.number,
-      plainText: menu.properties.name.title[0].plain_text,
-    })),
-  ]
+  const selectBoxItemList: SelectBoxItem[] = data?.results
+    ? [
+        { id: '-', up: 0, plainText: '선택하세요' },
+        ...data.results.map((menu: SelectMenu) => ({
+          id: menu.id,
+          up: menu.properties.up.number,
+          plainText: menu.properties.name.title[0].plain_text,
+        })),
+      ]
+    : []
   return (
     <Layout>
       {isLoading ? (
@@ -77,12 +79,14 @@ export default function Main({
                 onChange={handleSelect(setSelected1st)}
                 selectValue={selected1st}
                 selectBoxItemList={selectBoxItemList}
+                label="추천 1순위"
               ></SelectBox>
               <SelectBox
                 selectProps={{ id: 'getUpData2nd' }}
                 onChange={handleSelect(setSelected2nd)}
                 selectValue={selected2nd}
                 selectBoxItemList={selectBoxItemList}
+                label="추천 2순위"
               ></SelectBox>
               {currentUser.up > 0 && disable === false ? (
                 <button
