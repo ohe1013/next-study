@@ -1,9 +1,8 @@
 import Head from 'next/head'
 import Layout from 'components/layout'
-import Programmer from 'components/programmer'
 import { Client } from '@notionhq/client'
-import { TOKEN, DATABASE_ID, DATABASE_ID_USER } from '../config/index'
-import { useEffect, useState } from 'react'
+import { TOKEN, DATABASE_ID_USER } from '../config/index'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 

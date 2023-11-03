@@ -1,19 +1,16 @@
 import Layout from 'components/layout'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import Chart from 'chart.js/auto' // chartjs의 차트 클래스를 가져옴
-import Link from 'next/dist/client/link'
 import LoadingModal from '../components/LoadingModal'
 export default function Main() {
   const chartRef = useRef(null)
   const { data, isLoading } = useQuery(['menus'], queryFN, {
-    staleTime: 5 * 1000,
+    staleTime: 1000,
+    cacheTime: 5000,
   })
-  const [result, setResult] = useState({})
 
   useEffect(() => {
-    console.log(data)
     if (chartRef.current && data) {
       if (chartRef.current.chart) {
         chartRef.current.chart.destroy()
