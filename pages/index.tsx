@@ -35,7 +35,7 @@ export default function Home({ users }: { users: User }) {
                   <Image
                     unoptimized
                     height={200}
-                    width={600}
+                    width={426}
                     alt="jungo"
                     src="../assets/favicon.ico"
                   ></Image>
