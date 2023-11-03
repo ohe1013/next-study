@@ -49,13 +49,14 @@ export default function Main({
     alert('추천이 완료되었습니다.')
     router.push('/')
   }
-  const selectBoxItemList: SelectBoxItem[] = data?.results?.map(
-    (menu: SelectMenu) => ({
+  const selectBoxItemList: SelectBoxItem[] = [
+    { id: '-', up: 0, plainText: '선택하세요' },
+    ...data?.results?.map((menu: SelectMenu) => ({
       id: menu.id,
       up: menu.properties.up.number,
       plainText: menu.properties.name.title[0].plain_text,
-    }),
-  )
+    })),
+  ]
   return (
     <Layout>
       {isLoading ? (
