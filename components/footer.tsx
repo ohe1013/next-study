@@ -15,10 +15,17 @@ export default function Footer() {
           <Link
             href="https://twitter.com/knyttneve"
             rel="noopener noreferrer"
-            className="text-gray-600 ml-1"
+            className="text-gray-500 sm:ml-6 sm:mt-0 mt-4  ml-1"
             target="_blank"
           >
             투표
+          </Link>
+          <Link
+            className="text-gray-500 sm:ml-6 sm:mt-0 mt-4"
+            href="https://www.flaticon.com/kr/free-icons/"
+            title="투표 아이콘"
+          >
+            ©투표 아이콘 제작자: Freepik - Flaticon
           </Link>
         </p>
       </div>
