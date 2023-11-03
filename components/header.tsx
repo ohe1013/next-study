@@ -9,11 +9,11 @@ export default function Header() {
           href="/"
           className="flex title-font font-medium items-center text-gray-900 mb-0"
         >
-          <span className="ml-3 dark:text-white text-xl">Jungdo</span>
+          <span className="ml-3 dark:text-white text-xl">OHK</span>
         </Link>
         <nav className="ml-auto flex flex-wrap items-center text-base justify-center">
           <Link href="/result" className="mr-5 hover:text-gray-900">
-            결과보기
+            OHK
           </Link>
         </nav>
         <DarkModeToggleButton></DarkModeToggleButton>
