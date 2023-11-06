@@ -22,9 +22,9 @@ export default function Home({ users }: { users: User }) {
     <div className="bg-primary">
       <Layout>
         <section className="flex min-h-fit flex-col items-center text-gray-600 body-font">
-          <div className="container mx-auto flex px-5 py-16 flex-col items-center">
+          <div className="container mx-auto flex px-5 py-24 flex-col items-center">
             <section className="text-gray-600 body-font">
-              <div className="container mx-auto flex px-5 py-9 md:flex-row flex-col items-center">
+              <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
                   <Image
                     unoptimized
