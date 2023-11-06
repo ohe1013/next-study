@@ -64,7 +64,7 @@ export default function Main({
       {isLoading ? (
         <LoadingModal isLoading={true} />
       ) : (
-        <section className="text-gray-600 pt-10 body-font">
+        <section className="text-gray-600 py-12 body-font">
           <div className="container px-5  mx-auto">
             <div className="flex flex-wrap -m-4">
               {data?.results.map((result: any, idx: number) => (
