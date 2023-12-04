@@ -22,11 +22,11 @@
     "**/*.tsx",
     "components/main.tsx",
     "components/main.ts",
-    "pages/main.js",
+    "pages/main.tsx",
     "pages/index.tsx",
-    "pages/main.js",
+    "pages/main.tsx",
     "pages/api/[id].js",
-    "pages/result.js"
+    "pages/result.tsx"
   ],
   "exclude": ["node_modules"],
   "plugins": [
