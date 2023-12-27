@@ -113,7 +113,6 @@ export default function Main({
   )
 }
 // 빌드 타임에 호출
-interface fetchMenu {}
 const queryFN = async () => {
   return (await fetch('/api/menu/')).json()
 }

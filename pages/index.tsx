@@ -2,8 +2,8 @@ import Layout from 'components/layout'
 import { Client } from '@notionhq/client'
 import { TOKEN, DATABASE_ID_USER } from '../config/index'
 import { useState } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 type User = {
   [name: string]: {
@@ -11,8 +11,22 @@ type User = {
     id: string
   }
 }
-
+interface SubmitProps {
+  name: string
+}
 export default function Home({ users }: { users: User }) {
+  const router = useRouter()
+  const isValidUser = (name: string) => {
+    return uesrNameArr.includes(name)
+  }
+  const submitHandler = ({ name }: SubmitProps) => {
+    if (isValidUser(name)) {
+      const id = users[userName].id
+      router.push({ pathname: 'main', query: { name, id } }, 'main')
+    } else {
+      alert('해당 이름은 존재하지 않습니다.')
+    }
+  }
   const uesrNameArr = Object.keys(users)
   const [userName, setUserName] = useState<string>('')
   const onChangeUserName = (e: any) => {
@@ -44,7 +58,7 @@ export default function Home({ users }: { users: User }) {
                   <h2 className="title-font sm:text-xl text-l mb-4 font-medium text-gray-900">
                     날짜 : xx월 xx일 ~ yy월 yy일
                   </h2>
-                  <div className="leading-relaxed">
+                  <div className="leading-relaxed dark:text-white">
                     추천 2회 가능합니다. [1순위, 2순위]
                   </div>
                   <div className="mb-8 leading-relaxed text-red-500">
@@ -54,7 +68,7 @@ export default function Home({ users }: { users: User }) {
                     <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4">
                       <label
                         htmlFor="hero-field"
-                        className="leading-7 text-sm text-gray-600"
+                        className="leading-7 text-sm text-gray-600 dark:text-white"
                       >
                         이름(오현근으로 접속가능)
                       </label>
@@ -62,34 +76,24 @@ export default function Home({ users }: { users: User }) {
                         type="text"
                         id="hero-field"
                         name="hero-field"
-                        className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:ring-2 focus:dark:text-white focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                         required
                         value={userName}
                         onChange={onChangeUserName}
                       />
                     </div>
-                    {uesrNameArr.includes(userName) ? (
-                      <Link
-                        className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                        rel="preload"
-                        href={{
-                          pathname: './main',
-                          query: {
-                            name: userName,
-                            id: users[userName].id,
-                          },
-                        }}
-                      >
-                        입장
-                      </Link>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                      >
-                        입장
-                      </button>
-                    )}
+                    <button
+                      onClick={() =>
+                        submitHandler({
+                          name: userName,
+                        })
+                      }
+                      type="submit"
+                      className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                    >
+                      입장
+                    </button>
+                    {/* )} */}
                   </div>
                 </div>
               </div>

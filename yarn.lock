@@ -873,6 +873,13 @@
   resolved "https://registry.npmjs.org/@types/caseless/-/caseless-0.12.2.tgz"
   integrity sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==
 
+"@types/chart.js@^2.9.41":
+  version "2.9.41"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.41.tgz#4148cdc87d4f98fad44b2883271cd0fa57f05e0d"
+  integrity sha512-3dvkDvueckY83UyUXtJMalYoH6faOLkWQoaTlJgB4Djde3oORmNP0Jw85HtzTuXyliUHcdp704s0mZFQKio/KQ==
+  dependencies:
+    moment "^2.10.2"
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.6"
   resolved "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.6.tgz"
@@ -4021,6 +4028,11 @@ minimist@^1.2.0, minimist@^1.2.6:
   version "1.2.8"
   resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
+
+moment@^2.10.2:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.0.tgz#c2a65bb962bdf2a9c49c69b5358c41f6c66ad10e"
+  integrity sha512-8XSlYFhOSJvnEJOas6RpDCNU2PYeVC+oE33d3Z9tIsXpD8LIgBeqrHPjP8es4b3fcJpf07D1PJWGDUfdbqDLnQ==
 
 ms@2.0.0:
   version "2.0.0"
