@@ -38,6 +38,7 @@
     "react-intersection-observer": "^9.4.3",
     "react-lottie-player": "^1.5.0",
     "react-query": "^3.39.3",
+    "recoil": "^0.7.7",
     "request": "^2.88.2",
     "styled-components": "^5.3.8",
     "typescript": "^4.9.5"
