@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LoadingModal = ({ isLoading }) => {
+const LoadingModal = ({ isLoading }: { isLoading: boolean }) => {
   if (!isLoading) return null
 
   return (
