@@ -1,4 +1,3 @@
-import Layout from 'components/layout'
 import { Client } from '@notionhq/client'
 import { useRouter } from 'next/router'
 import {
@@ -51,4 +50,3 @@ async function ss({ userId, itemId }) {
     .then((response) => console.log(response))
     .catch((err) => console.error(err))
 }
-

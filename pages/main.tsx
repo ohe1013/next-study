@@ -1,4 +1,3 @@
-import Layout from 'components/layout'
 import { useRouter } from 'next/router'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
@@ -6,6 +5,8 @@ import LoadingModal from '../components/LoadingModal'
 import SelectBox from 'components/SelectBox'
 import { SelectBoxItem } from 'types/selectBox'
 import Card from 'components/Card'
+import { useRecoilState } from 'recoil'
+import { alertState } from 'src/recoil/alert/alert'
 
 type SelectMenu = {
   id: string
@@ -21,6 +22,7 @@ export default function Main({
   currentUser: { id: string; up: number }
 }): JSX.Element {
   const router = useRouter()
+  const [alert, setAlert] = useRecoilState(alertState)
   const { data, isLoading } = useQuery(['menus'], queryFN, {
     staleTime: 1000,
   })
@@ -36,17 +38,32 @@ export default function Main({
       return
     }
     if (!selected1st || !selected2nd) {
-      alert('선택을 비울 수 없습니다.')
+      setAlert({
+        ...alert,
+        type: 'warn',
+        visible: true,
+        message: '선택을 비울 수 없습니다.',
+      })
       return
     }
     if (selected1st.startsWith('-') || selected2nd.startsWith('-')) {
-      alert('선택을 비울 수 없습니다.')
+      setAlert({
+        ...alert,
+        type: 'warn',
+        visible: true,
+        message: '선택을 비울 수 없습니다.',
+      })
       return
     }
     setDisable(!disable)
     await recommend(selected1st, selected2nd)
     await reduceUp(currentUser.id)
-    alert('추천이 완료되었습니다.')
+    setAlert({
+      ...alert,
+      type: 'success',
+      visible: true,
+      message: '추천이 완료되었습니다.',
+    })
     router.push('/')
   }
   const selectBoxItemList: SelectBoxItem[] = data?.results
@@ -60,11 +77,11 @@ export default function Main({
       ]
     : []
   return (
-    <Layout>
+    <>
       {isLoading ? (
         <LoadingModal isLoading={true} />
       ) : (
-        <section className="text-gray-600 pt-10 body-font">
+        <section className="text-gray-600 py-12 body-font">
           <div className="container px-5  mx-auto">
             <div className="flex flex-wrap -m-4">
               {data?.results.map((result: any, idx: number) => (
@@ -109,11 +126,10 @@ export default function Main({
           <LoadingModal isLoading={disable} />
         </section>
       )}
-    </Layout>
+    </>
   )
 }
 // 빌드 타임에 호출
-interface fetchMenu {}
 const queryFN = async () => {
   return (await fetch('/api/menu/')).json()
 }

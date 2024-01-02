@@ -2,6 +2,9 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { QueryClientProvider, QueryClient, Hydrate } from 'react-query'
+import { RecoilRoot } from 'recoil'
+import Layout from 'components/layout'
+import { Alert } from 'components/Alert'
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
@@ -9,9 +12,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class">
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedProps}>
-          <Component {...pageProps} />
-        </Hydrate>
+        <RecoilRoot>
+          <Hydrate state={pageProps.dehydratedProps}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Hydrate>
+        </RecoilRoot>
       </QueryClientProvider>
     </ThemeProvider>
   )
