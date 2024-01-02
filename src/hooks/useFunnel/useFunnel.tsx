@@ -48,15 +48,12 @@ export const useFunnel = <Steps extends NonEmptyArray<string>>(
         options?.onStepChange?.(newStep)
       }
     }
-
-    // 라우터 이벤트 리스너를 추가합니다.
-    // router.events.on('routeChangeComplete', handleRouteChange)
+    router.events.on('routeChangeComplete', handleRouteChange)
     handleRouteChange()
-    // // 클린업 함수에서 이벤트 리스너를 제거합니다.
-    // return () => {
-    //   router.events.off('routeChangeComplete', handleRouteChange)
-    // }
-  }, [router.events, steps, stepQueryKey, options, router.query])
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [steps, stepQueryKey, options, router])
   assert(steps.length > 0, 'steps가 비어있습니다.')
 
   const FunnelComponent = useMemo(
