@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import Lottie from 'react-lottie-player'
 // Alternatively:
 // import Lottie from 'react-lottie-player/dist/LottiePlayerLight'
 
 import programmer from '../public/char/programming.json'
-
-export default function Programmer() {
+const Programmer = memo(() => {
   return (
     <Lottie
       loop
@@ -15,4 +14,7 @@ export default function Programmer() {
       style={{ width: 500, height: 500 }}
     />
   )
-}
+})
+Programmer.displayName = 'Programmer'
+
+export default Programmer
