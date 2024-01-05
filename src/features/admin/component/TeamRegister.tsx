@@ -1,18 +1,21 @@
+import { useState } from 'react'
+
 interface TeamRegisterProps {
   id: string
   name: string
-  setId: (val: string) => void
-  setName: (val: string) => void
-  onClick: () => void
+  onNext: ({ id, name }: { id: string; name: string }) => void
 }
 
 export default function TeamRegister({
-  id,
-  name,
-  setId,
-  setName,
-  onClick,
+  id: _id,
+  name: _name,
+  onNext,
 }: TeamRegisterProps) {
+  const [id, setId] = useState(_id)
+  const [name, setName] = useState(_name)
+  const onClick = () => {
+    onNext({ id, name })
+  }
   return (
     <>
       <label>id</label>

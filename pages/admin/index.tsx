@@ -9,12 +9,10 @@ interface Vote {
 }
 
 export default function Admin() {
-  const [Funnel, setStep] = useFunnel(['init', 'ee'] as const, {
+  const [Funnel, setStep] = useFunnel(['init', 'register'] as const, {
     initialStep: 'init',
   })
   const [vote, setVote] = useState<Vote>({ id: '', name: '', items: [] })
-  const setId = (val: string) => setVote({ ...vote, id: val })
-  const setName = (val: string) => setVote({ ...vote, name: val })
   return (
     <div className="min-h-body flex-col flex">
       <Funnel>
@@ -22,14 +20,14 @@ export default function Admin() {
           <TeamRegister
             id={vote.id}
             name={vote.name}
-            setId={setId}
-            setName={setName}
-            onClick={() => setStep('ee')}
+            onNext={(reqData: { id: string; name: string }) => {
+              setVote({ ...vote, id: reqData.id, name: reqData.name })
+              setStep('register')
+            }}
           />
-          <button onClick={() => setStep('ee')}>ee</button>
+          <button onClick={() => setStep('register')}>ee</button>
         </Funnel.Step>
-        <Funnel.Step name="ee">
-          <div>ee</div>
+        <Funnel.Step name="register">
           <button onClick={() => setStep('init')}>init</button>
         </Funnel.Step>
       </Funnel>
