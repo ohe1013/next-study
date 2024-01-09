@@ -22,7 +22,6 @@ export default function TeamRegister({
       <input value={id} onChange={(e) => setId(e.target.value)} />
       <label>name</label>
       <input value={name} onChange={(e) => setName(e.target.value)} />
-      <button onClick={onClick}>다음</button>
     </>
   )
 }

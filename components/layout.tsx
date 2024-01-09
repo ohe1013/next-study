@@ -1,5 +1,5 @@
-import Header from './header'
-import Footer from './footer'
+import Header from './Header'
+import Footer from './Footer'
 import { Alert } from './Alert'
 export default function Layout({ children }: any) {
   return (
@@ -11,7 +11,3 @@ export default function Layout({ children }: any) {
     </div>
   )
 }
-
-// export async function getServerSideProps(context) {
-//     return 'asd'
-// }

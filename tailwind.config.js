@@ -1,3 +1,7 @@
+const px0_10 = { ...Array.from(Array(11)).map((_, i) => `${i}px`) }
+const px0_100 = { ...Array.from(Array(101)).map((_, i) => `${i}px`) }
+const px0_200 = { ...Array.from(Array(201)).map((_, i) => `${i}px`) }
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: 'jit',

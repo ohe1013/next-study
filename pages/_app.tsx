@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { QueryClientProvider, QueryClient, Hydrate } from 'react-query'
 import { RecoilRoot } from 'recoil'
-import Layout from 'components/layout'
+import Layout from 'components/Layout'
 import { Alert } from 'components/Alert'
 
 export default function App({ Component, pageProps }: AppProps) {

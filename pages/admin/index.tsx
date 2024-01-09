@@ -1,3 +1,4 @@
+import { Button } from 'components/basic/Button'
 import { useState } from 'react'
 import TeamRegister from 'src/features/admin/component/TeamRegister'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
@@ -25,10 +26,10 @@ export default function Admin() {
               setStep('register')
             }}
           />
-          <button onClick={() => setStep('register')}>ee</button>
+          <Button onClick={() => setStep('init')}>다음</Button>
         </Funnel.Step>
         <Funnel.Step name="register">
-          <button onClick={() => setStep('init')}>init</button>
+          <Button onClick={() => setStep('init')}></Button>
         </Funnel.Step>
       </Funnel>
     </div>

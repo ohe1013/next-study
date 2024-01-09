@@ -1,5 +1,7 @@
+const withTwin = require('./withTwin')
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withTwin({
   reactStrictMode: false,
   swcMinify: true,
   images: {
@@ -8,6 +10,6 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-}
+})
 
 module.exports = nextConfig

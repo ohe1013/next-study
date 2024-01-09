@@ -3,7 +3,6 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import LoadingModal from '../components/LoadingModal'
 import SelectBox from 'components/SelectBox'
-import { SelectBoxItem } from 'types/selectBox'
 import Card from 'components/Card'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
@@ -14,6 +13,11 @@ type SelectMenu = {
     up: { number: number }
     name: { title: { plain_text: any }[] }
   }
+}
+export interface SelectBoxItem {
+  id: string
+  up: number
+  plainText: string
 }
 
 export default function Main({
