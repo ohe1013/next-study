@@ -1,27 +1,17 @@
+import { Button } from 'components/basic/Button'
+import Modal from 'components/basic/Modal'
 import { useState } from 'react'
 
-interface TeamRegisterProps {
-  id: string
-  name: string
-  onNext: ({ id, name }: { id: string; name: string }) => void
-}
-
-export default function TeamRegister({
-  id: _id,
-  name: _name,
-  onNext,
-}: TeamRegisterProps) {
-  const [id, setId] = useState(_id)
-  const [name, setName] = useState(_name)
-  const onClick = () => {
-    onNext({ id, name })
-  }
+export function TeamRegister() {
+  const [isActive, setIsActive] = useState(false)
   return (
     <>
-      <label>id</label>
-      <input value={id} onChange={(e) => setId(e.target.value)} />
-      <label>name</label>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <Modal
+        title={'메뉴명'}
+        isActive={isActive}
+        setIsActive={setIsActive}
+      ></Modal>
+      <Button onClick={() => setIsActive(true)}>등록하기</Button>
     </>
   )
 }
