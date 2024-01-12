@@ -12,7 +12,7 @@ interface TeamRegisterProps {
   onNext: ({ id, name }: { id: string; name: string }) => void
 }
 
-export default function TeamInit({
+export default function TeamRegister({
   id: _id,
   name: _name,
   onNext,

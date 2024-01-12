@@ -3,7 +3,7 @@ import tw, { styled } from 'twin.macro'
 
 type Button = {
   buttonType?: 'primary' | 'danger' | 'light' | 'dark'
-  style?: 'fill' | 'outline' | 'weak' | 'flat'
+  buttonStyle?: 'fill' | 'outline' | 'weak' | 'flat'
   display?: 'inline' | 'block' | 'full'
   size?: 'big' | 'medium' | 'small'
 
@@ -17,7 +17,7 @@ type Props = PropsWithChildren<Button>
 export function Button(props: Props) {
   const {
     buttonType = 'primary',
-    style = 'fill',
+    buttonStyle = 'fill',
     display = 'inline',
     disabled,
     className,
@@ -30,6 +30,7 @@ export function Button(props: Props) {
       id={buttonId}
       buttonType={buttonType}
       disabled={disabled}
+      buttonStyle={buttonStyle}
       {...rest}
       size={'big'}
     >
@@ -39,10 +40,13 @@ export function Button(props: Props) {
   )
 }
 
-const ButtonField = styled.button<Button>(({ disabled, size, buttonType }) => {
-  return [
-    // Basic button styles
-    tw`inline-flex items-center justify-center relative 
+const primary_color = 'blue-500'
+
+const ButtonField = styled.button<Button>(
+  ({ disabled, size, buttonType, buttonStyle }) => {
+    return [
+      // Basic button styles
+      tw`inline-flex items-center justify-center relative 
     font-bold antialiased whitespace-nowrap select-none border-0
      bg-transparent transition-all overflow-hidden transform p-0 
      text-white
@@ -52,13 +56,14 @@ const ButtonField = styled.button<Button>(({ disabled, size, buttonType }) => {
      after:content-[' '] after:absolute after:top-0 after:right-0 
      after:bottom-0 after:left-0 after:bg-transparent  
      `,
-    size === 'big' && tw`w-full rounded-[16px]`, // Add more size-specific styles
+      size === 'big' && tw`w-full rounded-[16px]`, // Add more size-specific styles
 
-    buttonType === 'primary' && tw`bg-blue-500`, // Add more type-specific styles
-
-    disabled && tw`opacity-25 cursor-not-allowed`,
-  ]
-})
+      buttonType === 'primary' && tw`bg-${primary_color}`,
+      buttonStyle === 'weak' && tw`bg-blue-50 text-${primary_color}`,
+      disabled && tw`opacity-25 cursor-not-allowed`,
+    ]
+  },
+)
 
 const SpanField = styled.span(() => [
   tw`flex items-center content-center box-border`,
