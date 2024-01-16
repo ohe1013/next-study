@@ -55,7 +55,7 @@ function InputContainer(props: Props) {
           {label}
         </label>
       </LabelContainer>
-      <Text>{String(value)?.length !== 0 ? value : label}</Text>
+      {/* <Text>{String(value)?.length !== 0 ? value : label}</Text> */}
       <BottomLine />
     </InputContainerField>
   )
@@ -135,7 +135,6 @@ const InputContainerField = styled.div<Omit<Props, 'label'>>(
 
 const LabelContainer = styled.div<{ hasValue?: boolean; focused?: boolean }>(
   ({ hasValue, focused }) => {
-    console.log(hasValue, focused)
     return [
       tw`absolute top-6 left-0 pointer-events-none whitespace-nowrap
   -translate-y-6  text-gray-800 

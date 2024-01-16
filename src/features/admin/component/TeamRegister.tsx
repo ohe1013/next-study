@@ -8,20 +8,21 @@ import tw from 'twin.macro'
 interface RegisterState {
   storeName: string
   storeLink: string
-  representNameList: string[]
-  advantageList: string[]
-  disAdvantageList: string[]
+  representNameList: Set<string>
+  advantageList: Set<string>
+  disAdvantageList: Set<string>
 }
 const defaultRegisterState: RegisterState = {
   storeName: '',
   storeLink: '',
-  representNameList: [],
-  advantageList: [],
-  disAdvantageList: [],
+  representNameList: new Set(),
+  advantageList: new Set(),
+  disAdvantageList: new Set(),
 }
 
 export function TeamRegister() {
   const [isActive, setIsActive] = useState(false)
+  const [menuList, setMenuList] = useState(new Set<string>([]))
   const [registerState, setRegisterState] =
     useState<RegisterState>(defaultRegisterState)
 
@@ -30,6 +31,7 @@ export function TeamRegister() {
   }
   const onCancelEventHandler = () => {
     setIsActive(false)
+    setRegisterState(defaultRegisterState)
   }
   return (
     <>
@@ -40,7 +42,7 @@ export function TeamRegister() {
         onCancel={onCancelEventHandler}
       >
         <div css={tw`max-w-md mx-auto [min-width: 384px] w-96 `}>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div className="relative z-0 w-full mb-5 group">
               <Input
                 label={'매장명'}
@@ -66,17 +68,49 @@ export function TeamRegister() {
               />
             </div>
             <div className="relative z-0 w-full mb-5 group">
-              <TagList></TagList>
-              <Input label={'메뉴리스트'} />
+              <TagList
+                tagList={registerState.representNameList}
+                setTagList={(newTagList) =>
+                  setRegisterState((state) => ({
+                    ...state,
+                    representNameList: newTagList,
+                  }))
+                }
+                title={'메뉴리스트'}
+              ></TagList>
             </div>
-            <div css={tw`grid md:grid-cols-2 md:gap-6`}>
+            <div className="relative z-0 w-full mb-5 group">
+              <TagList
+                tagList={registerState.advantageList}
+                setTagList={(newTagList) =>
+                  setRegisterState((state) => ({
+                    ...state,
+                    advantageList: newTagList,
+                  }))
+                }
+                title={'장점'}
+              ></TagList>
+            </div>
+            <div className="relative z-0 w-full mb-5 group">
+              <TagList
+                tagList={registerState.disAdvantageList}
+                setTagList={(newTagList) =>
+                  setRegisterState((state) => ({
+                    ...state,
+                    disAdvantageList: newTagList,
+                  }))
+                }
+                title={'단점'}
+              ></TagList>
+            </div>
+            {/* <div css={tw`grid md:grid-cols-2 md:gap-6`}>
               <div className="relative z-0 w-full mb-5 group">
                 <Input label={'장점'} />
               </div>
               <div className="relative z-0 w-full mb-5 group">
                 <Input label={'단점'} />
               </div>
-            </div>
+            </div> */}
             <div className="grid md:grid-cols-2 md:gap-6">
               <div className="relative z-0 w-full mb-5 group"></div>
               <div className="relative z-0 w-full mb-5 group"></div>

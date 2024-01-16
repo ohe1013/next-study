@@ -1,5 +1,5 @@
 import { PropsWithChildren, useId } from 'react'
-import tw, { styled } from 'twin.macro'
+import tw, { TwStyle, styled } from 'twin.macro'
 
 type Button = {
   buttonType?: 'primary' | 'danger' | 'light' | 'dark'
@@ -7,7 +7,7 @@ type Button = {
   display?: 'inline' | 'block' | 'full'
   size?: 'big' | 'medium' | 'small'
 
-  className?: string
+  className?: string | TwStyle
   onClick?: React.MouseEventHandler<HTMLElement>
   disabled?: boolean
 }
@@ -33,9 +33,10 @@ export function Button(props: Props) {
       buttonStyle={buttonStyle}
       {...rest}
       size={'big'}
+      className={className as string}
     >
       <SpanField>{children}</SpanField>
-      <span css={tw`flex items-center content-center box-border`}></span>
+      {/* <span css={tw`flex items-center content-center box-border`}></span> */}
     </ButtonField>
   )
 }
@@ -43,7 +44,7 @@ export function Button(props: Props) {
 const primary_color = 'blue-500'
 
 const ButtonField = styled.button<Button>(
-  ({ disabled, size, buttonType, buttonStyle }) => {
+  ({ disabled, size, buttonType, buttonStyle, className }) => {
     return [
       // Basic button styles
       tw`inline-flex items-center justify-center relative 
@@ -61,13 +62,14 @@ const ButtonField = styled.button<Button>(
       buttonType === 'primary' && tw`bg-${primary_color}`,
       buttonStyle === 'weak' && tw`bg-blue-50 text-${primary_color}`,
       disabled && tw`opacity-25 cursor-not-allowed`,
+      className && className,
     ]
   },
 )
 
 const SpanField = styled.span(() => [
-  tw`flex items-center content-center box-border`,
-  tw`max-h-14 h-14 [min-width: 96px] p-4`,
+  tw`flex items-center justify-center box-border`,
+  tw`max-h-14 h-14 [min-width: 96px] p-4 `,
 ])
 
 // export default Example;
