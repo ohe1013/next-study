@@ -6,6 +6,7 @@ import SelectBox from 'components/SelectBox'
 import Card from 'components/Card'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
+import { MenuAPi } from './api/menu/MenuAPi'
 
 type SelectMenu = {
   id: string
@@ -30,7 +31,6 @@ export default function Main({
   const { data, isLoading } = useQuery(['menus'], queryFN, {
     staleTime: 1000,
   })
-
   const [selected1st, setSelected1st] = useState('')
   const [selected2nd, setSelected2nd] = useState('')
   const [disable, setDisable] = useState(false)
@@ -134,7 +134,7 @@ export default function Main({
   )
 }
 // 빌드 타임에 호출
-const queryFN = async () => {
+const queryFN = async (): Promise<MenuAPi> => {
   return (await fetch('/api/menu/')).json()
 }
 const fetchUser = async (id: string) => {

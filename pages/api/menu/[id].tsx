@@ -13,6 +13,7 @@ async function getMenu({ id }: { id: any }) {
     },
   }
   const res = await axios.request(options)
+
   return res.data.properties.up.number
 }
 
