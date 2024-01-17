@@ -4,7 +4,6 @@ import { ThemeProvider } from 'next-themes'
 import { QueryClientProvider, QueryClient, Hydrate } from 'react-query'
 import { RecoilRoot } from 'recoil'
 import Layout from 'components/Layout'
-import { Alert } from 'components/Alert'
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
