@@ -1,5 +1,5 @@
+import { SelectBoxItem } from 'pages/main'
 import { ChangeEventHandler } from 'react'
-import { SelectBoxItem } from 'types/selectBox'
 
 export default function SelectBox({
   selectProps,
