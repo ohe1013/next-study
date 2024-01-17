@@ -3,7 +3,7 @@ import tw, { TwStyle, styled } from 'twin.macro'
 
 type Button = {
   buttonType?: 'primary' | 'danger' | 'light' | 'dark'
-  buttonStyle?: 'fill' | 'outline' | 'weak' | 'flat'
+  buttonStyle?: 'fill' | 'outline' | 'addone' | 'weak' | 'flat'
   display?: 'inline' | 'block' | 'full'
   size?: 'big' | 'medium' | 'small'
 
@@ -33,18 +33,15 @@ export function Button(props: Props) {
       buttonStyle={buttonStyle}
       {...rest}
       size={'big'}
-      className={className as string}
+      css={className}
     >
       <SpanField>{children}</SpanField>
       {/* <span css={tw`flex items-center content-center box-border`}></span> */}
     </ButtonField>
   )
 }
-
-const primary_color = 'blue-500'
-
 const ButtonField = styled.button<Button>(
-  ({ disabled, size, buttonType, buttonStyle, className }) => {
+  ({ disabled, size, buttonType, buttonStyle }) => {
     return [
       // Basic button styles
       tw`inline-flex items-center justify-center relative 
@@ -59,10 +56,13 @@ const ButtonField = styled.button<Button>(
      `,
       size === 'big' && tw`w-full rounded-[16px]`, // Add more size-specific styles
 
-      buttonType === 'primary' && tw`bg-${primary_color}`,
-      buttonStyle === 'weak' && tw`bg-blue-50 text-${primary_color}`,
+      buttonType === 'primary' && tw`bg-primary active:bg-blue-600 `,
+      buttonStyle === 'weak' && tw`bg-blue-50 text-primary active:bg-blue-100`,
+      buttonStyle === 'addone' &&
+        tw`
+      w-20 h-12 my-auto 
+     `,
       disabled && tw`opacity-25 cursor-not-allowed`,
-      className && className,
     ]
   },
 )

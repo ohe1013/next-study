@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useQuery, QueryClient, dehydrate } from 'react-query'
 import LoadingModal from '../components/LoadingModal'
@@ -21,11 +21,11 @@ export interface SelectBoxItem {
   plainText: string
 }
 
-export default function Main({
+const Main = ({
   currentUser,
 }: {
   currentUser: { id: string; up: number }
-}): JSX.Element {
+}): JSX.Element => {
   const router = useRouter()
   const [alert, setAlert] = useRecoilState(alertState)
   const { data, isLoading } = useQuery(['menus'], queryFN, {
@@ -88,22 +88,24 @@ export default function Main({
         <section className="text-gray-600 py-12 body-font">
           <div className="container px-5  mx-auto">
             <div className="flex flex-wrap -m-4">
-              {data?.results.map((result: any, idx: number) => (
-                <Card key={idx} menu={result}></Card>
-              ))}
+              {(data?.results as MenuAPi['results']).map(
+                (result, idx: number) => (
+                  <Card key={idx} menu={result}></Card>
+                ),
+              )}
             </div>
           </div>
           <div className="container w-9/12 px-5 mx-auto ">
             <div className="flex py-12 -m-4 gap-2">
               <SelectBox
-                selectProps={{ id: 'getUpData1st' }}
+                selectProps={{ id: 'up1st' }}
                 onChange={handleSelect(setSelected1st)}
                 selectValue={selected1st}
                 selectBoxItemList={selectBoxItemList}
                 label="추천 1순위"
               ></SelectBox>
               <SelectBox
-                selectProps={{ id: 'getUpData2nd' }}
+                selectProps={{ id: 'up2nd' }}
                 onChange={handleSelect(setSelected2nd)}
                 selectValue={selected2nd}
                 selectBoxItemList={selectBoxItemList}
@@ -133,6 +135,8 @@ export default function Main({
     </>
   )
 }
+
+export default Main
 // 빌드 타임에 호출
 const queryFN = async (): Promise<MenuAPi> => {
   return (await fetch('/api/menu/')).json()
@@ -147,15 +151,18 @@ const fetchUser = async (id: string) => {
 export async function getServerSideProps(context: {
   query: { id: string; name: any }
 }) {
-  // const host = headers().get('host');
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery(['menu', queryFN])
+  if (!context.query.id) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
   const fetchedUser = await fetchUser(context.query.id)
-
   const user = await fetchedUser.json()
   return {
     props: {
-      dehydratedProps: dehydrate(queryClient),
       currentUser: {
         name: context.query.name,
         up: user.properties.up.number,

@@ -48,7 +48,7 @@ export default function TeamRegister({
       <div css={[`padding:16px`]}>
         <Input
           label={'투표명'}
-          labelHtmlFor={id}
+          id={id}
           value={id}
           onChange={(e) => setId(e.target.value)}
         ></Input>
@@ -56,7 +56,7 @@ export default function TeamRegister({
       <div css={[`padding:16px`]}>
         <Input
           label={'관리자ID'}
-          labelHtmlFor={name}
+          id={name}
           value={name}
           onChange={(e) => setName(e.target.value)}
         ></Input>

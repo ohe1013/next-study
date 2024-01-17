@@ -18,7 +18,7 @@ export default function Header() {
           <span className="ml-3 dark:text-white text-xl">OHK</span>
         </Link>
         <Link
-          href="/admin"
+          href={{ pathname: 'admin', query: { 'funnel-step': 'init' } }}
           className="flex title-font font-medium items-center text-gray-900 mb-0"
         >
           <span className="ml-3 dark:text-white text-xl">관리자</span>

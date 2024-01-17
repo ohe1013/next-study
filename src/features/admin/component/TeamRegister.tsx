@@ -11,6 +11,7 @@ interface RegisterState {
   representNameList: Set<string>
   advantageList: Set<string>
   disAdvantageList: Set<string>
+  reviewLinkList: Set<string>
 }
 const defaultRegisterState: RegisterState = {
   storeName: '',
@@ -18,11 +19,11 @@ const defaultRegisterState: RegisterState = {
   representNameList: new Set(),
   advantageList: new Set(),
   disAdvantageList: new Set(),
+  reviewLinkList: new Set(),
 }
 
 export function TeamRegister() {
   const [isActive, setIsActive] = useState(false)
-  const [menuList, setMenuList] = useState(new Set<string>([]))
   const [registerState, setRegisterState] =
     useState<RegisterState>(defaultRegisterState)
 
@@ -77,6 +78,7 @@ export function TeamRegister() {
                   }))
                 }
                 title={'메뉴리스트'}
+                buttonLabel={'추가'}
               ></TagList>
             </div>
             <div className="relative z-0 w-full mb-5 group">
@@ -89,6 +91,7 @@ export function TeamRegister() {
                   }))
                 }
                 title={'장점'}
+                buttonLabel={'추가'}
               ></TagList>
             </div>
             <div className="relative z-0 w-full mb-5 group">
@@ -101,16 +104,22 @@ export function TeamRegister() {
                   }))
                 }
                 title={'단점'}
+                buttonLabel={'추가'}
               ></TagList>
             </div>
-            {/* <div css={tw`grid md:grid-cols-2 md:gap-6`}>
-              <div className="relative z-0 w-full mb-5 group">
-                <Input label={'장점'} />
-              </div>
-              <div className="relative z-0 w-full mb-5 group">
-                <Input label={'단점'} />
-              </div>
-            </div> */}
+            <div className="relative z-0 w-full mb-5 group">
+              <TagList
+                tagList={registerState.reviewLinkList}
+                setTagList={(newTagList) =>
+                  setRegisterState((state) => ({
+                    ...state,
+                    reviewLinkList: newTagList,
+                  }))
+                }
+                title={'후기'}
+                buttonLabel={'추가'}
+              ></TagList>
+            </div>
             <div className="grid md:grid-cols-2 md:gap-6">
               <div className="relative z-0 w-full mb-5 group"></div>
               <div className="relative z-0 w-full mb-5 group"></div>
