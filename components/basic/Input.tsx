@@ -123,7 +123,7 @@ interface InputContainer {
   focused?: boolean
 }
 const InputContainerField = styled.div<Omit<Props, 'label'>>(
-  ({ hasValue, className, focused }) => [
+  ({ className }) => [
     tw`cursor-text flex [align-items: flex-end] justify-center
   relative [padding: 20px 0 4px] whitespace-nowrap overflow-hidden
   text-2xl 
@@ -134,7 +134,7 @@ const InputContainerField = styled.div<Omit<Props, 'label'>>(
 )
 
 const LabelContainer = styled.div<{ hasValue?: boolean; focused?: boolean }>(
-  ({ hasValue, focused }: { hasValue: boolean; focused: boolean }) => {
+  ({ hasValue, focused }) => {
     return [
       tw`absolute top-6 left-0 pointer-events-none whitespace-nowrap
   -translate-y-6  text-gray-800 
