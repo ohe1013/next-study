@@ -14,12 +14,12 @@ export default function Modal(props: PropsWithChildren<ModalProps>) {
   return isActive ? (
     <>
       <div
-        css={tw`justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`}
+        css={tw`justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none `}
       >
-        <div css={tw`relative w-auto my-6 mx-auto max-w-3xl`}>
+        <div css={tw`relative w-auto my-6 mx-auto max-w-3xl `}>
           {/*content*/}
           <div
-            css={tw`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none`}
+            css={tw`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none dark:bg-slate-700`}
           >
             {/*header*/}
             <div

@@ -101,7 +101,7 @@ export const TagsList = styled.ul(() => [tw`flex flex-wrap p-0 gap-2`])
 export const TagItem = styled.li(() => [
   tw`flex items-center justify-center text-white
   p-2 text-sm  list-none rounded-[2px] 
-  m-[0_8px_8px_0] bg-primary [border-radius: 15px]`,
+  m-[2px_8px_2px_0] bg-primary [border-radius: 15px]`,
 ])
 
 export const TagCloseIcon = styled.span(() => [

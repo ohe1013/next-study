@@ -13,7 +13,7 @@ module.exports = {
   theme: {
     extend: {
       minHeight: {
-        body: 'calc(100vh - 148px)',
+        body: 'calc(100vh - 2rem)',
       },
       colors: {
         primary: '#3b82f6',

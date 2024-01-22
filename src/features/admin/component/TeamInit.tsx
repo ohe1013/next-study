@@ -61,7 +61,11 @@ export default function TeamRegister({
           onChange={(e) => setName(e.target.value)}
         ></Input>
       </div>
-      {code && <span>{code}</span>}
+      {code && (
+        <div css={[`padding:16px`]}>
+          <Input label={'코드'} id={code} value={code} disabled={true}></Input>
+        </div>
+      )}
       <div css={[`padding:16px`]}>
         <Button disabled={!isValid([id, name])} onClick={createCode}>
           코드 발급받기

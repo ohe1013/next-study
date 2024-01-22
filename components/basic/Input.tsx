@@ -56,7 +56,7 @@ function InputContainer(props: Props) {
         </label>
       </LabelContainer>
       {/* <Text>{String(value)?.length !== 0 ? value : label}</Text> */}
-      <BottomLine />
+      {/* <BottomLine /> */}
     </InputContainerField>
   )
 }
@@ -134,7 +134,7 @@ const InputContainerField = styled.div<Omit<Props, 'label'>>(
 )
 
 const LabelContainer = styled.div<{ hasValue?: boolean; focused?: boolean }>(
-  ({ hasValue, focused }) => {
+  ({ hasValue, focused }: { hasValue: boolean; focused: boolean }) => {
     return [
       tw`absolute top-6 left-0 pointer-events-none whitespace-nowrap
   -translate-y-6  text-gray-800 
@@ -167,6 +167,8 @@ const text_input = tw`
   p-0 [font-size: inherit] font-medium [line-height: inherit] 
   text-gray-800 caret-blue-400 outline-none  border-b-2  border-gray-200 
   focus:border-b-2 focus:border-blue-400
+  dark:text-white
+
   `
 
 const InputField = styled.input(() => [text_input])
@@ -178,7 +180,7 @@ const Text = styled.div(() => [
 ])
 
 const BottomLine = styled.span(() => [
-  tw`absolute left-0 right-0 bottom-0 h-1 [border-radius: 1px]
+  tw`absolute left-0 right-0 bottom-0 [height:2px] [border-radius: 1px]
   bg-gray-100
   `,
 ])
