@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect, useRef } from 'react'
 import { Button } from './Button'
 import tw from 'twin.macro'
 
@@ -11,6 +11,22 @@ interface ModalProps {
 
 export default function Modal(props: PropsWithChildren<ModalProps>) {
   const { title, onCancel, onSuccess, isActive, children } = props
+  const currentTop = useRef(window.scrollY)
+  console.log(currentTop)
+  useEffect(() => {
+    if (isActive) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${currentTop.current}px;
+      overflow-y: scroll;
+      width: 100%;`
+    }
+    return () => {
+      document.body.style.cssText = ''
+      window.scrollTo(0, parseInt(currentTop.current + '' || '0', 10) * -1)
+    }
+  }, [isActive])
+
   return isActive ? (
     <>
       <div

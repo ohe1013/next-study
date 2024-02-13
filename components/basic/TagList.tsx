@@ -11,7 +11,7 @@ interface TagProps {
   buttonLabel: string
 }
 export default function TagList(props: TagProps) {
-  const { tagList, setTagList, buttonLabel, type = 'link' } = props
+  const { tagList, setTagList, buttonLabel, type = 'string' } = props
   const [inputValue, setInputValue] = useState('')
   const removeTags = useCallback(
     (tagToRemove: string, tags: Set<string>) => {
@@ -22,6 +22,7 @@ export default function TagList(props: TagProps) {
 
   const addTags = useCallback(
     (tags: Set<string>, inputVal: string) => {
+      if (inputVal === '') return
       setTagList(new Set(tags.add(inputVal)))
       setInputValue('')
     },

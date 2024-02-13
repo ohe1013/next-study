@@ -1,28 +1,51 @@
-import { Button } from 'components/basic/Button'
+import { BottomCTA } from 'components/basic/BottomCTA'
 import Input from 'components/basic/Input'
 import Modal from 'components/basic/Modal'
 import TagList from 'components/basic/TagList'
-import { useState } from 'react'
+import Image from 'next/image'
+import { RegisterState } from 'pages/admin'
+import { ChangeEvent, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { alertState } from 'src/recoil/alert/alert'
 import tw from 'twin.macro'
+import { Entries } from 'types/util'
 
-interface RegisterState {
-  storeName: string
-  storeLink: string
-  representNameList: Set<string>
-  advantageList: Set<string>
-  disAdvantageList: Set<string>
-  reviewLinkList: Set<string>
-}
 const defaultRegisterState: RegisterState = {
-  storeName: '',
-  storeLink: '',
-  representNameList: new Set(),
-  advantageList: new Set(),
-  disAdvantageList: new Set(),
-  reviewLinkList: new Set(),
+  representImg: { label: '이미지', type: 'img', value: null },
+  storeName: { value: '', type: 'input', label: '매장명' },
+  storeLink: { value: '', type: 'input', label: '매장링크' },
+  representNameList: {
+    value: new Set(),
+    type: 'tag',
+    label: '대표메뉴',
+    buttonLabel: '추가',
+  },
+  advantageList: {
+    value: new Set(),
+    type: 'tag',
+    label: '장점',
+    buttonLabel: '추가',
+  },
+  disAdvantageList: {
+    value: new Set(),
+    type: 'tag',
+    label: '단점',
+    buttonLabel: '추가',
+  },
+  reviewLinkList: {
+    value: new Set(),
+    type: 'tag',
+    label: '후기',
+    buttonLabel: '추가',
+  },
 }
 
-export function TeamRegister() {
+interface TeamRegisterProps {
+  registerList: RegisterState[]
+}
+
+export function TeamRegister(teamRegisterProps: TeamRegisterProps) {
+  const { registerList } = teamRegisterProps
   const [isActive, setIsActive] = useState(false)
   const [registerState, setRegisterState] =
     useState<RegisterState>(defaultRegisterState)
@@ -34,6 +57,18 @@ export function TeamRegister() {
     setIsActive(false)
     setRegisterState(defaultRegisterState)
   }
+  const handleOnChange = <T extends keyof RegisterState>(
+    key: T,
+    newValue: RegisterState[T]['value'],
+  ) => {
+    setRegisterState((state) => ({
+      ...state,
+      [key]: {
+        ...state[key],
+        value: newValue,
+      },
+    }))
+  }
   return (
     <>
       <Modal
@@ -44,82 +79,47 @@ export function TeamRegister() {
       >
         <div css={tw`max-w-md mx-auto [min-width: 384px] w-96 `}>
           <form onSubmit={(e) => e.preventDefault()}>
-            <div className="relative z-0 w-full mb-5 group">
-              <Input
-                label={'매장명'}
-                value={registerState.storeName}
-                onChange={(e) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    storeName: e.target.value,
-                  }))
+            {(Object.entries(registerState) as Entries<RegisterState>).map(
+              ([key, value]) => {
+                switch (value.type) {
+                  case 'input': {
+                    return (
+                      <div key={key} className="relative z-0 w-full mb-5 group">
+                        <Input
+                          label={value.label}
+                          value={value.value}
+                          onChange={(e) => handleOnChange(key, e.target.value)}
+                        />
+                      </div>
+                    )
+                  }
+                  case 'tag': {
+                    return (
+                      <div key={key} className="relative z-0 w-full mb-5 group">
+                        <TagList
+                          tagList={value.value}
+                          setTagList={(newValue) =>
+                            handleOnChange(key, newValue)
+                          }
+                          title={value.label}
+                          buttonLabel={value.buttonLabel}
+                        ></TagList>
+                      </div>
+                    )
+                  }
+                  case 'img': {
+                    return (
+                      <FIleInput
+                        key={key}
+                        _key={key as 'representImg'}
+                        value={value.value}
+                        onChange={handleOnChange}
+                      />
+                    )
+                  }
                 }
-              />
-            </div>
-            <div className="relative z-0 w-full mb-5 group">
-              <Input
-                label={'매장링크'}
-                value={registerState.storeLink}
-                onChange={(e) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    storeLink: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="relative z-0 w-full mb-5 group">
-              <TagList
-                tagList={registerState.representNameList}
-                setTagList={(newTagList) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    representNameList: newTagList,
-                  }))
-                }
-                title={'메뉴리스트'}
-                buttonLabel={'추가'}
-              ></TagList>
-            </div>
-            <div className="relative z-0 w-full mb-5 group">
-              <TagList
-                tagList={registerState.advantageList}
-                setTagList={(newTagList) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    advantageList: newTagList,
-                  }))
-                }
-                title={'장점'}
-                buttonLabel={'추가'}
-              ></TagList>
-            </div>
-            <div className="relative z-0 w-full mb-5 group">
-              <TagList
-                tagList={registerState.disAdvantageList}
-                setTagList={(newTagList) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    disAdvantageList: newTagList,
-                  }))
-                }
-                title={'단점'}
-                buttonLabel={'추가'}
-              ></TagList>
-            </div>
-            <div className="relative z-0 w-full mb-5 group">
-              <TagList
-                tagList={registerState.reviewLinkList}
-                setTagList={(newTagList) =>
-                  setRegisterState((state) => ({
-                    ...state,
-                    reviewLinkList: newTagList,
-                  }))
-                }
-                title={'후기'}
-                buttonLabel={'추가'}
-              ></TagList>
-            </div>
+              },
+            )}
             <div className="grid md:grid-cols-2 md:gap-6">
               <div className="relative z-0 w-full mb-5 group"></div>
               <div className="relative z-0 w-full mb-5 group"></div>
@@ -127,7 +127,43 @@ export function TeamRegister() {
           </form>
         </div>
       </Modal>
-      <Button onClick={() => setIsActive(true)}>등록하기</Button>
+      <BottomCTA onClick={() => setIsActive(true)}>등록하기</BottomCTA>
     </>
+  )
+}
+
+interface FileInputProps {
+  _key: 'representImg'
+  value: RegisterState['representImg']['value']
+  onChange: <T extends keyof RegisterState>(
+    key: T,
+    newValue: RegisterState[T]['value'],
+  ) => void
+}
+const FIleInput = (props: FileInputProps) => {
+  const { _key: key, value, onChange } = props
+  const [, setAlert] = useRecoilState(alertState)
+  const fileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return
+    if (e.target.files[0].size > 1_024_000) {
+      setAlert({
+        type: 'warn',
+        visible: true,
+        message: '파일의 사이즈를 1mb이하로 부탁드립니다.',
+      })
+      return
+    }
+    const imgFile = e.target.files[0]
+    URL.revokeObjectURL(value)
+    const blobUrl = URL.createObjectURL(imgFile)
+    onChange(key, blobUrl)
+  }
+  return (
+    <div key={props._key} className="relative z-0 w-full mb-5 group">
+      <input accept="image/*" type="file" onChange={fileChangeHandler} />
+      {value && (
+        <Image loading="lazy" src={value} width={200} height={200} alt={''} />
+      )}
+    </div>
   )
 }

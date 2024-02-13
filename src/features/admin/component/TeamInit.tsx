@@ -2,25 +2,28 @@ import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
 import Input from 'components/basic/Input'
 import { randomUUID } from 'crypto'
+import { Vote } from 'pages/admin'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 
-interface TeamRegisterProps {
+export interface TeamInitProps {
   id: string
   name: string
-  onNext: ({ id, name }: { id: string; name: string }) => void
+  code: string
+  onNext: (state: Pick<Vote, keyof Omit<TeamInitProps, 'onNext'>>) => void
 }
 
 export default function TeamRegister({
   id: _id,
   name: _name,
+  code: _code,
   onNext,
-}: TeamRegisterProps) {
+}: TeamInitProps) {
   const [id, setId] = useState(_id)
   const [name, setName] = useState(_name)
-  const [alert, setAlert] = useRecoilState(alertState)
-  const [code, setCode] = useState('')
+  const [, setAlert] = useRecoilState(alertState)
+  const [code, setCode] = useState(_code)
   const isValid = <T extends string>(props: [T, ...T[]]) => {
     for (const prop of props) {
       if (prop === '') return false
@@ -40,8 +43,8 @@ export default function TeamRegister({
     }
   }
 
-  const onClick = () => {
-    onNext({ id, name })
+  const handleNextButton = () => {
+    onNext({ id, name, code })
   }
   return (
     <>
@@ -71,7 +74,10 @@ export default function TeamRegister({
           코드 발급받기
         </Button>
       </div>
-      <BottomCTA disabled={!isValid([id, name, code])} onClick={onClick}>
+      <BottomCTA
+        disabled={!isValid([id, name, code])}
+        onClick={handleNextButton}
+      >
         다음
       </BottomCTA>
     </>
