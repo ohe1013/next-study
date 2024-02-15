@@ -10,6 +10,10 @@ const nextConfig = withTwin({
   compiler: {
     styledComponents: true,
   },
+  i18n: {
+    locale: ['ko'],
+    defaultLocale: 'ko',
+  },
 })
 
 module.exports = nextConfig

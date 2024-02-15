@@ -18,6 +18,7 @@ export default function DarkModeToggleButton() {
             "
         type="button"
         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        aria-label='dark mode toggle button'
       >
         {/* 다크모드 */}
         <svg
