@@ -11,7 +11,7 @@ const nextConfig = withTwin({
     styledComponents: true,
   },
   i18n: {
-    locale: ['ko'],
+    locales: ['ko'],
     defaultLocale: 'ko',
   },
 })

@@ -1,11 +1,14 @@
 import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
 import Input from 'components/basic/Input'
-import { randomUUID } from 'crypto'
 import { Vote } from 'pages/admin'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
+import {
+  useAdminInfoPatchMutation,
+  useAdminInfoPostMutation,
+} from '../queries/useAdminInfoMutation'
 
 export interface TeamInitProps {
   id: string
@@ -42,9 +45,19 @@ export default function TeamRegister({
       })
     }
   }
-
-  const handleNextButton = () => {
+  const {
+    mutate: postMuatate,
+    data: adminInfoData,
+    status: adminInfoStatus,
+  } = useAdminInfoPostMutation()
+  const { mutate, data, isSuccess, status } = useAdminInfoPatchMutation()
+  if (adminInfoStatus === 'success') {
     onNext({ id, name, code })
+    const itemKey = adminInfoData.data.id
+    mutate({ adminName: name, teamName: id, id: code, itemKey: itemKey })
+  }
+  const handleNextButton = () => {
+    postMuatate({ adminName: name, teamName: id, id: code })
   }
   return (
     <>

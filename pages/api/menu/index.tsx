@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { TOKEN, DATABASE_ID_MENU } from '../../../config'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { MenuAPi } from './MenuAPi'
+import { MenuAPi } from './Menu'
 
 export default async function menu(req: NextApiRequest, res: NextApiResponse) {
   const options = {

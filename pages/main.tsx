@@ -6,7 +6,7 @@ import SelectBox from 'components/SelectBox'
 import Card from 'components/Card'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
-import { MenuAPi } from './api/menu/MenuAPi'
+import { MenuAPi } from './api/menu/Menu'
 
 type SelectMenu = {
   id: string

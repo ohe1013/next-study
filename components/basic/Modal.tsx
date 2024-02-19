@@ -12,7 +12,6 @@ interface ModalProps {
 export default function Modal(props: PropsWithChildren<ModalProps>) {
   const { title, onCancel, onSuccess, isActive, children } = props
   const currentTop = useRef(window.scrollY)
-  console.log(currentTop)
   useEffect(() => {
     if (isActive) {
       document.body.style.cssText = `
