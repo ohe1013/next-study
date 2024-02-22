@@ -46,18 +46,29 @@ export default function TeamRegister({
     }
   }
   const {
-    mutate: postMuatate,
-    data: adminInfoData,
-    status: adminInfoStatus,
+    mutate: postAdminInfoMuatate,
+    data: postAdminInfoData,
+    status: postAdminInfoStatus,
   } = useAdminInfoPostMutation()
-  const { mutate, data, isSuccess, status } = useAdminInfoPatchMutation()
-  if (adminInfoStatus === 'success') {
+
+  const { mutate: patchAdminInfohMutate } = useAdminInfoPatchMutation()
+  if (postAdminInfoStatus === 'success') {
     onNext({ id, name, code })
-    const itemKey = adminInfoData.data.id
-    mutate({ adminName: name, teamName: id, id: code, itemKey: itemKey })
+    const page_id = postAdminInfoData.data.id
+    patchAdminInfohMutate({
+      data: {
+        adminName: name,
+        teamName: id,
+        id: code,
+        userKey: 'it test',
+      },
+      params: {
+        page_id,
+      },
+    })
   }
   const handleNextButton = () => {
-    postMuatate({ adminName: name, teamName: id, id: code })
+    postAdminInfoMuatate({ data: { adminName: name, teamName: id, id: code } })
   }
   return (
     <>

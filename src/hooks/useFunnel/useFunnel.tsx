@@ -53,7 +53,7 @@ export const useFunnel = <Steps extends NonEmptyArray<string>>(
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
-  }, [steps, stepQueryKey, options, router])
+  }, [options, router.query, router.events, stepQueryKey, steps])
   assert(steps.length > 0, 'steps가 비어있습니다.')
 
   const FunnelComponent = useMemo(

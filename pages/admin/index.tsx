@@ -1,8 +1,9 @@
-import { Button } from 'components/basic/Button'
-import { useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
 import { TeamRegister } from 'src/features/admin/component/TeamRegister'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
+import { adminFunnelRollback } from 'src/recoil/admin'
 
 export interface Vote {
   id: string
@@ -48,6 +49,7 @@ export default function Admin() {
     code: '',
     registerList: [],
   })
+  const [rollback, setRollback] = useRecoilState(adminFunnelRollback)
   return (
     <div className="min-h-body flex-col flex">
       <Funnel>

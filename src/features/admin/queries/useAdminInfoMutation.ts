@@ -1,21 +1,33 @@
 import axios from 'axios'
 import { useMutation } from 'react-query'
 
-interface PostAdminInfoProps {
+interface Data {
   id: string
   adminName: string
   teamName: string
 }
 
-const fetcher = (props: PostAdminInfoProps) => axios.post('/api/admin', props)
-const fetcher2 = (
-  props: PostAdminInfoProps & { itemKey: string; page_id: string },
-) => axios.patch('/api/admin?page_id=' + props.page_id, props)
-const useAdminInfoPatchMutation = () => {
-  return useMutation(fetcher2)
+interface PostAdminInfoProps {
+  params?: Record<string, string>
+  data: Data
 }
+type PatchAdminInfoProps = {
+  params?: Record<string, string>
+  data: Data & { userKey: string }
+}
+
+const postFetcher = (props: PostAdminInfoProps) =>
+  axios.post('/api/admin/pages', props.data)
+
+const patchFetcher = (props: PatchAdminInfoProps) =>
+  axios.patch('/api/admin/pages', props.data, { params: props.params })
+
+const useAdminInfoPatchMutation = () => {
+  return useMutation(patchFetcher)
+}
+
 const useAdminInfoPostMutation = () => {
-  return useMutation(fetcher)
+  return useMutation(postFetcher)
 }
 
 export { useAdminInfoPostMutation, useAdminInfoPatchMutation }

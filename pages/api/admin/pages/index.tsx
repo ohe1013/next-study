@@ -7,9 +7,8 @@ export default async function adminInfo(
   res: NextApiResponse,
 ) {
   const requestMethod = req.method
-  const { page_id } = req.query
-  console.log(req.query)
   const properties: any = {}
+  const { page_id } = req.query
   const createText = (value: string) => [
     {
       text: { content: value },
