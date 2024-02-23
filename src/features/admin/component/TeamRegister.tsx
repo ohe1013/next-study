@@ -4,11 +4,12 @@ import Modal from 'components/basic/Modal'
 import TagList from 'components/basic/TagList'
 import Image from 'next/image'
 import { RegisterState } from 'pages/admin'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 import tw from 'twin.macro'
 import { Entries } from 'types/util'
+import { useAdminItemPostDBMutation } from '../queries/useAdminItemMutation'
 
 const defaultRegisterState: RegisterState = {
   representImg: { label: '이미지', type: 'img', value: null },
@@ -42,13 +43,26 @@ const defaultRegisterState: RegisterState = {
 
 interface TeamRegisterProps {
   registerList: RegisterState[]
+  apiInfo: Record<string, string>
 }
 
 export function TeamRegister(teamRegisterProps: TeamRegisterProps) {
-  const { registerList } = teamRegisterProps
+  const { registerList, apiInfo } = teamRegisterProps
   const [isActive, setIsActive] = useState(false)
   const [registerState, setRegisterState] =
     useState<RegisterState>(defaultRegisterState)
+
+  const { mutate: postDB, status, data } = useAdminItemPostDBMutation()
+  const db = Object.entries(defaultRegisterState).map(([key, value]) => ({
+    type: value.type,
+    label: value.label,
+  }))
+  useEffect(() => {
+    postDB({ data: db })
+  }, [])
+  if (status === 'success') {
+    console.log(data)
+  }
 
   const onSuccessEventHandler = () => {
     setIsActive(false)

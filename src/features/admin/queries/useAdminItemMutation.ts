@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { useMutation } from 'react-query'
 
-interface Data {
-  id: string
-  adminName: string
-  teamName: string
-}
+type Data = {
+  type: 'tag' | 'input'
+  label: string
+}[]
 interface PostAdminItemProps {
   params?: Record<string, string>
   data: Data

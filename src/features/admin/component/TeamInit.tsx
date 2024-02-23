@@ -14,13 +14,15 @@ export interface TeamInitProps {
   id: string
   name: string
   code: string
-  onNext: (state: Pick<Vote, keyof Omit<TeamInitProps, 'onNext'>>) => void
+  apiInfo: Record<string, string>
+  onNext: (state: Pick<TeamInitProps, 'id' | 'name' | 'code'>) => void
 }
 
 export default function TeamRegister({
   id: _id,
   name: _name,
   code: _code,
+  apiInfo: _apiInfo,
   onNext,
 }: TeamInitProps) {
   const [id, setId] = useState(_id)

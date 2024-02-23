@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
 import { TeamRegister } from 'src/features/admin/component/TeamRegister'
@@ -49,6 +49,7 @@ export default function Admin() {
     code: '',
     registerList: [],
   })
+  const apiInfo = useRef<Record<string, string>>({})
   const [rollback, setRollback] = useRecoilState(adminFunnelRollback)
   return (
     <div className="min-h-body flex-col flex">
@@ -58,7 +59,7 @@ export default function Admin() {
             id={vote.id}
             name={vote.name}
             code={vote.code}
-            onNext={(reqData: Omit<TeamInitProps, 'onNext'>) => {
+            onNext={(reqData: Pick<TeamInitProps, 'id' | 'name' | 'code'>) => {
               setVote({
                 ...vote,
                 id: reqData.id,
@@ -67,10 +68,14 @@ export default function Admin() {
               })
               setStep('register')
             }}
+            apiInfo={apiInfo.current}
           />
         </Funnel.Step>
         <Funnel.Step name="register">
-          <TeamRegister registerList={vote.registerList} />
+          <TeamRegister
+            apiInfo={apiInfo.current}
+            registerList={vote.registerList}
+          />
         </Funnel.Step>
       </Funnel>
     </div>
