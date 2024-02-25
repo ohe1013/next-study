@@ -1,20 +1,14 @@
 import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
 import Input from 'components/basic/Input'
-import { Vote } from 'pages/admin'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
-import {
-  useAdminInfoPatchMutation,
-  useAdminInfoPostMutation,
-} from '../queries/useAdminInfoMutation'
 
 export interface TeamInitProps {
   id: string
   name: string
   code: string
-  apiInfo: Record<string, string>
   onNext: (state: Pick<TeamInitProps, 'id' | 'name' | 'code'>) => void
 }
 
@@ -22,7 +16,6 @@ export default function TeamRegister({
   id: _id,
   name: _name,
   code: _code,
-  apiInfo: _apiInfo,
   onNext,
 }: TeamInitProps) {
   const [id, setId] = useState(_id)
@@ -47,30 +40,9 @@ export default function TeamRegister({
       })
     }
   }
-  const {
-    mutate: postAdminInfoMuatate,
-    data: postAdminInfoData,
-    status: postAdminInfoStatus,
-  } = useAdminInfoPostMutation()
 
-  const { mutate: patchAdminInfohMutate } = useAdminInfoPatchMutation()
-  if (postAdminInfoStatus === 'success') {
-    onNext({ id, name, code })
-    const page_id = postAdminInfoData.data.id
-    patchAdminInfohMutate({
-      data: {
-        adminName: name,
-        teamName: id,
-        id: code,
-        userKey: 'it test',
-      },
-      params: {
-        page_id,
-      },
-    })
-  }
   const handleNextButton = () => {
-    postAdminInfoMuatate({ data: { adminName: name, teamName: id, id: code } })
+    onNext({ id, name, code })
   }
   return (
     <>
