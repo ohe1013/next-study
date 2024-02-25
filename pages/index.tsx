@@ -50,7 +50,7 @@ export default function Home({ users }: { users: User }) {
                   unoptimized
                   height={200}
                   width={426}
-                  alt="jungo"
+                  alt="vote"
                   src="../assets/vote.png"
                   priority={false}
                 ></Image>

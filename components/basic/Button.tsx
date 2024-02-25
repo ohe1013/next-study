@@ -41,7 +41,7 @@ export function Button(props: Props) {
   )
 }
 const ButtonField = styled.button<Button>(
-  ({ disabled, size, buttonType, buttonStyle }) => {
+  ({ disabled, size, buttonType, buttonStyle, css }) => {
     return [
       // Basic button styles
       tw`inline-flex items-center justify-center relative 
@@ -63,6 +63,7 @@ const ButtonField = styled.button<Button>(
       w-20 h-12 my-auto 
      `,
       disabled && tw`opacity-25 cursor-not-allowed`,
+      css && css,
     ]
   },
 )

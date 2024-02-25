@@ -1,16 +1,21 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import Init from 'src/features/admin/component/Init'
+import { ItemRegister } from 'src/features/admin/component/ItemRegister'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
-import { TeamRegister } from 'src/features/admin/component/TeamRegister'
+import UserRegister from 'src/features/admin/component/UserRegister'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
 import { adminFunnelRollback } from 'src/recoil/admin'
 
+// DT = Dining Together
 export interface Vote {
   id: string
   name: string
   code: string
-  registerList: RegisterState[]
+  userKey: string
+  itemKey: string
 }
+type ItemList = DtRegisterItem[]
 
 interface FormImgData {
   value: any
@@ -30,7 +35,7 @@ interface FormTagData<T> {
   buttonLabel: string
 }
 
-export interface RegisterState {
+export interface DtRegisterItem {
   representImg: FormImgData
   storeName: FormInputData
   storeLink: FormInputData
@@ -39,22 +44,36 @@ export interface RegisterState {
   disAdvantageList: FormTagData<string>
   reviewLinkList: FormTagData<string>
 }
+const defaultVote = {
+  id: '',
+  name: '',
+  code: '',
+  itemKey: '',
+  userKey: '',
+}
 export default function Admin() {
-  const [Funnel, setStep] = useFunnel(['init', 'register'] as const, {
-    initialStep: 'init',
-  })
-  const [vote, setVote] = useState<Vote>({
-    id: '',
-    name: '',
-    code: '',
-    registerList: [],
-  })
-  const apiInfo = useRef<Record<string, string>>({})
+  const [Funnel, setStep] = useFunnel(
+    ['init', 'teamInit', 'registerItem', 'registerUser'] as const,
+    {
+      initialStep: 'init',
+    },
+  )
+  const [vote, setVote] = useState<Vote>(defaultVote)
+  const [dtItemList, setDtItemList] = useState<DtRegisterItem[]>([])
+  const [dtUserList, setDtUserList] = useState<string[]>([])
   const [rollback, setRollback] = useRecoilState(adminFunnelRollback)
   return (
     <div className="min-h-body flex-col flex">
       <Funnel>
         <Funnel.Step name="init">
+          <Init
+            onNext={(type: 'create' | 'update') =>
+              setStep(type === 'create' ? 'teamInit' : 'registerItem')
+            }
+          ></Init>
+        </Funnel.Step>
+
+        <Funnel.Step name="teamInit">
           <TeamInit
             id={vote.id}
             name={vote.name}
@@ -66,16 +85,25 @@ export default function Admin() {
                 name: reqData.name,
                 code: reqData.code,
               })
-              setStep('register')
+              setStep('registerItem')
             }}
-            apiInfo={apiInfo.current}
           />
         </Funnel.Step>
-        <Funnel.Step name="register">
-          <TeamRegister
-            apiInfo={apiInfo.current}
-            registerList={vote.registerList}
+        <Funnel.Step name="registerItem">
+          <ItemRegister
+            dtItemList={dtItemList}
+            setDtItemList={setDtItemList}
+            onNext={(reqData: Pick<Vote, 'itemKey'>) => {
+              setVote({
+                ...vote,
+                itemKey: reqData.itemKey,
+              })
+              setStep('registerUser')
+            }}
           />
+        </Funnel.Step>
+        <Funnel.Step name="registerUser">
+          <UserRegister dtUserList={dtUserList} setDtUserList={setDtUserList} />
         </Funnel.Step>
       </Funnel>
     </div>
