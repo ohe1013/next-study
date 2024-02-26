@@ -19,7 +19,6 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
 
   if (status === 'success') {
     const { id } = data.data
-    console.log(data.data)
     onNext(id)
   }
   const onNextButtonHandler = () => {
