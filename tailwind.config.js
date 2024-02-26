@@ -18,6 +18,11 @@ module.exports = {
       colors: {
         primary: '#3b82f6',
       },
+      screens: {
+        xsm: '320px',
+        m:'960px',
+        "3xl" :'1600px'
+      },
     },
   },
   plugins: [],

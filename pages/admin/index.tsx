@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import Complete from 'src/features/admin/component/Complete'
 import Init from 'src/features/admin/component/Init'
 import { ItemRegister } from 'src/features/admin/component/ItemRegister'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
@@ -53,7 +54,7 @@ const defaultVote = {
 }
 export default function Admin() {
   const [Funnel, setStep] = useFunnel(
-    ['init', 'teamInit', 'registerItem', 'registerUser'] as const,
+    ['init', 'teamInit', 'registerItem', 'registerUser', 'complete'] as const,
     {
       initialStep: 'init',
     },
@@ -103,7 +104,20 @@ export default function Admin() {
           />
         </Funnel.Step>
         <Funnel.Step name="registerUser">
-          <UserRegister dtUserList={dtUserList} setDtUserList={setDtUserList} />
+          <UserRegister
+            dtUserList={dtUserList}
+            setDtUserList={setDtUserList}
+            onNext={(reqData: Pick<Vote, 'userKey'>) => {
+              setVote({
+                ...vote,
+                userKey: reqData.userKey,
+              })
+              setStep('complete')
+            }}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="complete">
+          <Complete />
         </Funnel.Step>
       </Funnel>
     </div>
