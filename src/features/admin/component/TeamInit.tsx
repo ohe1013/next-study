@@ -30,7 +30,7 @@ export default function TeamRegister({
     return true
   }
   const createCode = () => {
-    if (isValid([id, name, code])) {
+    if (isValid([id, name])) {
       setAlert({ type: 'success', message: '성공', visible: true })
       setCode((Math.random() + 1).toString(36).substring(7))
     } else {

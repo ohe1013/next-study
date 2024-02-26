@@ -29,21 +29,31 @@ interface FormInputData {
   type: 'input'
   label: string
 }
+interface FormInputLinkData {
+  value: string
+  type: 'input/link'
+  label: string
+}
 interface FormTagData<T> {
   value: Set<T>
   type: 'tag'
   label: string
   buttonLabel: string
 }
+interface FormTagLinkData<T> {
+  value: Set<T>
+  type: 'tag/link'
+  label: string
+  buttonLabel: string
+}
 
 export interface DtRegisterItem {
-  representImg: FormImgData
   storeName: FormInputData
-  storeLink: FormInputData
+  storeLink: FormInputLinkData
   representNameList: FormTagData<string>
   advantageList: FormTagData<string>
   disAdvantageList: FormTagData<string>
-  reviewLinkList: FormTagData<string>
+  reviewLinkList: FormTagLinkData<string>
 }
 const defaultVote = {
   id: '',

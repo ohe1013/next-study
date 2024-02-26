@@ -74,9 +74,14 @@ export default function TagList(props: TagProps) {
         <TagsList>
           {[...tagList].map((tag, index) => (
             <TagItem key={index} className="tag">
-              <span className="tag-title">
+              <a
+                className="tag-title"
+                target="_blank"
+                href={tag}
+                rel="noopener noreferrer"
+              >
                 {type === 'link' ? '링크' + (index + 1) : tag}
-              </span>
+              </a>
               <TagCloseIcon
                 className="tag-close-icon"
                 onClick={() => removeTags(tag, tagList)}

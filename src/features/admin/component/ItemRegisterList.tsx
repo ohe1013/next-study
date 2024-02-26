@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { DtRegisterItem } from 'pages/admin'
 
 export default function TeamRegisterList({
@@ -69,7 +70,7 @@ function DtRegisterItemComponent({ item }: { item: DtRegisterItem }) {
               : ''}
           </div>
           <div className="flex items-center flex-wrap ">
-            <a
+            <Link
               href={item.storeLink.value}
               target="_blank"
               rel="noreferrer"
@@ -88,7 +89,7 @@ function DtRegisterItemComponent({ item }: { item: DtRegisterItem }) {
                 <path d="M5 12h14"></path>
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

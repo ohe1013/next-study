@@ -63,7 +63,7 @@ export default function Main() {
       ) : (
         <section className="text-gray-600 pt-10 body-font">
           <div className="container px-5 mx-auto">
-            <div className="w-1/2 mx-auto">
+            <div className="w-full mx-auto">
               <canvas key={res?.request_id} ref={chartRef}></canvas>
             </div>
           </div>

@@ -10,9 +10,8 @@ import { alertState } from 'src/recoil/alert/alert'
 import Image from 'next/image'
 
 export const defaultDtRegisterItem: DtRegisterItem = {
-  representImg: { label: '이미지', type: 'img', value: null },
   storeName: { value: '', type: 'input', label: '매장명' },
-  storeLink: { value: '', type: 'input', label: '매장링크' },
+  storeLink: { value: '', type: 'input/link', label: '매장링크' },
   representNameList: {
     value: new Set(),
     type: 'tag',
@@ -33,7 +32,7 @@ export const defaultDtRegisterItem: DtRegisterItem = {
   },
   reviewLinkList: {
     value: new Set(),
-    type: 'tag',
+    type: 'tag/link',
     label: '후기',
     buttonLabel: '추가',
   },
@@ -49,10 +48,6 @@ export default function TeamRegisterModal({
   setIsActive: Dispatch<SetStateAction<boolean>>
 }) {
   const [dtItem, setDtItem] = useState<DtRegisterItem>(defaultDtRegisterItem)
-  // const db = Object.entries(defaultDtRegisterItem).map(([key, value]) => ({
-  //   type: value.type,
-  //   label: value.label,
-  // }))
   const onSuccessEventHandler = () => {
     setDtItemList((preList) => {
       return [...preList, dtItem]
@@ -82,42 +77,43 @@ export default function TeamRegisterModal({
       onSuccess={onSuccessEventHandler}
       onCancel={onCancelEventHandler}
     >
-      <div css={tw`max-w-md mx-auto [min-width: 384px] w-96 `}>
+      <div css={tw`max-w-md mx-auto [min-width: 20rem] xsm:w-60 sm:w-96 `}>
         <form onSubmit={(e) => e.preventDefault()}>
           {(Object.entries(dtItem) as Entries<DtRegisterItem>).map(
             ([key, value]) => {
               switch (value.type) {
-                case 'input': {
+                case 'input':
+                case 'input/link': {
                   return (
                     <div key={key} className="relative z-0 w-full mb-5 group">
                       <Input
-                        label={value.label}
+                        label={
+                          value.type === 'input/link'
+                            ? value.label + '(http 포함)'
+                            : value.label
+                        }
                         value={value.value}
                         onChange={(e) => handleOnChange(key, e.target.value)}
                       />
                     </div>
                   )
                 }
-                case 'tag': {
+                case 'tag':
+                case 'tag/link': {
                   return (
                     <div key={key} className="relative z-0 w-full mb-5 group">
                       <TagList
                         tagList={value.value}
                         setTagList={(newValue) => handleOnChange(key, newValue)}
-                        title={value.label}
+                        title={
+                          value.type === 'tag/link'
+                            ? value.label + '(http 포함)'
+                            : value.label
+                        }
                         buttonLabel={value.buttonLabel}
+                        type={value.type === 'tag/link' ? 'link' : 'string'}
                       ></TagList>
                     </div>
-                  )
-                }
-                case 'img': {
-                  return (
-                    <FIleInput
-                      key={key}
-                      _key={key as 'representImg'}
-                      value={value.value}
-                      onChange={handleOnChange}
-                    />
                   )
                 }
               }
@@ -133,38 +129,38 @@ export default function TeamRegisterModal({
   )
 }
 
-interface FileInputProps {
-  _key: 'representImg'
-  value: DtRegisterItem['representImg']['value']
-  onChange: <T extends keyof DtRegisterItem>(
-    key: T,
-    newValue: DtRegisterItem[T]['value'],
-  ) => void
-}
-const FIleInput = (props: FileInputProps) => {
-  const { _key: key, value, onChange } = props
-  const [, setAlert] = useRecoilState(alertState)
-  const fileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return
-    if (e.target.files[0].size > 1_024_000) {
-      setAlert({
-        type: 'warn',
-        visible: true,
-        message: '파일의 사이즈를 1mb이하로 부탁드립니다.',
-      })
-      return
-    }
-    const imgFile = e.target.files[0]
-    URL.revokeObjectURL(value)
-    const blobUrl = URL.createObjectURL(imgFile)
-    onChange(key, blobUrl)
-  }
-  return (
-    <div key={props._key} className="relative z-0 w-full mb-5 group">
-      <input accept="image/*" type="file" onChange={fileChangeHandler} />
-      {value && (
-        <Image loading="lazy" src={value} width={200} height={200} alt={''} />
-      )}
-    </div>
-  )
-}
+// interface FileInputProps {
+//   _key: 'representImg'
+//   value: DtRegisterItem['representImg']['value']
+//   onChange: <T extends keyof DtRegisterItem>(
+//     key: T,
+//     newValue: DtRegisterItem[T]['value'],
+//   ) => void
+// }
+// const FIleInput = (props: FileInputProps) => {
+//   const { _key: key, value, onChange } = props
+//   const [, setAlert] = useRecoilState(alertState)
+//   const fileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+//     if (!e.target.files || e.target.files.length === 0) return
+//     if (e.target.files[0].size > 1_024_000) {
+//       setAlert({
+//         type: 'warn',
+//         visible: true,
+//         message: '파일의 사이즈를 1mb이하로 부탁드립니다.',
+//       })
+//       return
+//     }
+//     const imgFile = e.target.files[0]
+//     URL.revokeObjectURL(value)
+//     const blobUrl = URL.createObjectURL(imgFile)
+//     onChange(key, blobUrl)
+//   }
+//   return (
+//     <div key={props._key} className="relative z-0 w-full mb-5 group">
+//       <input accept="image/*" type="file" onChange={fileChangeHandler} />
+//       {value && (
+//         <Image loading="lazy" src={value} width={200} height={200} alt={''} />
+//       )}
+//     </div>
+//   )
+// }
