@@ -4,6 +4,7 @@ import Input from 'components/basic/Input'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
+import tw from 'twin.macro'
 
 export interface TeamInitProps {
   id: string
@@ -29,7 +30,7 @@ export default function TeamRegister({
     return true
   }
   const createCode = () => {
-    if (isValid([id, name])) {
+    if (isValid([id, name, code])) {
       setAlert({ type: 'success', message: '성공', visible: true })
       setCode((Math.random() + 1).toString(36).substring(7))
     } else {
@@ -62,13 +63,19 @@ export default function TeamRegister({
           onChange={(e) => setName(e.target.value)}
         ></Input>
       </div>
-      {code && (
-        <div css={[`padding:16px`]}>
-          <Input label={'코드'} id={code} value={code} disabled={true}></Input>
-        </div>
-      )}
-      <div css={[`padding:16px`]}>
-        <Button disabled={!isValid([id, name])} onClick={createCode}>
+      <div css={[`padding:16px; display:flex;width:100%`]}>
+        <Input
+          css={tw`flex-1`}
+          label={'코드'}
+          id={code}
+          value={code}
+          disabled={true}
+        ></Input>
+        <Button
+          className={tw`w-40`}
+          disabled={!isValid([id, name]) || !!code}
+          onClick={createCode}
+        >
           코드 발급받기
         </Button>
       </div>

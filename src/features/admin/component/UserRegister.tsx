@@ -67,7 +67,7 @@ function DtUserListContainer(name: string) {
         <div
           id="dropdown"
           css={[
-            tw`z-10 mt-10 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`,
+            tw`z-10 mt-10 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-20 dark:bg-gray-700`,
             !show && tw`hidden`,
           ]}
         >
