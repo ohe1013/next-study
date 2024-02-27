@@ -8,9 +8,9 @@ export default function TeamRegisterList({
 }) {
   return (
     <div className="flex">
-      {dTItemList.map((item) => (
+      {dTItemList.map((item, idx) => (
         <DtRegisterItemComponent
-          key={item.storeName.value}
+          key={item.storeName.value + idx}
           item={item}
         ></DtRegisterItemComponent>
       ))}

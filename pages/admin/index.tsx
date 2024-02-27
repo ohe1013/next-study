@@ -72,12 +72,13 @@ export default function Admin() {
   const [vote, setVote] = useState<Vote>(defaultVote)
   const [dtItemList, setDtItemList] = useState<DtRegisterItem[]>([])
   const [dtUserList, setDtUserList] = useState<string[]>([])
-  const [rollback, setRollback] = useRecoilState(adminFunnelRollback)
   return (
     <div className="min-h-body flex-col flex">
       <Funnel>
         <Funnel.Step name="init">
           <Init
+            itemList={{ dtItemList, setDtItemList }}
+            userList={{ dtUserList, setDtUserList }}
             onNext={(type: 'create' | 'update') =>
               setStep(type === 'create' ? 'teamInit' : 'registerItem')
             }

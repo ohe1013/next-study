@@ -4,10 +4,8 @@ import TagList from 'components/basic/TagList'
 import { Entries } from 'types/util'
 import { DtRegisterItem } from 'pages/admin'
 import tw from 'twin.macro'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { alertState } from 'src/recoil/alert/alert'
-import Image from 'next/image'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { cloneDeep } from 'lodash'
 
 export const defaultDtRegisterItem: DtRegisterItem = {
   storeName: { value: '', type: 'input', label: '매장명' },
@@ -47,16 +45,21 @@ export default function TeamRegisterModal({
   isActive: boolean
   setIsActive: Dispatch<SetStateAction<boolean>>
 }) {
-  const [dtItem, setDtItem] = useState<DtRegisterItem>(defaultDtRegisterItem)
+  const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
+  const [dtItem, setDtItem] = useState<DtRegisterItem>(_defaultDtRegisterItem)
+  const clearDtItem = () => {
+    setDtItem(cloneDeep(_defaultDtRegisterItem))
+  }
   const onSuccessEventHandler = () => {
     setDtItemList((preList) => {
       return [...preList, dtItem]
     })
+    clearDtItem()
     setIsActive(false)
   }
   const onCancelEventHandler = () => {
+    clearDtItem()
     setIsActive(false)
-    setDtItem(defaultDtRegisterItem)
   }
   const handleOnChange = <T extends keyof DtRegisterItem>(
     key: T,

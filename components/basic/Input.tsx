@@ -102,7 +102,7 @@ export default function Input({
         }}
         value={value}
         autoComplete={autoComplete}
-        css={text_input}
+        css={text_input(hasError)}
         placeholder={undefined}
         onFocus={() => setHasFocus(true)}
         onBlur={() => setHasFocus(false)}
@@ -145,36 +145,30 @@ const LabelContainer = styled.div<{ hasValue?: boolean; focused?: boolean }>(
         !focused &&
         css`
     top: calc((0.409 * 22px) / 2 + 22px);
-    top: calc(
-      (var(--toss-line-height-22, 22px) - var(--toss-font-size-22, 22px)) / 2 +
-        var(--toss-font-size-22, 22px)
-    );
     transform: translateY(0);
     font-size: 22px;
-    font-size: var(--toss-font-size-22, 22px);
     font-weight: 500;
     color: $grey500;
-
     line-height: calc(13px * 2.2);
-    line-height: calc(var(--toss-font-size-13) * 2.2);
   }`,
     ]
   },
 )
 
-const text_input = tw`
+const text_input = (hasError?: boolean) => [
+  tw`
   w-full max-w-full bg-transparent  appearance-none
   p-0 [font-size: inherit] font-medium [line-height: inherit] 
   text-gray-800 caret-blue-400 outline-none  border-b-2  border-gray-200 
   focus:border-b-2 focus:border-blue-400
-  dark:text-white
+  dark:text-white`,
+  hasError && tw`border-red-500`,
+]
 
-  `
-
-const InputField = styled.input(() => [text_input])
+const InputField = styled.input(() => [text_input()])
 
 const Text = styled.div(() => [
-  text_input,
+  text_input(),
   tw`w-full [text-align: left]`,
   tw`h-0.5 opacity-0 overflow-hidden [width: unset]`,
 ])

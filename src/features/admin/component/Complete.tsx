@@ -3,7 +3,6 @@ import Confetti from 'react-confetti'
 import useWindowSize from 'src/hooks/useWindowSize/useWindowSize'
 import styles from './Complete.module.css'
 import tw from 'twin.macro'
-import { Button } from 'components/basic/Button'
 import { useRouter } from 'next/router'
 import { BottomCTA } from 'components/basic/BottomCTA'
 export default function Complete() {
