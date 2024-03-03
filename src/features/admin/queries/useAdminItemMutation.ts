@@ -4,6 +4,7 @@ import { useMutation } from 'react-query'
 type Data = {
   type: 'tag' | 'input'
   label: string
+  value?: any
 }[]
 interface PostAdminItemProps {
   params?: Record<string, string>

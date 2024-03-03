@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { Entries } from 'types/util'
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method
-  const { database_id } = req.query
   const properties: any = {
     id: {
       title: {},

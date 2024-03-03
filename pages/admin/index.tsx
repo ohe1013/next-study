@@ -3,10 +3,19 @@ import { useRecoilState } from 'recoil'
 import Complete from 'src/features/admin/component/Complete'
 import Init from 'src/features/admin/component/Init'
 import { ItemRegister } from 'src/features/admin/component/ItemRegister'
+import { defaultDtRegisterItem } from 'src/features/admin/component/ItemRegisterModal'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
 import UserRegister from 'src/features/admin/component/UserRegister'
+import { useAdminInfoPostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
+import {
+  useAdminItemPostDBMutation,
+  useAdminItemPostPageMutation,
+} from 'src/features/admin/queries/useAdminItemMutation'
+import {
+  useAdminUserPostDBMutation,
+  useAdminUserPostPageMutation,
+} from 'src/features/admin/queries/useAdminUserMutation'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
-import { adminFunnelRollback } from 'src/recoil/admin'
 
 // DT = Dining Together
 export interface Vote {
@@ -69,9 +78,50 @@ export default function Admin() {
       initialStep: 'init',
     },
   )
+
   const [vote, setVote] = useState<Vote>(defaultVote)
   const [dtItemList, setDtItemList] = useState<DtRegisterItem[]>([])
   const [dtUserList, setDtUserList] = useState<string[]>([])
+
+  const {
+    mutate: itemDbMutate,
+    data: itemDbData,
+    isSuccess: itemSuccess,
+  } = useAdminItemPostDBMutation()
+  const { mutate: itemPageMutate, data: itemPageData } =
+    useAdminItemPostPageMutation()
+  const {
+    mutate: userDBMutate,
+    data: userDbData,
+    isSuccess: userSuccess,
+  } = useAdminUserPostDBMutation()
+  const { mutate: userPageMutate, data: userPageData } =
+    useAdminUserPostPageMutation()
+  const { mutate } = useAdminInfoPostMutation()
+
+  if (itemSuccess) {
+    const { id: itemDatabaseId } = itemDbData.data
+    // const { id: userDatabaseId } = userDbData.data
+    const dtRegisterDB = dtItemList.map((dtItem) =>
+      Object.entries(dtItem).map(([key, value]) => ({
+        type: value.type,
+        label: value.label,
+      })),
+    )
+    itemPageMutate({ data: dtRegisterDB, params: { page_id: itemDatabaseId } })
+  }
+  const completeHandler = async () => {
+    const dtRegisterDB = Object.entries(defaultDtRegisterItem).map(
+      ([key, value]) => ({
+        type: value.type,
+        label: value.label,
+      }),
+    )
+    // const dtUserDB = [{ label: '이름' }]
+    itemDbMutate({ data: dtRegisterDB })
+    // userDBMutate({ data: dtUserDB })
+  }
+
   return (
     <div className="min-h-body flex-col flex">
       <Funnel>
@@ -123,6 +173,7 @@ export default function Admin() {
                 ...vote,
                 userKey: reqData.userKey,
               })
+              completeHandler()
               setStep('complete')
             }}
           />
