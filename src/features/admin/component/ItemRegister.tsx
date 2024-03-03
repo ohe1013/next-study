@@ -15,18 +15,18 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
   const { dtItemList, setDtItemList } = teamRegisterProps
   const [isActive, setIsActive] = useState(false)
   const { onNext } = teamRegisterProps
-  const { mutate, status, data } = useAdminItemPostDBMutation()
+  // const { mutate, status, data } = useAdminItemPostDBMutation()
 
-  if (status === 'success') {
-    const { id } = data.data
-    onNext(id)
-  }
+  // if (status === 'success') {
+  //   const { id } = data.data
+  // }
   const onNextButtonHandler = () => {
-    const data = Object.entries(defaultDtRegisterItem).map(([key, value]) => ({
-      type: value.type,
-      label: value.label,
-    }))
-    mutate({ data })
+    // const data = Object.entries(defaultDtRegisterItem).map(([key, value]) => ({
+    //   type: value.type,
+    //   label: value.label,
+    // }))
+    // mutate({ data })
+    onNext({ itemKey: 'test' })
   }
 
   return (
