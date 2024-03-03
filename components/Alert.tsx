@@ -13,11 +13,11 @@ type AlertContainerProps = Omit<AlertProps, 'message' | 'visible'> & {
 }
 type AlertMessageProps = Omit<AlertProps, 'visible'>
 const alertColor = {
-  info: 'bg-blue-50 text-blue-800 dark:text-blue-300',
-  danger: 'bg-red-50 text-red-800 dark:text-red-300',
-  success: 'bg-green-50 text-green-800 dark:text-green-300',
-  warn: 'bg-yellow-50 text-yellow-800 dark:text-yellow-300',
-  default: 'bg-gray-50 text-gray-800 dark:text-gray-300',
+  info: 'bg-blue-100 text-blue-800 dark:text-blue-300',
+  danger: 'bg-red-100 text-red-800 dark:text-red-300',
+  success: 'bg-green-100 text-green-800 dark:text-green-300',
+  warn: 'bg-yellow-100 text-yellow-800 dark:text-yellow-300',
+  default: 'bg-gray-100 text-gray-800 dark:text-gray-300',
 }
 
 export const Alert = () => {
@@ -43,7 +43,7 @@ export const Alert = () => {
 }
 
 const AlertContainer = (props: AlertContainerProps) => {
-  const _className = `top-20 absolute left-1/2 p-4 mb-4 text-sm  rounded-lg dark:bg-gray-700 ${
+  const _className = `top-20 z-50  absolute left-1/2 p-4 mb-4 text-sm  rounded-lg dark:bg-gray-700 ${
     alertColor[props.type]
   } ${props.animationType}`
 

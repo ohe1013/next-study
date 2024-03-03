@@ -1,9 +1,8 @@
-import { BottomCTA, BottomCTATypeTwo } from 'components/basic/BottomCTA'
+import { BottomCTATypeTwo } from 'components/basic/BottomCTA'
 import { Dispatch, SetStateAction, useState } from 'react'
-import TeamRegisterModal, { defaultDtRegisterItem } from './ItemRegisterModal'
+import TeamRegisterModal from './ItemRegisterModal'
 import { DtRegisterItem, Vote } from 'pages/admin'
 import TeamRegisterList from './ItemRegisterList'
-import { useAdminItemPostDBMutation } from '../queries/useAdminItemMutation'
 
 interface TeamRegisterProps {
   dtItemList: DtRegisterItem[]
@@ -15,18 +14,12 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
   const { dtItemList, setDtItemList } = teamRegisterProps
   const [isActive, setIsActive] = useState(false)
   const { onNext } = teamRegisterProps
-  const { mutate, status, data } = useAdminItemPostDBMutation()
-
-  if (status === 'success') {
-    const { id } = data.data
-    onNext(id)
+  const checkValid = (item: DtRegisterItem[]) => {
+    if (item.length === 0) return false
+    return true
   }
   const onNextButtonHandler = () => {
-    const data = Object.entries(defaultDtRegisterItem).map(([key, value]) => ({
-      type: value.type,
-      label: value.label,
-    }))
-    mutate({ data })
+    if (checkValid(dtItemList)) onNext({ itemKey: 'fix it' })
   }
 
   return (
@@ -43,6 +36,7 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
           onClick: () => onNextButtonHandler(),
           children: '다음',
           buttonStyle: 'weak',
+          disabled: !checkValid(dtItemList),
         }}
       ></BottomCTATypeTwo>
     </>

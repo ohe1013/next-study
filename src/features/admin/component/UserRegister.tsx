@@ -1,6 +1,8 @@
+import CardHeader from 'components/CardHeader'
 import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
 import Input from 'components/basic/Input'
+import { uniqueId } from 'lodash'
 import { Vote } from 'pages/admin'
 import { Dispatch, SetStateAction, useState } from 'react'
 import tw from 'twin.macro'
@@ -12,13 +14,17 @@ interface UserRegisterProps {
 }
 
 export default function UserRegister(props: UserRegisterProps) {
-  const { dtUserList, setDtUserList } = props
+  const { dtUserList, setDtUserList, onNext } = props
   const [user, setUser] = useState<string>('')
   const onAddClickHandler = () => {
     setDtUserList([...dtUserList, user])
   }
+  const checkValid = (userList: string[]) => {
+    if (userList.length === 0) return false
+    return true
+  }
   const onNextHandler = () => {
-    props.onNext({ userKey: '' })
+    if (checkValid(dtUserList)) onNext({ userKey: '' })
   }
 
   return (
@@ -41,25 +47,32 @@ export default function UserRegister(props: UserRegisterProps) {
         m:grid-cols-3
         xl:grid-cols-4
         3xl:grid-cols-5
-        gap-4`
-      }
+        gap-4`}
       >
         {dtUserList &&
-          dtUserList.map((user, idx) =>
-            DtUserListItem(user, idx, setDtUserList),
-          )}
+          dtUserList.map((user, idx) => (
+            <DtUserListItem
+              name={user}
+              idx={idx}
+              key={uniqueId()}
+              setDtUserList={setDtUserList}
+            />
+          ))}
       </div>
-      <BottomCTA
-      onClick={onNextHandler}>제출</BottomCTA>
+      <BottomCTA onClick={onNextHandler}>완료</BottomCTA>
     </>
   )
 }
 
-function DtUserListItem(
-  name: string,
-  idx: number,
-  setDtUserList: Dispatch<SetStateAction<string[]>>,
-) {
+function DtUserListItem({
+  name,
+  idx,
+  setDtUserList,
+}: {
+  name: string
+  idx: number
+  setDtUserList: Dispatch<SetStateAction<string[]>>
+}) {
   const [show, setShow] = useState(false)
   const [onEdit, setOnEdit] = useState(false)
   const [curName, setCurName] = useState(name)
@@ -81,7 +94,7 @@ function DtUserListItem(
       [max-width:320px]
       [min-width: 240px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700`}
     >
-      <div css={tw`flex justify-between px-4 pt-4`}>
+      {/* <div css={tw`flex justify-between px-4 pt-4`}>
         <span>{onEdit ? '🛠️' : ''}</span>
         <button
           id="dropdownButton"
@@ -127,7 +140,8 @@ function DtUserListItem(
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
+      <CardHeader deleteCb={onDeleteHandler} editCb={onEditHandler} />
       <div css={tw`flex  items-center px-10 pb-10`}>
         <Input
           type="text"

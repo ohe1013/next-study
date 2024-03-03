@@ -23,14 +23,14 @@ export default function TeamRegister({
   const [name, setName] = useState(_name)
   const [, setAlert] = useRecoilState(alertState)
   const [code, setCode] = useState(_code)
-  const isValid = <T extends string>(props: [T, ...T[]]) => {
+  const checkValid = <T extends string>(props: [T, ...T[]]) => {
     for (const prop of props) {
       if (prop === '') return false
     }
     return true
   }
   const createCode = () => {
-    if (isValid([id, name])) {
+    if (checkValid([id, name])) {
       setAlert({ type: 'success', message: '성공', visible: true })
       setCode((Math.random() + 1).toString(36).substring(7))
     } else {
@@ -73,14 +73,14 @@ export default function TeamRegister({
         ></Input>
         <Button
           className={tw`w-40`}
-          disabled={!isValid([id, name]) || !!code}
+          disabled={!checkValid([id, name]) || !!code}
           onClick={createCode}
         >
           코드 발급받기
         </Button>
       </div>
       <BottomCTA
-        disabled={!isValid([id, name, code])}
+        disabled={!checkValid([id, name, code])}
         onClick={handleNextButton}
       >
         다음

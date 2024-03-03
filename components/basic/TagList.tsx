@@ -23,7 +23,7 @@ export default function TagList(props: TagProps) {
   const addTags = useCallback(
     (tags: Set<string>, inputVal: string) => {
       if (inputVal === '') return
-      setTagList(new Set(tags.add(inputVal)))
+      setTagList(new Set(tags).add(inputVal))
       setInputValue('')
     },
     [setTagList],

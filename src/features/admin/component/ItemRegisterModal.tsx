@@ -6,6 +6,8 @@ import { DtRegisterItem } from 'pages/admin'
 import tw from 'twin.macro'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { cloneDeep } from 'lodash'
+import { useRecoilState } from 'recoil'
+import { alertState } from 'src/recoil/alert/alert'
 
 export const defaultDtRegisterItem: DtRegisterItem = {
   storeName: { value: '', type: 'input', label: '매장명' },
@@ -47,10 +49,30 @@ export default function TeamRegisterModal({
 }) {
   const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
   const [dtItem, setDtItem] = useState<DtRegisterItem>(_defaultDtRegisterItem)
+  const [, setAlert] = useRecoilState(alertState)
   const clearDtItem = () => {
     setDtItem(cloneDeep(_defaultDtRegisterItem))
   }
+  const isValid = (item: DtRegisterItem) => {
+    const entries = Object.entries(item) as Entries<DtRegisterItem>
+    for (const [, value] of entries) {
+      if (value.value instanceof Set) {
+        if (value.value.size === 0) return false
+      } else {
+        if (value.value === '') return false
+      }
+    }
+    return true
+  }
   const onSuccessEventHandler = () => {
+    if (!isValid(dtItem)) {
+      setAlert({
+        type: 'danger',
+        message: '입력란을 모두 채워주세요.',
+        visible: true,
+      })
+      return
+    }
     setDtItemList((preList) => {
       return [...preList, dtItem]
     })
