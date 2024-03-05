@@ -18,7 +18,11 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method
   const { page_id } = req.query
   const properties: Record<string, any>[] = []
-  const dataList = req.body
+  const dataList = req.body as {
+    type: 'tag' | 'input'
+    label: string
+    value?: any
+  }[]
   dataList.forEach((data, idx) => {
     ;(Object.entries(data) as Entries<Record<string, Tag | Input>>).forEach(
       ([key, value]) => {
@@ -51,7 +55,7 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     )
   })
 
-  let options = (properties) => ({
+  let options = (properties: Record<string, any>) => ({
     method: 'POST',
     url: `https://api.notion.com/v1/databases`,
     headers: {
@@ -67,7 +71,7 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
       properties,
     },
   })
-  const promises = []
+  const promises: any[] = []
   properties.forEach((_properties) => {
     promises.push(axios.request(options(_properties)))
   })

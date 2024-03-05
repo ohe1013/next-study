@@ -6,14 +6,18 @@ type Data = {
   label: string
   value?: any
 }[]
-interface PostAdminItemProps {
+interface PostPageProps {
+  params?: Record<string, string>
+  data: Data[]
+}
+interface PostDBProps {
   params?: Record<string, string>
   data: Data
 }
-const postDBFetcher = (props: PostAdminItemProps) =>
+const postDBFetcher = (props: PostDBProps) =>
   axios.post('/api/admin/item/databases', props.data)
 
-const postPageFetcher = (props: PostAdminItemProps) =>
+const postPageFetcher = (props: PostPageProps) =>
   axios.post('/api/admin/item/pages', props.data)
 
 const useAdminItemPostDBMutation = () => {
