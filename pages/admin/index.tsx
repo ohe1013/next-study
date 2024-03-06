@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Complete from 'src/features/admin/component/Complete'
@@ -16,6 +17,7 @@ import {
   useAdminUserPostPageMutation,
 } from 'src/features/admin/queries/useAdminUserMutation'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
+import { Entries } from 'types/util'
 
 // DT = Dining Together
 export interface Vote {
@@ -33,36 +35,37 @@ interface FormImgData {
   label: string
 }
 
-interface FormInputData {
-  value: string
-  type: 'input'
+type FormInputType = 'input' | 'input/link'
+type FormTagType = 'tag' | 'tag/link'
+interface FormInputItem<Type extends FormInputType, ValueType> {
+  type: Type
+  value: ValueType
   label: string
 }
-interface FormInputLinkData {
-  value: string
-  type: 'input/link'
-  label: string
-}
-interface FormTagData<T> {
-  value: Set<T>
-  type: 'tag'
-  label: string
-  buttonLabel: string
-}
-interface FormTagLinkData<T> {
-  value: Set<T>
-  type: 'tag/link'
+
+interface FormTagItem<Type extends FormTagType, ValueType> {
+  value: Set<ValueType>
+  type: Type
   label: string
   buttonLabel: string
 }
 
+type FormItem<
+  Type extends FormTagType | FormInputType,
+  ValueType,
+> = Type extends FormInputType
+  ? FormInputItem<Type, ValueType>
+  : Type extends FormTagType
+  ? FormTagItem<Type, ValueType>
+  : never
+
 export interface DtRegisterItem {
-  storeName: FormInputData
-  storeLink: FormInputLinkData
-  representNameList: FormTagData<string>
-  advantageList: FormTagData<string>
-  disAdvantageList: FormTagData<string>
-  reviewLinkList: FormTagLinkData<string>
+  storeName: FormItem<'input', string>
+  storeLink: FormItem<'input/link', string>
+  representNameList: FormItem<'tag', string>
+  advantageList: FormItem<'tag', string>
+  disAdvantageList: FormItem<'tag', string>
+  reviewLinkList: FormTagItem<'tag/link', string>
 }
 const defaultVote = {
   id: '',
@@ -83,43 +86,65 @@ export default function Admin() {
   const [dtItemList, setDtItemList] = useState<DtRegisterItem[]>([])
   const [dtUserList, setDtUserList] = useState<string[]>([])
 
-  const {
-    mutate: itemDbMutate,
-    data: itemDbData,
-    isSuccess: itemSuccess,
-  } = useAdminItemPostDBMutation()
+  // const {
+  //   mutate: itemDbMutate,
+  //   data: itemDbData,
+  //   isSuccess: itemSuccess,
+  // } = useAdminItemPostDBMutation()
   const { mutate: itemPageMutate, data: itemPageData } =
     useAdminItemPostPageMutation()
-  const {
-    mutate: userDBMutate,
-    data: userDbData,
-    isSuccess: userSuccess,
-  } = useAdminUserPostDBMutation()
-  const { mutate: userPageMutate, data: userPageData } =
-    useAdminUserPostPageMutation()
-  const { mutate } = useAdminInfoPostMutation()
 
-  if (itemSuccess) {
-    const { id: itemDatabaseId } = itemDbData.data
-    // const { id: userDatabaseId } = userDbData.data
-    const dtRegisterDB = dtItemList.map((dtItem) =>
-      Object.entries(dtItem).map(([key, value]) => ({
-        type: value.type,
-        label: value.label,
-      })),
-    )
-    itemPageMutate({ data: dtRegisterDB, params: { page_id: itemDatabaseId } })
-  }
+  // if (itemSuccess) {
+  //   const { id: itemDatabaseId } = itemDbData.data
+  //   const dtRegisterDB = dtItemList.map((dtItem) =>
+  //     (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
+  //       ([key, value]) => ({
+  //         type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
+  //         label: value.label,
+  //         value:
+  //           value.type.indexOf('input') > -1
+  //             ? value.value
+  //             : Array.from(value.value),
+  //       }),
+  //     ),
+  //   )
+  //   itemPageMutate({
+  //     data: dtRegisterDB,
+  //     params: { database_id: itemDatabaseId },
+  //   })
+  //   Link({ href: '/' })
+  // }
+  const { mutate: itemDbMutate, isSuccess: itemSuccess } =
+    useAdminItemPostDBMutation({
+      onSuccess: (data: any) => {
+        const { id: itemDatabaseId } = data.data
+        const dtRegisterDB = dtItemList.map((dtItem) =>
+          (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
+            ([key, value]) => ({
+              type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
+              label: value.label,
+              value:
+                value.type.indexOf('input') > -1
+                  ? value.value
+                  : Array.from(value.value),
+            }),
+          ),
+        )
+        itemPageMutate({
+          data: dtRegisterDB,
+          params: { database_id: itemDatabaseId },
+        })
+        Link({ href: '/' })
+      },
+    })
   const completeHandler = async () => {
     const dtRegisterDB = Object.entries(defaultDtRegisterItem).map(
       ([key, value]) => ({
-        type: value.type,
+        type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
         label: value.label,
       }),
     )
-    // const dtUserDB = [{ label: '이름' }]
     itemDbMutate({ data: dtRegisterDB })
-    // userDBMutate({ data: dtUserDB })
   }
 
   return (

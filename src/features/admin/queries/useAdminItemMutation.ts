@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useMutation } from 'react-query'
 
 type Data = {
-  type: 'tag' | 'input'
+  type: string
   label: string
   value?: any
 }[]
@@ -18,10 +18,12 @@ const postDBFetcher = (props: PostDBProps) =>
   axios.post('/api/admin/item/databases', props.data)
 
 const postPageFetcher = (props: PostPageProps) =>
-  axios.post('/api/admin/item/pages', props.data)
+  axios.post('/api/admin/item/pages', props.data, { params: props.params })
 
-const useAdminItemPostDBMutation = () => {
-  return useMutation(postDBFetcher)
+const useAdminItemPostDBMutation = ({ onSuccess }: { onSuccess: any }) => {
+  return useMutation(postDBFetcher, {
+    onSuccess,
+  })
 }
 const useAdminItemPostPageMutation = () => {
   return useMutation(postPageFetcher)

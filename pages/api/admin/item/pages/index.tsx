@@ -6,24 +6,34 @@ import { Entries } from 'types/util'
 type Tag = {
   type: 'tag'
   label: string
-  value: Set<string>
+  value: Array<string>
 }
 type Input = {
   type: 'input'
   label: string
   value: string | null
 }
+type Data = {
+  type: 'tag' | 'input'
+  label: string
+  value?: any
+}[]
 
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
-  const requestMethod = req.method
-  const { page_id } = req.query
+  const { database_id } = req.query
+  console.log(database_id)
   const properties: Record<string, any>[] = []
-  const dataList = req.body as {
-    type: 'tag' | 'input'
-    label: string
-    value?: any
-  }[]
+  const dataList = req.body as Data[]
   dataList.forEach((data, idx) => {
+    properties[idx] = {
+      id: {
+        title: [
+          {
+            text: { content: database_id },
+          },
+        ],
+      },
+    }
     ;(Object.entries(data) as Entries<Record<string, Tag | Input>>).forEach(
       ([key, value]) => {
         switch (value.type) {
@@ -42,11 +52,11 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
             break
           case 'tag': {
             properties[idx][value.label] = {
-              multi_select: {
-                options: Array.from(value.value).map((item) => ({
+              multi_select: [
+                ...value.value.map((item) => ({
                   name: item,
                 })),
-              },
+              ],
             }
             break
           }
@@ -57,7 +67,7 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
 
   let options = (properties: Record<string, any>) => ({
     method: 'POST',
-    url: `https://api.notion.com/v1/databases`,
+    url: `https://api.notion.com/v1/pages`,
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       'Notion-Version': '2022-06-28',
@@ -65,8 +75,8 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     },
     data: {
       parent: {
-        type: 'page_id',
-        page_id: page_id,
+        type: 'database_id',
+        database_id: database_id,
       },
       properties,
     },
