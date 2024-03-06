@@ -23,6 +23,7 @@ const postPageFetcher = (props: PostPageProps) =>
 const useAdminItemPostDBMutation = ({ onSuccess }: { onSuccess: any }) => {
   return useMutation(postDBFetcher, {
     onSuccess,
+    retry: true,
   })
 }
 const useAdminItemPostPageMutation = () => {

@@ -1,6 +1,5 @@
-import Link from 'next/link'
-import { useRef, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import Complete from 'src/features/admin/component/Complete'
 import Init from 'src/features/admin/component/Init'
 import { ItemRegister } from 'src/features/admin/component/ItemRegister'
@@ -17,6 +16,7 @@ import {
   useAdminUserPostPageMutation,
 } from 'src/features/admin/queries/useAdminUserMutation'
 import { useFunnel } from 'src/hooks/useFunnel/useFunnel'
+import { usePrevious } from 'src/hooks/usePrevious/usePrevious'
 import { Entries } from 'types/util'
 
 // DT = Dining Together
@@ -81,62 +81,71 @@ export default function Admin() {
       initialStep: 'init',
     },
   )
-
+  const router = useRouter()
   const [vote, setVote] = useState<Vote>(defaultVote)
   const [dtItemList, setDtItemList] = useState<DtRegisterItem[]>([])
-  const [dtUserList, setDtUserList] = useState<string[]>([])
+  const [dtUserList, setDtUserList] = useState<
+    { label: string; value: string }[]
+  >([])
 
-  // const {
-  //   mutate: itemDbMutate,
-  //   data: itemDbData,
-  //   isSuccess: itemSuccess,
-  // } = useAdminItemPostDBMutation()
-  const { mutate: itemPageMutate, data: itemPageData } =
+  const { mutate: itemPageMutate, isSuccess: itemSuccess } =
     useAdminItemPostPageMutation()
+  const { mutate: userPageMutate, isSuccess: userSuccess } =
+    useAdminUserPostPageMutation()
+  const { mutate } = useAdminInfoPostMutation({
+    onSuccess: () => router.push('/'),
+  })
+  const prevItemSuccess = usePrevious(itemSuccess && userSuccess)
+  useEffect(() => {
+    if (!prevItemSuccess && itemSuccess && userSuccess) {
+      mutate({
+        data: {
+          code: vote.code,
+          teamName: vote.id,
+          adminName: vote.name,
+          userKey: vote.userKey,
+          itemKey: vote.itemKey,
+        },
+      })
+    }
+  }, [itemSuccess, userSuccess])
 
-  // if (itemSuccess) {
-  //   const { id: itemDatabaseId } = itemDbData.data
-  //   const dtRegisterDB = dtItemList.map((dtItem) =>
-  //     (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
-  //       ([key, value]) => ({
-  //         type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
-  //         label: value.label,
-  //         value:
-  //           value.type.indexOf('input') > -1
-  //             ? value.value
-  //             : Array.from(value.value),
-  //       }),
-  //     ),
-  //   )
-  //   itemPageMutate({
-  //     data: dtRegisterDB,
-  //     params: { database_id: itemDatabaseId },
-  //   })
-  //   Link({ href: '/' })
-  // }
-  const { mutate: itemDbMutate, isSuccess: itemSuccess } =
-    useAdminItemPostDBMutation({
-      onSuccess: (data: any) => {
-        const { id: itemDatabaseId } = data.data
-        const dtRegisterDB = dtItemList.map((dtItem) =>
-          (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
-            ([key, value]) => ({
-              type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
-              label: value.label,
-              value:
-                value.type.indexOf('input') > -1
-                  ? value.value
-                  : Array.from(value.value),
-            }),
-          ),
-        )
-        itemPageMutate({
-          data: dtRegisterDB,
-          params: { database_id: itemDatabaseId },
-        })
-        Link({ href: '/' })
-      },
-    })
+  const { mutate: itemDbMutate } = useAdminItemPostDBMutation({
+    onSuccess: (data: any) => {
+      const { id: itemDatabaseId } = data.data
+      const dtRegisterPage = dtItemList.map((dtItem) =>
+        (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
+          ([, value]) => ({
+            type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
+            label: value.label,
+            value:
+              value.type.indexOf('input') > -1
+                ? value.value
+                : Array.from(value.value),
+          }),
+        ),
+      )
+      itemPageMutate({
+        data: dtRegisterPage,
+        params: { database_id: itemDatabaseId },
+      })
+    },
+  })
+
+  const { mutate: userDbMutate } = useAdminUserPostDBMutation({
+    onSuccess: (data: any) => {
+      const { id: userDatabaseId } = data.data
+      const dtUserPage = dtUserList.map((dtUser) => ({
+        label: dtUser.label,
+        value: dtUser.value,
+      }))
+      userPageMutate({
+        data: dtUserPage,
+        params: { database_id: userDatabaseId },
+      })
+    },
+  })
+
   const completeHandler = async () => {
     const dtRegisterDB = Object.entries(defaultDtRegisterItem).map(
       ([key, value]) => ({
@@ -144,7 +153,9 @@ export default function Admin() {
         label: value.label,
       }),
     )
+    const dtUserPage = dtUserList.map((dtUser) => ({ label: dtUser.label }))
     itemDbMutate({ data: dtRegisterDB })
+    userDbMutate({ data: dtUserPage })
   }
 
   return (

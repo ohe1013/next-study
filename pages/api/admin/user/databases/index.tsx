@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { PARENT_PAGE_ID, TOKEN } from 'config'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Entries } from 'types/util'
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method
   const properties: any = {
@@ -9,10 +8,8 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
       title: {},
     },
   }
-  ;(
-    Object.entries(req.body) as Entries<Record<string, { label: string }>>
-  ).forEach(([, value]) => {
-    properties[value.label] = {
+  req.body.forEach((data: string) => {
+    properties[data] = {
       rich_text: {},
     }
   })

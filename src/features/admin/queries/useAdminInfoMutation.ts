@@ -2,9 +2,11 @@ import axios from 'axios'
 import { useMutation } from 'react-query'
 
 interface Data {
-  id: string
-  adminName: string
+  code: string
   teamName: string
+  adminName: string
+  userKey: string
+  itemKey: string
 }
 
 interface PostAdminInfoProps {
@@ -13,7 +15,7 @@ interface PostAdminInfoProps {
 }
 type PatchAdminInfoProps = {
   params?: Record<string, string>
-  data: Data & { userKey: string }
+  data: Data
 }
 
 const postFetcher = (props: PostAdminInfoProps) =>
@@ -26,8 +28,11 @@ const useAdminInfoPatchMutation = () => {
   return useMutation(patchFetcher)
 }
 
-const useAdminInfoPostMutation = () => {
-  return useMutation(postFetcher)
+const useAdminInfoPostMutation = ({ onSuccess }: { onSuccess: any }) => {
+  return useMutation(postFetcher, {
+    onSuccess,
+    retry: true,
+  })
 }
 
 export { useAdminInfoPostMutation, useAdminInfoPatchMutation }

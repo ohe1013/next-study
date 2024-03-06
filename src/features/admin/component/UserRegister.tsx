@@ -7,19 +7,23 @@ import { Vote } from 'pages/admin'
 import { Dispatch, SetStateAction, useState } from 'react'
 import tw from 'twin.macro'
 
+interface DtUser {
+  label: string
+  value: string
+}
 interface UserRegisterProps {
-  dtUserList: string[]
-  setDtUserList: Dispatch<SetStateAction<string[]>>
+  dtUserList: DtUser[]
+  setDtUserList: Dispatch<SetStateAction<DtUser[]>>
   onNext: (reqData: Pick<Vote, 'userKey'>) => void
 }
 
 export default function UserRegister(props: UserRegisterProps) {
   const { dtUserList, setDtUserList, onNext } = props
-  const [user, setUser] = useState<string>('')
+  const [user, setUser] = useState<DtUser>({ label: '', value: '' })
   const onAddClickHandler = () => {
     setDtUserList([...dtUserList, user])
   }
-  const checkValid = (userList: string[]) => {
+  const checkValid = (userList: DtUser[]) => {
     if (userList.length === 0) return false
     return true
   }
@@ -33,8 +37,8 @@ export default function UserRegister(props: UserRegisterProps) {
         <Input
           label={'유저'}
           type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
+          value={user.value}
+          onChange={(e) => setUser({ ...user, value: e.target.value })}
         />
         <Button className={tw`w-24`} onClick={onAddClickHandler}>
           추가
@@ -52,7 +56,7 @@ export default function UserRegister(props: UserRegisterProps) {
         {dtUserList &&
           dtUserList.map((user, idx) => (
             <DtUserListItem
-              name={user}
+              name={user.value}
               idx={idx}
               key={uniqueId()}
               setDtUserList={setDtUserList}
@@ -71,7 +75,7 @@ function DtUserListItem({
 }: {
   name: string
   idx: number
-  setDtUserList: Dispatch<SetStateAction<string[]>>
+  setDtUserList: Dispatch<SetStateAction<DtUser[]>>
 }) {
   const [show, setShow] = useState(false)
   const [onEdit, setOnEdit] = useState(false)
