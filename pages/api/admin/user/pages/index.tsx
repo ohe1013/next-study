@@ -5,7 +5,7 @@ import { Entries } from 'types/util'
 
 type Input = {
   label: string
-  value: string | null
+  value: string
 }
 
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
