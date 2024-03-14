@@ -16,7 +16,7 @@ export default async function adminInfo(
   ]
   ;(Object.entries(req.body) as Entries<Record<string, string>>).forEach(
     ([key, value]) => {
-      if (key === 'id') {
+      if (key === 'code') {
         properties[key] = {
           title: createText(value),
         }

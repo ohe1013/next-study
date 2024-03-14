@@ -2,14 +2,22 @@ import axios from 'axios'
 import { useMutation } from 'react-query'
 
 type Data = { label: string; value?: string }[]
-interface PostAdminUserProps {
+interface Params {
+  type: 'CREATE' | 'UPDATE'
+}
+
+interface PostPageProps {
   params?: Record<string, string>
   data: Data
 }
-const postDBFetcher = (props: PostAdminUserProps) =>
+interface PostDBProps {
+  params?: Params & Record<string, string>
+  data: Data
+}
+const postDBFetcher = (props: PostDBProps) =>
   axios.post('/api/admin/user/databases', props.data)
 
-const postPageFetcher = (props: PostAdminUserProps) =>
+const postPageFetcher = (props: PostPageProps) =>
   axios.post('/api/admin/user/pages', props.data, { params: props.params })
 
 const useAdminUserPostDBMutation = ({ onSuccess }: { onSuccess: any }) => {

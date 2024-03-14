@@ -57,7 +57,7 @@ export default function TeamRegister({
       </div>
       <div css={[`padding:16px`]}>
         <Input
-          label={'관리자ID'}
+          label={'관리자명'}
           id={name}
           value={name}
           onChange={(e) => setName(e.target.value)}

@@ -1,6 +1,6 @@
 import { Button } from 'components/basic/Button'
 import Image from 'next/image'
-import { DtRegisterItem } from 'pages/admin'
+import { DtRegisterItem, DtRegisterUser } from 'pages/admin'
 import { Dispatch, SetStateAction } from 'react'
 import tw from 'twin.macro'
 
@@ -11,8 +11,8 @@ interface InitProps {
     setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
   }
   userList: {
-    dtUserList: string[]
-    setDtUserList: Dispatch<SetStateAction<string[]>>
+    dtUserList: DtRegisterUser[]
+    setDtUserList: Dispatch<SetStateAction<DtRegisterUser[]>>
   }
 }
 

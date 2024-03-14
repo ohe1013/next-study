@@ -6,7 +6,7 @@ import { ItemRegister } from 'src/features/admin/component/ItemRegister'
 import { defaultDtRegisterItem } from 'src/features/admin/component/ItemRegisterModal'
 import TeamInit, { TeamInitProps } from 'src/features/admin/component/TeamInit'
 import UserRegister from 'src/features/admin/component/UserRegister'
-import { useAdminInfoPostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
+import { useAdminInfoPagePostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
 import {
   useAdminItemPostDBMutation,
   useAdminItemPostPageMutation,
@@ -67,6 +67,10 @@ export interface DtRegisterItem {
   disAdvantageList: FormItem<'tag', string>
   reviewLinkList: FormTagItem<'tag/link', string>
 }
+export interface DtRegisterUser {
+  label: string
+  value: string
+}
 const defaultVote = {
   id: '',
   name: '',
@@ -92,25 +96,26 @@ export default function Admin() {
     useAdminItemPostPageMutation()
   const { mutate: userPageMutate, isSuccess: userSuccess } =
     useAdminUserPostPageMutation()
-  const { mutate } = useAdminInfoPostMutation({
+  const { mutate } = useAdminInfoPagePostMutation({
     onSuccess: () => router.push('/'),
   })
   const prevItemSuccess = usePrevious(itemSuccess && userSuccess)
   useEffect(() => {
     if (!prevItemSuccess && itemSuccess && userSuccess) {
       mutate({
+        params: { type: 'CREATE' },
         data: {
           code: vote.code,
           teamName: vote.id,
           adminName: vote.name,
-          userKey: vote.userKey,
-          itemKey: vote.itemKey,
+          userKey: itemData?.data.id,
+          itemKey: userData?.data.id,
         },
       })
     }
   }, [itemSuccess, userSuccess])
 
-  const { mutate: itemDbMutate } = useAdminItemPostDBMutation({
+  const { mutate: itemDbMutate, data: itemData } = useAdminItemPostDBMutation({
     onSuccess: (data: any) => {
       const { id: itemDatabaseId } = data.data
       const dtRegisterPage = dtItemList.map((dtItem) =>
@@ -132,11 +137,11 @@ export default function Admin() {
     },
   })
 
-  const { mutate: userDbMutate } = useAdminUserPostDBMutation({
+  const { mutate: userDbMutate, data: userData } = useAdminUserPostDBMutation({
     onSuccess: (data: any) => {
       const { id: userDatabaseId } = data.data
       const dtUserPage = dtUserList.map((dtUser) => ({
-        label: dtUser.label,
+        label: '이름',
         value: dtUser.value,
       }))
       userPageMutate({
@@ -153,9 +158,19 @@ export default function Admin() {
         label: value.label,
       }),
     )
-    const dtUserPage = dtUserList.map((dtUser) => ({ label: dtUser.label }))
-    itemDbMutate({ data: dtRegisterDB })
-    userDbMutate({ data: dtUserPage })
+    const dtUserPage = [{ label: '이름' }]
+    itemDbMutate({
+      data: dtRegisterDB,
+      params: {
+        type: 'CREATE',
+      },
+    })
+    userDbMutate({
+      data: dtUserPage,
+      params: {
+        type: 'CREATE',
+      },
+    })
   }
 
   return (

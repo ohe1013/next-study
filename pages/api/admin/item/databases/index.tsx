@@ -2,8 +2,8 @@ import axios from 'axios'
 import { PARENT_PAGE_ID, TOKEN } from 'config'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Entries } from 'types/util'
-export default async function admin(req: NextApiRequest, res: NextApiResponse) {
-  const requestMethod = req.method
+
+async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
   const properties: any = {
     id: {
       title: {},
@@ -41,7 +41,7 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     }
   })
   const options = {
-    method: requestMethod,
+    method: 'POST',
     url: `https://api.notion.com/v1/databases`,
     headers: {
       Authorization: `Bearer ${TOKEN}`,
@@ -60,4 +60,18 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const _res = await axios.request(options)
 
   return res.status(200).json(_res.data)
+}
+
+async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {}
+export default async function admin(req: NextApiRequest, res: NextApiResponse) {
+  const { type } = req.query
+
+  switch (type) {
+    case 'CREATE': {
+      return await createDatabases(req, res)
+    }
+    case 'QUERY': {
+      return await queryDatabases(req, res)
+    }
+  }
 }

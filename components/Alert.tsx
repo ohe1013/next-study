@@ -43,7 +43,7 @@ export const Alert = () => {
 }
 
 const AlertContainer = (props: AlertContainerProps) => {
-  const _className = `top-20 z-50  absolute left-1/2 p-4 mb-4 text-sm  rounded-lg dark:bg-gray-700 ${
+  const _className = `top-20 z-50  absolute left-1/2 p-4 -translate-x-1/2 mb-4 text-sm  rounded-lg dark:bg-gray-700 ${
     alertColor[props.type]
   } ${props.animationType}`
 

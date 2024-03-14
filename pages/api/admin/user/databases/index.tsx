@@ -7,9 +7,19 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     id: {
       title: {},
     },
+    up: {
+      number: {
+        format: 'number',
+      },
+    },
+    down: {
+      number: {
+        format: 'number',
+      },
+    },
   }
-  req.body.forEach((data: string) => {
-    properties[data] = {
+  req.body.forEach((data: { label: string }) => {
+    properties[data.label] = {
       rich_text: {},
     }
   })

@@ -21,7 +21,6 @@ type Data = {
 
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const { database_id } = req.query
-  console.log(database_id)
   const properties: Record<string, any>[] = []
   const dataList = req.body as Data[]
   dataList.forEach((data, idx) => {
@@ -32,6 +31,12 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
             text: { content: database_id },
           },
         ],
+      },
+      up: {
+        number: 0,
+      },
+      down: {
+        number: 0,
       },
     }
     ;(Object.entries(data) as Entries<Record<string, Tag | Input>>).forEach(

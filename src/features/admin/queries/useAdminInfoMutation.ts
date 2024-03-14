@@ -8,18 +8,26 @@ interface Data {
   userKey: string
   itemKey: string
 }
-
-interface PostAdminInfoProps {
-  params?: Record<string, string>
+interface CreateAmdinInfoProps {
+  params: { type: 'CREATE' } & Record<string, any>
   data: Data
 }
+interface QueryAdminInfoProps {
+  params: { type: 'QUERY' } & Record<string, any>
+  data: Pick<Data, 'code'>
+}
+
+type PostAdminInfoProps = CreateAmdinInfoProps | QueryAdminInfoProps
 type PatchAdminInfoProps = {
   params?: Record<string, string>
   data: Data
 }
 
-const postFetcher = (props: PostAdminInfoProps) =>
-  axios.post('/api/admin/pages', props.data)
+const postPageFetcher = (props: PostAdminInfoProps) =>
+  axios.post(`/api/admin/pages`, props.data, { params: props.params })
+
+const postDBFetcher = (props: PostAdminInfoProps) =>
+  axios.post(`/api/admin/databases`, props.data, { params: props.params })
 
 const patchFetcher = (props: PatchAdminInfoProps) =>
   axios.patch('/api/admin/pages', props.data, { params: props.params })
@@ -28,11 +36,21 @@ const useAdminInfoPatchMutation = () => {
   return useMutation(patchFetcher)
 }
 
-const useAdminInfoPostMutation = ({ onSuccess }: { onSuccess: any }) => {
-  return useMutation(postFetcher, {
-    onSuccess,
+const useAdminInfoDBPostMutation = (props: { onSuccess: any }) => {
+  return useMutation(postDBFetcher, {
+    onSuccess: props.onSuccess,
+    retry: true,
+  })
+}
+const useAdminInfoPagePostMutation = (props: { onSuccess: any }) => {
+  return useMutation(postPageFetcher, {
+    onSuccess: props.onSuccess,
     retry: true,
   })
 }
 
-export { useAdminInfoPostMutation, useAdminInfoPatchMutation }
+export {
+  useAdminInfoDBPostMutation,
+  useAdminInfoPagePostMutation,
+  useAdminInfoPatchMutation,
+}

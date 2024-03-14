@@ -2,32 +2,18 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="text-gray-600 body-font">
-      <div className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
-        <Link
-          href="/"
-          className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
-        >
-          <span className="ml-3 dark:text-white text-xl">OHK</span>
-        </Link>
-        <p className="text-sm text-gray-500 sm:ml-6 sm:mt-0 mt-4">
-          © 2023 OHK —
-          <Link
-            href="https://twitter.com/knyttneve"
-            rel="noopener noreferrer"
-            className="text-gray-500 sm:ml-6 sm:mt-0 mt-4  ml-1 dark:text-white"
-            target="_blank"
-          >
-            투표
-          </Link>
-          <Link
-            className="text-gray-500 sm:ml-6 sm:mt-0 mt-4 dark:text-white"
-            href="https://www.flaticon.com/kr/free-icons/"
-            title="투표 아이콘"
-          >
-            ©투표 아이콘 제작자: Freepik - Flaticon
-          </Link>
-        </p>
+    <footer className="translate-y-full relative bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+      <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          ©2024 OHK 투표사이트
+        </span>
+        <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+          <li>
+            <span className="hover:underline me-4 md:me-6">
+              ©투표 아이콘 제작자: Freepik - Flaticon
+            </span>
+          </li>
+        </ul>
       </div>
     </footer>
   )
