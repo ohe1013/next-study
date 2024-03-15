@@ -7,7 +7,7 @@ export const BottomCTA = (props: ComponentProps<typeof Button>) => {
   return (
     <>
       <div css={tw`h-20`}>
-        <div css={tw`fixed left-0 bottom-0 w-full`}>
+        <div css={tw`absolute left-0 bottom-0 w-full`}>
           <div
             css={[
               css`
@@ -32,7 +32,7 @@ export const BottomCTATypeTwo = ({
   return (
     <>
       <div css={tw`h-20`}>
-        <div css={tw`fixed left-0 bottom-0 w-full`}>
+        <div css={tw`absolute left-0 bottom-0 w-full`}>
           <div
             css={[
               css`

@@ -53,6 +53,7 @@ const ButtonField = styled.button<Button>(
      not-disabled:cursor-pointer not-disabled:bg-none 
      after:content-[' '] after:absolute after:top-0 after:right-0 
      after:bottom-0 after:left-0 after:bg-transparent  
+     [max-width:inherit]
      `,
       size === 'big' && tw`w-full rounded-[16px]`, // Add more size-specific styles
 

@@ -3,6 +3,7 @@ import DarkModeToggleButton from './dark-mode-toggle-button'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import tw from 'twin.macro'
 
 export default function Header() {
   const [show, setShow] = useState(false)
@@ -63,7 +64,10 @@ export default function Header() {
           </div>
         </div>
         <div
-          className={'absolut mx-auto w-11/12 ' + (show ? 'block' : 'hidden')}
+          className={
+            `absolute left-1/2 -translate-x-1/2 w-11/12 ` +
+            (show ? 'block' : 'hidden')
+          }
         >
           <ul className="flex flex-col mt-4 font-medium ">
             <li>
