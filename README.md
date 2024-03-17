@@ -30,23 +30,23 @@ https://github.com/ohe1013/next-study/assets/84114149/bb1d8ffb-666d-4590-9648-d3
 
 `notion database`로 `db`를 구성하였고 `notion api`로 `crud`를 진행하였습니다.
 
-데이터 캐싱 및 실시간 데이터를 chart로 보여주기 위해 mutation을 통한 선언형 처리를 위해 'react-query'를 도입하였습니다.
+데이터 캐싱 및 실시간 데이터를 chart로 보여주기 위해 mutation을 통한 선언형 처리를 위해 `react-query`를 도입하였습니다.
 
-notion api의 불편한 부분이 많아 react-query의 도움을 통해 해결하고자 하였습니다.
+`notion api`의 불편한 부분이 많아 `react-query`의 도움을 통해 해결하고자 하였습니다.
 
-내부 전역 state관리는 recoil , 서버 state관리는 react-query 구조로 하였습니다.
+내부 전역 state관리는 recoil , 서버 state관리는 `react-query` 구조로 하였습니다.
 
 간단하지만, `chart.js`로 결과를 보여줄 수 있도록 하였습니다. 
 
 관리자 기능을 통해 새롭게 데이터를 추가할 수 있도록 진행하였습니다.
 
-관리자 기능을 추가하는 과정을 'toss'의 'use-funnel'과 같은 구조로 진행하고자하여, 커스텀하여 구현하였습니다.
+관리자 기능을 추가하는 과정을 `toss`의 `use-funnel`과 같은 구조로 진행하고자하여, 커스텀하여 구현하였습니다.
 
 기존의 페이지 구조에서 feature를 사용한 page 구조로 구현을 변경중에 있습니다. 
 
-feature 내부에 component, query, api, hook 까지 넣어 하나의 'feature' 로 구분하는 형식을 취하도록 변경하고 있습니다.
+`feature폴더` 내부에 component, query, api, hook 까지 넣어 하나의 `feature` 로 구분하는 형식을 취하도록 변경하고 있습니다.
 
-이 형식의 장점은 next.js 는 하나의 page를 하나의 feature로 생각하고 접근한다면, 구조화 하기 편하다고 생각했습니다.
+이 형식의 장점은 `next.js` 는 하나의 `page`를 하나의 `feature`로 생각하고 접근한다면, 구조화 하기 편하다고 생각했습니다.
 
 기존 폴더 구조가 component, api, service, hook 등 다양한 폴더에 각각 feature를 넣어 접근했다면, 이걸 역으로 feature하나에 넣는 방식으로 페러다임을 변경한 것 입니다.
 
