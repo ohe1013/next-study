@@ -19,8 +19,8 @@
 그래서 만들었습니다. 커스텀 투표 앱!
 
 
-https://github.com/ohe1013/next-study/assets/84114149/bb1d8ffb-666d-4590-9648-d30d03d444b7
 
+https://github.com/ohe1013/next-study/assets/84114149/d195110a-6745-4ac7-adfc-e915d19b34f1
 
 
 
