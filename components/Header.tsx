@@ -91,7 +91,7 @@ export default function Header() {
             <li>
               <Link
                 href="/result"
-                className="block py-2 pr-4 pl-3 rounded bg-gray-700 text-white  dark:text-white"
+                className="block py-2  my-1 pr-4 pl-3 rounded bg-gray-700 text-white  dark:text-white"
                 aria-current="page"
               >
                 결과보기
