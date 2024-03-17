@@ -13,15 +13,15 @@ module.exports = {
   theme: {
     extend: {
       minHeight: {
-        body: 'calc(100vh - 2rem)',
+        body: 'calc(100vh - 4rem)',
       },
       colors: {
         primary: '#3b82f6',
       },
       screens: {
         xsm: '320px',
-        m:'960px',
-        "3xl" :'1600px'
+        m: '960px',
+        '3xl': '1600px',
       },
     },
   },

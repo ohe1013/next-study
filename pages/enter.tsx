@@ -112,6 +112,7 @@ export default function Enter({ users }: { users: User }) {
 }
 export async function getServerSideProps() {
   const notion = new Client({ auth: TOKEN })
+
   const result = await notion.databases.query({
     database_id: DATABASE_ID_USER!,
   })

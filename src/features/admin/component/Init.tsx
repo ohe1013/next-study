@@ -1,4 +1,4 @@
-import { Button } from 'components/basic/Button'
+import { BottomCTATypeTwo } from 'components/basic/BottomCTA'
 import Image from 'next/image'
 import { DtRegisterItem, DtRegisterUser } from 'pages/admin'
 import { Dispatch, SetStateAction } from 'react'
@@ -19,8 +19,6 @@ interface InitProps {
 export default function Init(props: InitProps) {
   const { onNext, itemList, userList } = props
 
-  const onUpdateClickHandler = () => {}
-
   return (
     <div css={tw`flex-1 `}>
       <div css={tw`m-auto mt-20`}>
@@ -34,12 +32,14 @@ export default function Init(props: InitProps) {
           css={tw`mx-auto`}
         ></Image>
       </div>
-      <Button className={tw`mt-10 mb-5`} onClick={() => onNext('create')}>
-        새로 등록하기
-      </Button>
-      <Button buttonStyle="weak" onClick={() => onNext('update')}>
-        회식 수정하기
-      </Button>
+      <BottomCTATypeTwo
+        propsA={{ onClick: () => onNext('create'), children: '새로 등록하기' }}
+        propsB={{
+          onClick: () => onNext('update'),
+          children: ' 회식 수정하기',
+          buttonStyle: 'weak',
+        }}
+      ></BottomCTATypeTwo>
     </div>
   )
 }

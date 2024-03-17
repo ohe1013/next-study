@@ -65,7 +65,7 @@ export default function Header() {
         </div>
         <div
           className={
-            `absolute left-1/2 -translate-x-1/2 w-11/12 ` +
+            `absolute z-50 left-1/2 -translate-x-1/2 w-11/12 ` +
             (show ? 'block' : 'hidden')
           }
         >

@@ -18,18 +18,18 @@ export default function Layout({ children }: any) {
       css={tw`relative mx-auto dark:[background-color: #1e293b] [min-height: 100vh]`}
     >
       <div css={tw`w-80 `}></div>
-      <DesktopTemplate>
-        <Header />
-        {children}
-        {!isAdmin && <Footer />}
-        <Alert />
-      </DesktopTemplate>
+      {/* <DesktopTemplate> */}
+      <Header />
+      <div css={tw`[max-width: 1280px] mx-auto`}>{children}</div>
+      <Alert />
+      {/* {!isAdmin && <Footer />} */}
+      {/* </DesktopTemplate> */}
     </div>
   )
 }
 
-const DesktopTemplate = styled.div(() => {
-  return [
-    tw`absolute left-1/2  [max-width: 480px] [width: 480px] [min-height: 100vh]`,
-  ]
-})
+// const DesktopTemplate = styled.div(() => {
+//   return [
+//     tw`absolute left-1/2  [max-width: 480px] [width: 480px] [min-height: 100vh]`,
+//   ]
+// })
