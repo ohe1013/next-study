@@ -26,12 +26,20 @@ async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {
 
   const _res = await axios.request(options)
   if (_res.data.results.length === 0) {
-    // 데이터가 없는 경우 204 No Content 상태 코드 반환
     return res.status(204).end()
   }
+  const result: Record<string, any> = {}
+  Object.entries(_res.data.results[0].properties).forEach(
+    ([key, value]: [string, any]) => {
+      if (value.hasOwnProperty('rich_text')) {
+        result[key] = value.rich_text[0].text.content
+      } else if (value.hasOwnProperty('title')) {
+        result[key] = value.title[0].text.content
+      }
+    },
+  )
 
-  // 데이터가 있는 경우, 정상적으로 데이터 반환
-  return res.status(200).json(_res.data.results)
+  return res.status(200).json(result)
 }
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const { type } = req.query

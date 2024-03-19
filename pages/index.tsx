@@ -7,14 +7,15 @@ import { useState } from 'react'
 import { useAdminInfoDBPostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
 import { alertState } from 'src/recoil/alert/alert'
 import { useRecoilState } from 'recoil'
+import { configState } from 'src/recoil/personal'
 
 export default function Home() {
   const router = useRouter()
   const [, setAlert] = useRecoilState(alertState)
+  const [config, setConfig] = useRecoilState(configState)
   const [code, setCode] = useState('')
   const { mutate } = useAdminInfoDBPostMutation({
     onSuccess: (data: any) => {
-      console.log(data.data)
       if (!data.data) {
         setAlert({
           message: '코드를 확인해주세요. ',
@@ -22,6 +23,7 @@ export default function Home() {
           visible: true,
         })
       } else {
+        setConfig({ ...data.data })
         router.push({ pathname: '/enter' })
       }
     },

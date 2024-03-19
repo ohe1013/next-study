@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
+import { configState } from 'src/recoil/personal'
+import { useAdminUserPostDBMutation } from 'src/features/admin/queries/useAdminUserMutation'
 
 type User = {
   [name: string]: {
@@ -15,26 +17,44 @@ type User = {
 interface SubmitProps {
   name: string
 }
-export default function Enter({ users }: { users: User }) {
+export default function Enter() {
   const router = useRouter()
+  const { mutate } = useAdminUserPostDBMutation({
+    onSuccess: (data: any) => {
+      if (data.data !== 'ok') {
+        setAlert({
+          ...alert,
+          type: 'danger',
+          visible: true,
+          message: '해당 이름은 존재하지 않습니다.',
+        })
+      } else {
+        setConfig({ ...data.data })
+        router.push({ pathname: 'main' }, 'main')
+      }
+    },
+  })
   const [alert, setAlert] = useRecoilState(alertState)
-  const isValidUser = (name: string) => {
-    return uesrNameArr.includes(name)
-  }
+  const [config, setConfig] = useRecoilState(configState)
+  // const isValidUser = (name: string) => {
+  //   return uesrNameArr.includes(name)
+  // }
   const submitHandler = ({ name }: SubmitProps) => {
-    if (isValidUser(name)) {
-      const id = users[userName].id
-      router.push({ pathname: 'main', query: { name, id } }, 'main')
-    } else {
-      setAlert({
-        ...alert,
-        type: 'danger',
-        visible: true,
-        message: '해당 이름은 존재하지 않습니다.',
-      })
-    }
+    mutate({ params: { type: 'QUERY' }, data: { id: config.userKey } })
+    // if (isValidUser(name)) {
+    // const id = users[userName].id
+    // router.push({ pathname: 'main', query: { name, id } }, 'main')
+    // } else {
+    //   setAlert({
+    //     ...alert,
+    //     type: 'danger',
+    //     visible: true,
+    //     message: '해당 이름은 존재하지 않습니다.',
+    //   })
+    // }
   }
-  const uesrNameArr = Object.keys(users)
+
+  // const uesrNameArr = Object.keys(users)
   const [userName, setUserName] = useState<string>('')
   const onChangeUserName = (e: any) => {
     setUserName(e.target.value)
@@ -110,23 +130,23 @@ export default function Enter({ users }: { users: User }) {
     </div>
   )
 }
-export async function getServerSideProps() {
-  const notion = new Client({ auth: TOKEN })
+// export async function getServerSideProps() {
+//   const notion = new Client({ auth: TOKEN })
 
-  const result = await notion.databases.query({
-    database_id: DATABASE_ID_USER!,
-  })
-  const _users = result.results
-  const users: User = {}
-  _users.forEach((_user: any) => {
-    users[_user.properties.name.title[0].plain_text] = {
-      up: _user.properties.up.number,
-      id: _user.id,
-    }
-  })
-  return {
-    props: {
-      users,
-    },
-  }
-}
+//   const result = await notion.databases.query({
+//     database_id: DATABASE_ID_USER!,
+//   })
+//   const _users = result.results
+//   const users: User = {}
+//   _users.forEach((_user: any) => {
+//     users[_user.properties.name.title[0].plain_text] = {
+//       up: _user.properties.up.number,
+//       id: _user.id,
+//     }
+//   })
+//   return {
+//     props: {
+//       users,
+//     },
+//   }
+// }
