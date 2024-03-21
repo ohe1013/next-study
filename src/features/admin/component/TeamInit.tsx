@@ -1,5 +1,6 @@
 import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
+import DatePicker from 'components/basic/DatePicker'
 import Input from 'components/basic/Input'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -79,6 +80,7 @@ export default function TeamRegister({
           코드 발급받기
         </Button>
       </div>
+      <DatePicker />
       <BottomCTA
         disabled={!checkValid([id, name, code])}
         onClick={handleNextButton}

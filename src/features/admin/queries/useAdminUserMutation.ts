@@ -14,7 +14,11 @@ interface PostDBProps {
   params?: Params & Record<string, string>
   data: Data
 }
-const postDBFetcher = (props: PostDBProps) =>
+interface PostDBQueryProps {
+  params: { type: 'QUERY'; database_id: string } & Record<string, string>
+  data: { name: string }
+}
+const postDBFetcher = (props: PostDBProps | PostDBQueryProps) =>
   axios.post('/api/admin/user/databases', props.data, { params: props.params })
 
 const postPageFetcher = (props: PostPageProps) =>

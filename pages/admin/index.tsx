@@ -174,7 +174,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-body flex-col flex relative">
+    <div className="bg-primary min-h-body flex-col flex relative">
       <Funnel>
         <Funnel.Step name="init">
           <Init

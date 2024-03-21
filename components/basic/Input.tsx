@@ -149,7 +149,7 @@ const LabelContainer = styled.div<{ hasValue?: boolean; focused?: boolean }>(
     font-size: 22px;
     font-weight: 500;
     color: $grey500;
-    line-height: calc(13px * 2.2);
+    line-height:13px ;
   }`,
     ]
   },

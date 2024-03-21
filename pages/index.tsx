@@ -3,7 +3,12 @@ import { useRouter } from 'next/router'
 import { Button } from 'components/basic/Button'
 import tw from 'twin.macro'
 import Input from 'components/basic/Input'
-import { useState } from 'react'
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useState,
+} from 'react'
 import { useAdminInfoDBPostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
 import { alertState } from 'src/recoil/alert/alert'
 import { useRecoilState } from 'recoil'
@@ -28,6 +33,15 @@ export default function Home() {
       }
     },
   })
+
+  const handleChangeCode: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setCode(e.target.value)
+  const handleEnterKeydown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === 'Enter') {
+      enterVote(code)
+    }
+  }
+
   const enterVote = (code: string) => {
     mutate({ data: { code }, params: { type: 'QUERY' } })
   }
@@ -52,7 +66,8 @@ export default function Home() {
               css={tw`flex-1`}
               label={'코드'}
               id={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={handleChangeCode}
+              onKeyDown={handleEnterKeydown}
               value={code}
             ></Input>
             <Button className={tw`w-40`} onClick={() => enterVote(code)}>

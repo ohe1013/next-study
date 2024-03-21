@@ -47,11 +47,11 @@ async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.body
-  const { databaes_id } = req.query
+  const { name } = req.body
+  const { database_id } = req.query
   const options = {
     method: 'POST',
-    url: `https://api.notion.com/v1/databases/${databaes_id}/query`,
+    url: `https://api.notion.com/v1/databases/${database_id}/query`,
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       'Notion-Version': '2022-06-28',
@@ -59,9 +59,9 @@ async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {
     },
     data: {
       filter: {
-        property: 'id',
+        property: '이름',
         rich_text: {
-          equals: id,
+          equals: name,
         },
       },
     },
