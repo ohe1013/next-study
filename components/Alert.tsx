@@ -24,12 +24,14 @@ export const Alert = () => {
   const [alert, setAlert] = useRecoilState(alertState)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setAlert({ ...alert, visible: false })
-    }, 2000)
+    if (alert.visible) {
+      const timer = setTimeout(() => {
+        setAlert((prevAlert) => ({ ...prevAlert, visible: false }))
+      }, 2000)
 
-    return () => clearTimeout(timer)
-  }, [alert, setAlert])
+      return () => clearTimeout(timer)
+    }
+  }, [alert.visible, setAlert])
 
   const animationClass = alert.visible ? 'animate-fadeIn' : 'animate-fadeOut'
 

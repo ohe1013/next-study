@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Button } from 'components/basic/Button'
@@ -11,13 +13,13 @@ import {
 } from 'react'
 import { useAdminInfoDBPostMutation } from 'src/features/admin/queries/useAdminInfoMutation'
 import { alertState } from 'src/recoil/alert/alert'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { configState } from 'src/recoil/personal'
 
 export default function Home() {
   const router = useRouter()
-  const [, setAlert] = useRecoilState(alertState)
-  const [config, setConfig] = useRecoilState(configState)
+  const setAlert = useSetRecoilState(alertState)
+  const setConfig = useSetRecoilState(configState)
   const [code, setCode] = useState('')
   const { mutate } = useAdminInfoDBPostMutation({
     onSuccess: (data: any) => {

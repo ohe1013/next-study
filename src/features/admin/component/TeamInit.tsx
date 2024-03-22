@@ -3,7 +3,7 @@ import { Button } from 'components/basic/Button'
 import DatePicker from 'components/basic/DatePicker'
 import Input from 'components/basic/Input'
 import { useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 import tw from 'twin.macro'
 
@@ -14,7 +14,7 @@ export interface TeamInitProps {
   onNext: (state: Pick<TeamInitProps, 'id' | 'name' | 'code'>) => void
 }
 
-export default function TeamRegister({
+export default function TeamInit({
   id: _id,
   name: _name,
   code: _code,
@@ -22,7 +22,7 @@ export default function TeamRegister({
 }: TeamInitProps) {
   const [id, setId] = useState(_id)
   const [name, setName] = useState(_name)
-  const [, setAlert] = useRecoilState(alertState)
+  const setAlert = useSetRecoilState(alertState)
   const [code, setCode] = useState(_code)
   const checkValid = <T extends string>(props: [T, ...T[]]) => {
     for (const prop of props) {

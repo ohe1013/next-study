@@ -6,37 +6,9 @@ import { DtRegisterItem } from 'pages/admin'
 import tw from 'twin.macro'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { cloneDeep } from 'lodash'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
-
-export const defaultDtRegisterItem: DtRegisterItem = {
-  storeName: { value: '', type: 'input', label: '매장명' },
-  storeLink: { value: '', type: 'input/link', label: '매장링크' },
-  representNameList: {
-    value: new Set(),
-    type: 'tag',
-    label: '대표메뉴',
-    buttonLabel: '추가',
-  },
-  advantageList: {
-    value: new Set(),
-    type: 'tag',
-    label: '장점',
-    buttonLabel: '추가',
-  },
-  disAdvantageList: {
-    value: new Set(),
-    type: 'tag',
-    label: '단점',
-    buttonLabel: '추가',
-  },
-  reviewLinkList: {
-    value: new Set(),
-    type: 'tag/link',
-    label: '후기',
-    buttonLabel: '추가',
-  },
-}
+import { defaultDtRegisterItem } from '../hooks/useCreateVote'
 
 export default function TeamRegisterModal({
   setDtItemList,
@@ -49,7 +21,7 @@ export default function TeamRegisterModal({
 }) {
   const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
   const [dtItem, setDtItem] = useState<DtRegisterItem>(_defaultDtRegisterItem)
-  const [, setAlert] = useRecoilState(alertState)
+  const setAlert = useSetRecoilState(alertState)
   const clearDtItem = () => {
     setDtItem(cloneDeep(_defaultDtRegisterItem))
   }

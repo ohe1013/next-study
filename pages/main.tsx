@@ -1,10 +1,10 @@
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import { useQuery, QueryClient, dehydrate } from 'react-query'
+import { useQuery } from 'react-query'
 import LoadingModal from '../components/LoadingModal'
 import SelectBox from 'components/SelectBox'
 import Card from 'components/Card'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 import { MenuAPi } from './api/menu/Menu'
 
@@ -27,7 +27,7 @@ const Main = ({
   currentUser: { id: string; up: number }
 }): JSX.Element => {
   const router = useRouter()
-  const [alert, setAlert] = useRecoilState(alertState)
+  const setAlert = useSetRecoilState(alertState)
   const { data, isLoading } = useQuery(['menus'], queryFN, {
     staleTime: 1000,
   })
@@ -43,7 +43,6 @@ const Main = ({
     }
     if (!selected1st || !selected2nd) {
       setAlert({
-        ...alert,
         type: 'warn',
         visible: true,
         message: '선택을 비울 수 없습니다.',
@@ -52,7 +51,6 @@ const Main = ({
     }
     if (selected1st.startsWith('-') || selected2nd.startsWith('-')) {
       setAlert({
-        ...alert,
         type: 'warn',
         visible: true,
         message: '선택을 비울 수 없습니다.',
@@ -63,7 +61,6 @@ const Main = ({
     await recommend(selected1st, selected2nd)
     await reduceUp(currentUser.id)
     setAlert({
-      ...alert,
       type: 'success',
       visible: true,
       message: '추천이 완료되었습니다.',

@@ -21,7 +21,6 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
   const onNextButtonHandler = () => {
     if (checkValid(dtItemList)) onNext({ itemKey: 'fix it' })
   }
-
   return (
     <>
       <TeamRegisterList dTItemList={dtItemList} />

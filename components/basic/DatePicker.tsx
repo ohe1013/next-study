@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { KeyboardEvent, Reducer, useEffect, useReducer, useRef } from 'react'
 
 interface Month {
   name: string
@@ -313,13 +313,14 @@ const formatYearsMonthDay = (date: Date): string => {
 }
 
 const DatePicker = () => {
-  const [state, dispatch] = React.useReducer<
-    React.Reducer<DatePickerReducerState, DatePickeReducerAction>
+  const [state, dispatch] = useReducer<
+    Reducer<DatePickerReducerState, DatePickeReducerAction>
   >(datePickerReducer, initState)
-  const displayDateRef = React.useRef<HTMLInputElement>(null)
-  const daysDivRef = React.useRef<HTMLDivElement>(null)
+  const displayDateRef = useRef<HTMLInputElement>(null)
+  const daysDivRef = useRef<HTMLDivElement>(null)
+  console.log(state)
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch({ type: 'SET_INIT_STATE' })
   }, [])
 
@@ -330,7 +331,7 @@ const DatePicker = () => {
     return today.toDateString() === day.toDateString() ? true : false
   }
 
-  const handleDatePickerKeydown = (event: React.KeyboardEvent) => {
+  const handleDatePickerKeydown = (event: KeyboardEvent) => {
     if (event.charCode === 0) {
       dispatch({ type: 'IS_OPEN', isOpen: false })
     }
@@ -356,7 +357,7 @@ const DatePicker = () => {
         <div className="mb-5 w-64">
           <label
             htmlFor="datepicker"
-            className="font-bold mb-1 text-gray-700 block"
+            className="font-semibold mb-1 text-gray-700 block"
           >
             날짜
           </label>
