@@ -15,81 +15,80 @@ interface DatePickerReducerState {
   daysInMonthArr: number[]
   blankDaysArr: number[]
 }
-
 const months: { [id: number]: string } = {
-  0: 'January',
-  1: 'February',
-  2: 'March',
-  3: 'April',
-  4: 'May',
-  5: 'June',
-  6: 'July',
-  7: 'August',
-  8: 'September',
-  9: 'October',
-  10: 'November',
-  11: 'December',
+  0: '1월',
+  1: '2월',
+  2: '3월',
+  3: '4월',
+  4: '5월',
+  5: '6월',
+  6: '7월',
+  7: '8월',
+  8: '9월',
+  9: '10월',
+  10: '11월',
+  11: '12월',
 }
 
 const monthObj: { [id: number]: Month } = {
   0: {
-    name: 'January',
-    shortName: 'Jan',
+    name: '1월',
+    shortName: '1월',
     calendarMonthNumber: 1,
   },
   1: {
-    name: 'February',
-    shortName: 'Feb',
+    name: '2월',
+    shortName: '2월',
     calendarMonthNumber: 2,
   },
   2: {
-    name: 'March',
-    shortName: 'Mar',
+    name: '3월',
+    shortName: '3월',
     calendarMonthNumber: 3,
   },
   3: {
-    name: 'April',
-    shortName: 'Apr',
+    name: '4월',
+    shortName: '4월',
     calendarMonthNumber: 4,
   },
   4: {
-    name: 'May',
-    shortName: 'May',
+    name: '5월',
+    shortName: '5월',
     calendarMonthNumber: 5,
   },
   5: {
-    name: 'June',
-    shortName: 'Jun',
+    name: '6월',
+    shortName: '6월',
     calendarMonthNumber: 6,
   },
   6: {
-    name: 'July',
-    shortName: 'Jul',
+    name: '7월',
+    shortName: '7월',
     calendarMonthNumber: 7,
   },
   7: {
-    name: 'August',
-    shortName: 'Aug',
+    name: '8월',
+    shortName: '8월',
     calendarMonthNumber: 8,
   },
   8: {
-    name: 'September',
-    shortName: 'Sep',
+    name: '9월',
+    shortName: '9월',
     calendarMonthNumber: 9,
   },
   9: {
-    name: 'October',
-    shortName: 'Oct',
+    name: '10월',
+    shortName: '10월',
     calendarMonthNumber: 10,
   },
   10: {
-    name: 'November',
-    shortName: 'Nov',
+    name: '11월',
+    shortName: '11월',
     calendarMonthNumber: 11,
   },
   11: {
-    name: 'December',
-    shortName: 'Dec',
+    name: '12월',
+    shortName: '12월',
     calendarMonthNumber: 12,
   },
 }
@@ -102,48 +101,48 @@ interface CalendarDay {
 
 const dayObj: { [id: number]: CalendarDay } = {
   0: {
-    name: 'Sunday',
-    shortName: 'Sun',
+    name: '일요일',
+    shortName: '일',
     calendarWeekdayNumber: 0,
   },
   1: {
-    name: 'Monday',
-    shortName: 'Mon',
+    name: '월요일',
+    shortName: '월',
     calendarWeekdayNumber: 1,
   },
   2: {
-    name: 'Tuesday',
-    shortName: 'Tue',
+    name: '화요일',
+    shortName: '화',
     calendarWeekdayNumber: 2,
   },
   3: {
-    name: 'Wednesday',
-    shortName: 'Wed',
+    name: '수요일',
+    shortName: '수',
     calendarWeekdayNumber: 3,
   },
   4: {
-    name: 'Thursday',
-    shortName: 'Thu',
+    name: '목요일',
+    shortName: '목',
     calendarWeekdayNumber: 4,
   },
   5: {
-    name: 'Friday',
-    shortName: 'Fri',
+    name: '금요일',
+    shortName: '금',
     calendarWeekdayNumber: 5,
   },
   6: {
-    name: 'Saturday',
-    shortName: 'Sat',
+    name: '토요일',
+    shortName: '토',
     calendarWeekdayNumber: 6,
   },
 }
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const days = ['일', '월', '화', '수', '목', '금', '토']
 
 type DatePickeReducerAction =
-  | { type: 'SET_INIT_STATE' }
+  | { type: 'SET_INIT_STATE'; setDate: (date: string) => void }
   | { type: 'IS_OPEN'; isOpen: boolean }
-  | { type: 'SET_DATE'; dayNumber: number }
+  | { type: 'SET_DATE'; dayNumber: number; setDate: (date: string) => void }
   | { type: 'ADD_MONTH' }
   | { type: 'SUBTRACT_MONTH' }
 
@@ -169,7 +168,9 @@ const datePickerReducer: React.Reducer<
 
       const dayOfWeek = new Date(year, month).getDay()
       const weekday = dayObj[dayOfWeek].calendarWeekdayNumber
-      const displayDate = getDate(new Date(year, month, today.getDate()))
+      const displayDate = createDisplayDay(
+        new Date(year, month, today.getDate()),
+      )
       const date = formatYearsMonthDay(new Date(year, month, today.getDate()))
 
       // Get last day number of the previous actual month
@@ -185,6 +186,7 @@ const datePickerReducer: React.Reducer<
       for (let i = 1; i < daysInMonth; i++) {
         daysInMonthArr.push(i)
       }
+      action.setDate(displayDate)
 
       return {
         ...state,
@@ -207,8 +209,8 @@ const datePickerReducer: React.Reducer<
     case 'SET_DATE': {
       const dateToFormat = new Date(state.year, state.month, action.dayNumber)
       const date = formatYearsMonthDay(dateToFormat)
-      const displayDate = getDate(dateToFormat)
-
+      const displayDate = createDisplayDay(dateToFormat)
+      action.setDate(displayDate)
       return {
         ...state,
         date,
@@ -293,13 +295,13 @@ const datePickerReducer: React.Reducer<
   }
 }
 
-const getDate = (date: Date): string => {
+const createDisplayDay = (date: Date): string => {
   const year = date.getFullYear()
   const monthShortName = monthObj[date.getMonth()].shortName
   const day = ('0' + date.getDate()).slice(-2)
   const dayShortName = dayObj[date.getDay()].shortName
 
-  return `${dayShortName} ${day} ${monthShortName}, ${year}`
+  return `${year}년 ${monthShortName} ${day}일 (${dayShortName}) `
 }
 
 const formatYearsMonthDay = (date: Date): string => {
@@ -312,16 +314,18 @@ const formatYearsMonthDay = (date: Date): string => {
   )
 }
 
-const DatePicker = () => {
+const DatePicker = ({ setDate }: { setDate: (date: string) => void }) => {
   const [state, dispatch] = useReducer<
     Reducer<DatePickerReducerState, DatePickeReducerAction>
   >(datePickerReducer, initState)
   const displayDateRef = useRef<HTMLInputElement>(null)
   const daysDivRef = useRef<HTMLDivElement>(null)
-  console.log(state)
 
   useEffect(() => {
-    dispatch({ type: 'SET_INIT_STATE' })
+    dispatch({
+      type: 'SET_INIT_STATE',
+      setDate: (date: string) => setDate(date),
+    })
   }, [])
 
   const isToday = (dayNumber: number) => {
@@ -357,7 +361,7 @@ const DatePicker = () => {
         <div className="mb-5 w-64">
           <label
             htmlFor="datepicker"
-            className="font-semibold mb-1 text-gray-700 block"
+            className="font-medium mb-1 text-gray-700 block"
           >
             날짜
           </label>
@@ -488,7 +492,11 @@ const DatePicker = () => {
                   >
                     <div
                       onClick={() => {
-                        dispatch({ type: 'SET_DATE', dayNumber })
+                        dispatch({
+                          type: 'SET_DATE',
+                          dayNumber,
+                          setDate: (date: string) => setDate(date),
+                        })
                         toggleDisplayDateFocus()
                       }}
                       onMouseDown={(event) => event.preventDefault()}

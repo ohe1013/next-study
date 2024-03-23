@@ -7,6 +7,7 @@ interface Data {
   adminName: string
   userKey: string
   itemKey: string
+  date: string
 }
 interface CreateAmdinInfoProps {
   params: { type: 'CREATE' } & Record<string, any>

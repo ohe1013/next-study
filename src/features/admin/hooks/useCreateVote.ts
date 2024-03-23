@@ -14,12 +14,13 @@ import { useAdminInfoPagePostMutation } from '../queries/useAdminInfoMutation'
 import { usePrevious } from 'src/hooks/usePrevious/usePrevious'
 import { Entries } from 'types/util'
 
-const defaultVote = {
+const defaultVote: Vote = {
   id: '',
   name: '',
   code: '',
   itemKey: '',
   userKey: '',
+  date: '',
 }
 export const defaultDtRegisterItem: DtRegisterItem = {
   storeName: { value: '', type: 'input', label: '매장명' },
@@ -79,9 +80,11 @@ export const useCreatevote = () => {
           adminName: vote.name,
           userKey: itemData?.data.id,
           itemKey: userData?.data.id,
+          date: vote.date,
         },
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemSuccess, userSuccess])
 
   const { mutate: itemDbMutate, data: itemData } = useAdminItemPostDBMutation({
