@@ -1,5 +1,3 @@
-import { Client } from '@notionhq/client'
-import { TOKEN, DATABASE_ID_USER } from '../config/index'
 import { ChangeEventHandler, KeyboardEventHandler, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -74,10 +72,10 @@ export default function Enter() {
                 <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
                   {config.teamName}
                 </h1>
-                {/*
+
                 <h2 className="title-font sm:text-xl text-l mb-4 font-medium text-gray-900">
-                  날짜 : xx월 xx일 ~ yy월 yy일
-                </h2> */}
+                  날짜 : {config.date}
+                </h2>
                 <div className="leading-relaxed">
                   <span>추천 2회 가능합니다. [1순위, 2순위]</span>
                 </div>
@@ -108,23 +106,3 @@ export default function Enter() {
     </div>
   )
 }
-// export async function getServerSideProps() {
-//   const notion = new Client({ auth: TOKEN })
-
-//   const result = await notion.databases.query({
-//     database_id: DATABASE_ID_USER!,
-//   })
-//   const _users = result.results
-//   const users: User = {}
-//   _users.forEach((_user: any) => {
-//     users[_user.properties.name.title[0].plain_text] = {
-//       up: _user.properties.up.number,
-//       id: _user.id,
-//     }
-//   })
-//   return {
-//     props: {
-//       users,
-//     },
-//   }
-// }

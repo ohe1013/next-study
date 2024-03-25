@@ -8,6 +8,7 @@ const configState = atom({
     itemKey: '',
     teamName: '',
     userKey: '',
+    date: '',
   },
 })
 

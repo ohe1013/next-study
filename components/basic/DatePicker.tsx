@@ -140,9 +140,9 @@ const dayObj: { [id: number]: CalendarDay } = {
 const days = ['일', '월', '화', '수', '목', '금', '토']
 
 type DatePickeReducerAction =
-  | { type: 'SET_INIT_STATE'; setDate: (date: string) => void }
+  | { type: 'SET_INIT_STATE' }
   | { type: 'IS_OPEN'; isOpen: boolean }
-  | { type: 'SET_DATE'; dayNumber: number; setDate: (date: string) => void }
+  | { type: 'SET_DATE'; dayNumber: number }
   | { type: 'ADD_MONTH' }
   | { type: 'SUBTRACT_MONTH' }
 
@@ -186,7 +186,6 @@ const datePickerReducer: React.Reducer<
       for (let i = 1; i < daysInMonth; i++) {
         daysInMonthArr.push(i)
       }
-      action.setDate(displayDate)
 
       return {
         ...state,
@@ -210,7 +209,6 @@ const datePickerReducer: React.Reducer<
       const dateToFormat = new Date(state.year, state.month, action.dayNumber)
       const date = formatYearsMonthDay(dateToFormat)
       const displayDate = createDisplayDay(dateToFormat)
-      action.setDate(displayDate)
       return {
         ...state,
         date,
@@ -324,9 +322,12 @@ const DatePicker = ({ setDate }: { setDate: (date: string) => void }) => {
   useEffect(() => {
     dispatch({
       type: 'SET_INIT_STATE',
-      setDate: (date: string) => setDate(date),
     })
   }, [])
+
+  useEffect(() => {
+    setDate(state.displayDate)
+  }, [setDate, state.displayDate])
 
   const isToday = (dayNumber: number) => {
     const today = new Date()
@@ -495,7 +496,6 @@ const DatePicker = ({ setDate }: { setDate: (date: string) => void }) => {
                         dispatch({
                           type: 'SET_DATE',
                           dayNumber,
-                          setDate: (date: string) => setDate(date),
                         })
                         toggleDisplayDateFocus()
                       }}

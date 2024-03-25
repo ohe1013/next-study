@@ -23,7 +23,7 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
   }
   return (
     <>
-      <TeamRegisterList dTItemList={dtItemList} />
+      <TeamRegisterList dTItemList={dtItemList} setDtItemList={setDtItemList} />
       <TeamRegisterModal
         isActive={isActive}
         setIsActive={setIsActive}

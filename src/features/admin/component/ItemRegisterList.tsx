@@ -1,46 +1,53 @@
 import CardHeader from 'components/CardHeader'
 import Link from 'next/link'
 import { DtRegisterItem } from 'pages/admin'
-import { useState } from 'react'
-import tw from 'twin.macro'
-import { Entries } from 'types/util'
+import { Dispatch, SetStateAction, useState } from 'react'
+
+type DeleteFn = (idx: number) => void
 
 export default function TeamRegisterList({
   dTItemList,
+  setDtItemList,
 }: {
   dTItemList: DtRegisterItem[]
+  setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
 }) {
+  const deleteFn: DeleteFn = (idx: number) => {
+    const newDtItemList = [...dTItemList]
+    newDtItemList.splice(idx, 1)
+    setDtItemList(newDtItemList)
+  }
+
   return (
     <div className="flex">
       {dTItemList.map((item, idx) => (
         <DtRegisterItemComponent
           key={item.storeName.value + idx}
           item={item}
+          deleteFn={() => deleteFn(idx)}
         ></DtRegisterItemComponent>
       ))}
     </div>
   )
 }
 
-function DtRegisterItemComponent({ item }: { item: DtRegisterItem }) {
-  const [show, setShow] = useState(false)
+function DtRegisterItemComponent({
+  item,
+  deleteFn,
+}: {
+  item: DtRegisterItem
+  deleteFn: DeleteFn
+}) {
   const [onEdit, setOnEdit] = useState(false)
-  const [curName, setCurName] = useState(name)
 
-  const onDeleteHandler = () => {
-    // setDtUserList((dtUserList) => {
-    //   return dtUserList.filter((_, i) => i !== idx)
-    // })
-    setShow(false)
-  }
+  const onDeleteHandler = () => {}
   const onEditHandler = (type: boolean) => {
     setOnEdit(type)
-    setShow(false)
   }
 
   return (
     <div className="p-4 md:w-1/3 relative">
-      <CardHeader deleteCb={onDeleteHandler} editCb={onEditHandler} />
+      <CardHeader deleteCb={deleteFn} editCb={onEditHandler} />
       <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
         <div className="p-6">
           <h1 className="title-font text-lg font-medium text-gray-900 mb-3">

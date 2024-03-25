@@ -2,7 +2,7 @@ import { BottomCTA } from 'components/basic/BottomCTA'
 import { Button } from 'components/basic/Button'
 import DatePicker from 'components/basic/DatePicker'
 import Input from 'components/basic/Input'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 import tw from 'twin.macro'
@@ -59,9 +59,9 @@ export default function TeamInit({ initVoteProps, onNext }: TeamInitProps) {
     (key: keyof InitVoteProps) => (e: ChangeEvent<HTMLInputElement>) =>
       setInitVoteData({ ...initVoteData, [key]: e.target.value })
 
-  const handleChangeDate = (date: string) => {
-    setInitVoteData({ ...initVoteData, date })
-  }
+  const handleChangeDate = useCallback((date: string) => {
+    setInitVoteData((data) => ({ ...data, date }))
+  }, [])
   return (
     <>
       <div css={[`padding:16px`]}>
