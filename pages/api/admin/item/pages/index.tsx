@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { Entries } from 'types/util'
 
 type Tag = {
-  type: 'tag'
+  type: `tag${string}`
   label: string
   value: Array<string>
 }
 type Input = {
-  type: 'input'
+  type: `input${string}`
   label: string
   value: string | null
 }
@@ -41,8 +41,8 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     }
     ;(Object.entries(data) as Entries<Record<string, Tag | Input>>).forEach(
       ([key, value]) => {
-        switch (value.type) {
-          case 'input':
+        switch (true) {
+          case value.type.startsWith('input'):
             {
               properties[idx][value.label] = {
                 rich_text: [
@@ -55,10 +55,10 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
               }
             }
             break
-          case 'tag': {
+          case value.type.startsWith('tag'): {
             properties[idx][value.label] = {
               multi_select: [
-                ...value.value.map((item) => ({
+                ...(value.value as Tag['value']).map((item) => ({
                   name: item,
                 })),
               ],

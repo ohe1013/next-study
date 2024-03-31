@@ -92,9 +92,9 @@ export const useCreatevote = () => {
       const { id: itemDatabaseId } = data.data
       const dtRegisterPage = dtItemList.map((dtItem) =>
         (Object.entries(dtItem) as Entries<DtRegisterItem>).map(
-          ([, value]) => ({
-            type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
-            label: value.label,
+          ([key, value]) => ({
+            type: value.type,
+            label: key,
             value:
               value.type.indexOf('input') > -1
                 ? value.value
@@ -126,8 +126,8 @@ export const useCreatevote = () => {
   const completeHandler = () => {
     const dtRegisterDB = Object.entries(defaultDtRegisterItem).map(
       ([key, value]) => ({
-        type: value.type.indexOf('input') > -1 ? 'input' : 'tag',
-        label: value.label,
+        type: value.type,
+        label: key,
       }),
     )
     const dtUserPage = [{ label: '이름' }]

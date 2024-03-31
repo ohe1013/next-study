@@ -1,6 +1,7 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { PARENT_PAGE_ID, TOKEN } from 'config'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { UserQuery } from './model'
 
 async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method
@@ -49,33 +50,47 @@ async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
 async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.body
   const { database_id } = req.query
-  const options = {
-    method: 'POST',
-    url: `https://api.notion.com/v1/databases/${database_id}/query`,
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-      'Notion-Version': '2022-06-28',
-      'content-type': 'application/json',
-    },
-    data: {
-      filter: {
-        property: '이름',
-        rich_text: {
-          equals: name,
+  let options
+  if (name) {
+    options = {
+      method: 'POST',
+      url: `https://api.notion.com/v1/databases/${database_id}/query`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        'Notion-Version': '2022-06-28',
+        'content-type': 'application/json',
+      },
+      data: {
+        filter: {
+          property: '이름',
+          rich_text: {
+            equals: name,
+          },
         },
       },
-    },
+    }
+  } else {
+    options = {
+      method: 'POST',
+      url: `https://api.notion.com/v1/databases/${database_id}/query`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        'Notion-Version': '2022-06-28',
+        'content-type': 'application/json',
+      },
+    }
   }
 
-  const _res = await axios.request(options)
+  const _res: AxiosResponse<UserQuery> = await axios.request(options)
   if (_res.data.results.length === 0) {
     return res.status(204).end()
   }
+  const result = _res.data.results.map((item) => item.properties)
 
-  return res.status(200).json('ok')
+  return res.status(200).json(result)
 }
 
-export default async function admin(req: NextApiRequest, res: NextApiResponse) {
+export default async function user(req: NextApiRequest, res: NextApiResponse) {
   const { type } = req.query
 
   switch (type) {

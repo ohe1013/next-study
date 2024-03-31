@@ -1,11 +1,13 @@
 import { BottomCTATypeTwo } from 'components/basic/BottomCTA'
 import Image from 'next/image'
-import { DtRegisterItem, DtRegisterUser } from 'pages/admin'
-import { Dispatch, SetStateAction } from 'react'
+import { DtRegisterItem, DtRegisterUser, Vote } from 'pages/admin'
+import { Dispatch, SetStateAction, useState } from 'react'
 import tw from 'twin.macro'
+import InitModal from './InitModal'
 
 interface InitProps {
   onNext: (type: 'create' | 'update') => void
+  setVote: Dispatch<SetStateAction<Vote>>
   itemList: {
     dtItemList: DtRegisterItem[]
     setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
@@ -16,8 +18,28 @@ interface InitProps {
   }
 }
 
+type OnSuccessItemList = {
+  type: 'item'
+  data: DtRegisterItem[]
+}
+type OnSuccessUserist = {
+  type: 'user'
+  data: DtRegisterUser[]
+}
+export type OnSuccessProps = OnSuccessItemList | OnSuccessUserist
+
 export default function Init(props: InitProps) {
   const { onNext, itemList, userList } = props
+
+  const [active, setActive] = useState(false)
+
+  const onSuccess = (props: OnSuccessProps) => {
+    if (props.type === 'item') {
+      itemList.setDtItemList(props.data)
+    } else {
+      userList.setDtUserList(props.data)
+    }
+  }
 
   return (
     <div css={tw`flex-1 `}>
@@ -32,10 +54,15 @@ export default function Init(props: InitProps) {
           css={tw`mx-auto`}
         ></Image>
       </div>
+      <InitModal
+        isActive={active}
+        setIsActive={setActive}
+        onSuccess={onSuccess}
+      />
       <BottomCTATypeTwo
         propsA={{ onClick: () => onNext('create'), children: '새로 등록하기' }}
         propsB={{
-          onClick: () => onNext('update'),
+          onClick: () => setActive(true),
           children: ' 회식 수정하기',
           buttonStyle: 'weak',
         }}

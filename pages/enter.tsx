@@ -22,7 +22,7 @@ export default function Enter() {
   const [config] = useRecoilState(configState)
   const { mutate } = useAdminUserPostDBMutation({
     onSuccess: (data: any) => {
-      if (data.data !== 'ok') {
+      if (data.data.length === 0) {
         setAlert({
           ...alert,
           type: 'danger',

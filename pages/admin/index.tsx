@@ -25,6 +25,7 @@ export default function Admin() {
       <Funnel>
         <Funnel.Step name="init">
           <Init
+            setVote={setVote}
             itemList={{ dtItemList, setDtItemList }}
             userList={{ dtUserList, setDtUserList }}
             onNext={(type: 'create' | 'update') =>

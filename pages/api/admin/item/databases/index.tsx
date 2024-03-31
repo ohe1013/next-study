@@ -21,18 +21,18 @@ async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
   }
   ;(
     Object.entries(req.body) as Entries<
-      Record<string, { type: 'tag' | 'input'; label: string }>
+      Record<string, { type: `tag${string}` | `input${string}`; label: string }>
     >
-  ).forEach(([, value]) => {
-    switch (value.type) {
-      case 'input':
+  ).forEach(([key, value]) => {
+    switch (true) {
+      case value.type.indexOf('input') > -1:
         {
           properties[value.label] = {
             rich_text: {},
           }
         }
         break
-      case 'tag': {
+      case value.type.indexOf('tag') > -1: {
         properties[value.label] = {
           multi_select: {},
         }
@@ -62,7 +62,48 @@ async function createDatabases(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).json(_res.data)
 }
 
-async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {}
+async function queryDatabases(req: NextApiRequest, res: NextApiResponse) {
+  const { name } = req.body
+  const { database_id } = req.query
+  let options
+  if (!name) {
+    options = {
+      method: 'POST',
+      url: `https://api.notion.com/v1/databases/${database_id}/query`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        'Notion-Version': '2022-06-28',
+        'content-type': 'application/json',
+      },
+    }
+  } else {
+    options = {
+      method: 'POST',
+      url: `https://api.notion.com/v1/databases/${database_id}/query`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        'Notion-Version': '2022-06-28',
+        'content-type': 'application/json',
+      },
+      data: {
+        filter: {
+          property: '이름',
+          rich_text: {
+            equals: name,
+          },
+        },
+      },
+    }
+  }
+
+  const _res = await axios.request(options)
+  if (_res.data.results.length === 0) {
+    return res.status(204).end()
+  }
+
+  return res.status(200).json('ok')
+}
+
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   const { type } = req.query
 

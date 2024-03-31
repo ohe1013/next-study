@@ -15,6 +15,7 @@ import { useAdminInfoDBPostMutation } from 'src/features/admin/queries/useAdminI
 import { alertState } from 'src/recoil/alert/alert'
 import { useSetRecoilState } from 'recoil'
 import { configState } from 'src/recoil/personal'
+import { AxiosResponse } from 'axios'
 
 export default function Home() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function Home() {
   const setConfig = useSetRecoilState(configState)
   const [code, setCode] = useState('')
   const { mutate } = useAdminInfoDBPostMutation({
-    onSuccess: (data: any) => {
+    onSuccess: (data: AxiosResponse) => {
       if (!data.data) {
         setAlert({
           message: '코드를 확인해주세요. ',
@@ -76,7 +77,15 @@ export default function Home() {
               회식 참가하기
             </Button>
           </div>
-          <Button buttonStyle="weak" onClick={() => router.push('admin')}>
+          <Button
+            buttonStyle="weak"
+            onClick={() =>
+              router.push({
+                pathname: 'admin',
+                query: { 'funnel-step': 'init' },
+              })
+            }
+          >
             회식 만들기
           </Button>
         </div>
