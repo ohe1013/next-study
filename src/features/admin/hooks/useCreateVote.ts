@@ -55,6 +55,7 @@ export const useCreatevote = () => {
     ['init', 'teamInit', 'registerItem', 'registerUser', 'complete'] as const,
     {
       initialStep: 'init',
+      stepQueryKey: 'vote-create-step',
     },
   )
   const router = useRouter()

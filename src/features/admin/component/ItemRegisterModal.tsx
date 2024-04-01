@@ -116,7 +116,7 @@ export default function TeamRegisterModal({
               }
             },
           )}
-          <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="grid grid-cols-2 gap-6">
             <div className="relative z-0 w-full mb-5 group"></div>
             <div className="relative z-0 w-full mb-5 group"></div>
           </div>

@@ -8,7 +8,7 @@ type Data = {
 }[]
 
 interface Params {
-  type: 'CREATE' | 'UPDATE'
+  type: 'CREATE' | 'UPDATE' | 'QUERY'
 }
 
 interface PostPageProps {
@@ -17,7 +17,7 @@ interface PostPageProps {
 }
 interface PostDBProps {
   params?: Params & Record<string, string>
-  data: Data
+  data?: Data
 }
 const postDBFetcher = (props: PostDBProps) =>
   axios.post('/api/admin/item/databases', props.data, { params: props.params })
@@ -26,8 +26,9 @@ const postPageFetcher = (props: PostPageProps) =>
   axios.post('/api/admin/item/pages', props.data, { params: props.params })
 
 const useAdminItemPostDBMutation = ({ onSuccess }: { onSuccess: any }) => {
-  return useMutation({mutationFn: postDBFetcher,
-    mutationKey:'adminItemPostDB',
+  return useMutation({
+    mutationFn: postDBFetcher,
+    mutationKey: 'adminItemPostDB',
     onSuccess,
     retry: true,
   })

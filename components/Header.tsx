@@ -72,7 +72,10 @@ export default function Header() {
           <ul className="flex flex-col mt-4 font-medium ">
             <li>
               <Link
-                href={{ pathname: 'admin', query: { 'funnel-step': 'init' } }}
+                href={{
+                  pathname: 'admin',
+                  query: { 'vote-create-step': 'init' },
+                }}
                 className="block py-2 my-1 pr-4 pl-3 rounded bg-gray-700 text-white zzz dark:text-white"
                 aria-current="page"
               >

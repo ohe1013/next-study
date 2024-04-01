@@ -110,7 +110,7 @@ function DtUserListItem({
         />
         {onEdit ? (
           <Button
-            className={tw`md:[min-width: 80px] w-20`}
+            className={tw`[min-width: 80px] w-20`}
             onClick={() => onEditHandler(false)}
           >
             🛠️

@@ -12,7 +12,7 @@ interface PostPageProps {
 }
 interface PostDBProps {
   params?: Params & Record<string, string>
-  data: Data
+  data?: Data
 }
 interface PostDBQueryProps {
   params: { type: 'QUERY'; database_id: string } & Record<string, string>

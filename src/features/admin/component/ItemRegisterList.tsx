@@ -46,7 +46,7 @@ function DtRegisterItemComponent({
   }
 
   return (
-    <div className="p-4 md:w-1/3 relative">
+    <div className="p-4 w-1/3 relative">
       <CardHeader deleteCb={deleteFn} editCb={onEditHandler} />
       <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
         <div className="p-6">
@@ -101,7 +101,7 @@ function DtRegisterItemComponent({
               href={item.storeLink.value}
               target="_blank"
               rel="noreferrer"
-              className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0"
+              className="text-indigo-500 inline-flex items-center mb-2 lg:mb-0"
             >
               {item.storeLink.label}
               <svg

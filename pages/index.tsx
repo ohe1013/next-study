@@ -82,7 +82,7 @@ export default function Home() {
             onClick={() =>
               router.push({
                 pathname: 'admin',
-                query: { 'funnel-step': 'init' },
+                query: { 'vote-create-step': 'init' },
               })
             }
           >
