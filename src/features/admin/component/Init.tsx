@@ -58,6 +58,7 @@ export default function Init(props: InitProps) {
         isActive={active}
         setIsActive={setActive}
         onSuccess={onSuccess}
+        onNext={onNext}
       />
       <BottomCTATypeTwo
         propsA={{ onClick: () => onNext('create'), children: '새로 등록하기' }}

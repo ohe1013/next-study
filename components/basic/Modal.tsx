@@ -11,18 +11,18 @@ interface ModalProps {
 
 export default function Modal(props: PropsWithChildren<ModalProps>) {
   const { title, onCancel, onSuccess, isActive, children } = props
-  const currentTop = useRef(window.scrollY)
   useEffect(() => {
+    const currentTop = window.scrollY
     if (isActive) {
       document.body.style.cssText = `
       position: fixed; 
-      top: -${currentTop.current}px;
+      top: -${currentTop}px;
       overflow-y: scroll;
       width: 100%;`
     }
     return () => {
       document.body.style.cssText = ''
-      window.scrollTo(0, parseInt(currentTop.current + '' || '0', 10) * -1)
+      window.scrollTo(0, parseInt(currentTop + '' || '0', 10) * -1)
     }
   }, [isActive])
 

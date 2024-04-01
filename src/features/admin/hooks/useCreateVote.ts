@@ -79,8 +79,8 @@ export const useCreatevote = () => {
           code: vote.code,
           teamName: vote.id,
           adminName: vote.name,
-          userKey: itemData?.data.id,
-          itemKey: userData?.data.id,
+          userKey: userData?.data.id,
+          itemKey: itemData?.data.id,
           date: vote.date,
         },
       })

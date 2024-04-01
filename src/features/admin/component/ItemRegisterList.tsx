@@ -64,7 +64,7 @@ function DtRegisterItemComponent({
                 ))
               : ''}
           </h2>
-          <span className="text-green-600"> {item.advantageList.label} </span>
+          {/* <span className="text-green-600"> {item.advantageList.label} </span>
           <div className="ml-2 leading-relaxed mb-3">
             {item.advantageList
               ? Array.from(item.advantageList.value).map((item) => (
@@ -98,7 +98,7 @@ function DtRegisterItemComponent({
           </div>
           <div className="flex items-center flex-wrap ">
             <Link
-              href={item.storeLink.value}
+              href={item.storeLink.value ?? ''}
               target="_blank"
               rel="noreferrer"
               className="text-indigo-500 inline-flex items-center mb-2 lg:mb-0"
@@ -117,117 +117,9 @@ function DtRegisterItemComponent({
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
   )
 }
-
-// {(Object.entries(item) as Entries<DtRegisterItem>).map(
-//   ([key, value]) => {
-//     switch (value.type) {
-//       case 'input': {
-//         return (
-//           <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
-//             {value.value}
-//           </h1>
-//         )
-//       }
-//       case 'input/link': {
-//         return (
-//           <div className="flex items-center flex-wrap ">
-//             <Link
-//               href={value.value}
-//               target="_blank"
-//               rel="noreferrer"
-//               className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0"
-//             >
-//               {value.label}
-//               <svg
-//                 className="w-4 h-4 ml-2"
-//                 viewBox="0 0 24 24"
-//                 stroke="currentColor"
-//                 strokeWidth="2"
-//                 fill="none"
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//               >
-//                 <path d="M5 12h14"></path>
-//                 <path d="M12 5l7 7-7 7"></path>
-//               </svg>
-//             </Link>
-//           </div>
-//         )
-//       }
-//       case 'tag': {
-//         return (
-//           <>
-//             <span className="text-red-600"> {value.label} </span>
-//             <div className="ml-2 leading-relaxed mb-3">
-//               {value
-//                 ? Array.from(value.value).map((item) => (
-//                     <span key={item}>{item}</span>
-//                   ))
-//                 : ''}
-//             </div>
-//           </>
-//         )
-//       }
-//       case 'tag/link': {
-//         return (
-//           <>
-//             <span className="dark:text-white">{value.label} </span>
-//             <div className="leading-relaxed mb-3">
-//               {value.value.size > 0
-//                 ? Array.from(value.value).map((item, index) => (
-//                     <a
-//                       key={item}
-//                       className="ml-2 text-xs inline-flex items-center  leading-sm uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
-//                       href={item}
-//                       target="_blank"
-//                       rel="noreferrer"
-//                     >
-//                       {value.label}
-//                       {index + 1}
-//                     </a>
-//                   ))
-//                 : ''}
-//             </div>
-//           </>
-//         )
-//       }
-//     }
-//   },
-// )}
-// function TagContainer (props :  {
-//   value: Set<string>
-//   label: string
-//   isLink: boolean
-// }) {
-//   return (
-//     <>
-//                       <span className="dark:text-white">{props.label} </span>
-//                       <div className="leading-relaxed mb-3">
-//                         {props.value.size > 0
-//                           ? props.isLink? Array.from(props.value).map((item, index) => (
-
-//                              <a
-//                                 key={item}
-//                                 className="ml-2 text-xs inline-flex items-center  leading-sm uppercase px-3 py-1 bg-indigo-600 text-white rounded-md"
-//                                 href={item}
-//                                 target="_blank"
-//                                 rel="noreferrer"
-//                               >
-//                                 {props.label}
-//                                 {index + 1}
-//                               </a>
-//                             ))
-//                             :Array.from(props.value).map((item) => (
-//                               <span key={item}>{item}</span>
-//                             ))
-//                           : ''}
-//                       </div>
-//                     </>
-//   )
-// }
