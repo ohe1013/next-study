@@ -1,6 +1,6 @@
 import Input from 'components/basic/Input'
 import Modal from 'components/basic/Modal'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, KeyboardEvent, SetStateAction, useState } from 'react'
 import tw from 'twin.macro'
 import { OnSuccessProps } from './Init'
 import { useSetRecoilState } from 'recoil'
@@ -12,7 +12,6 @@ import { Entries } from 'types/util'
 import { cloneDeep } from 'lodash'
 import { AxiosResponse } from 'axios'
 import { useAdminInfoDBPostMutation } from '../queries/useAdminInfoMutation'
-import { usePrevious } from 'src/hooks/usePrevious/usePrevious'
 import { defaultDtRegisterItem } from '../hooks/useCreateVote'
 
 interface InitModalProps {
@@ -23,8 +22,13 @@ interface InitModalProps {
 }
 
 export default function InitModal(props: InitModalProps) {
-  const { code, setCode, onCancelEventHandler, onSuccessEventHandler } =
-    useInitModal(props)
+  const {
+    code,
+    setCode,
+    enterCode,
+    onCancelEventHandler,
+    onSuccessEventHandler,
+  } = useInitModal(props)
 
   return (
     <Modal
@@ -38,6 +42,10 @@ export default function InitModal(props: InitModalProps) {
           label={'코드'}
           value={code}
           onChange={(e) => setCode(e.target.value)}
+          onKeyUp={(e) => {
+            e.preventDefault()
+            enterCode(e, code)
+          }}
         />
       </div>
     </Modal>
@@ -154,6 +162,15 @@ function useInitModal(props: InitModalProps) {
     setIsActive(false)
     setCode('')
   }
+  const enterCode = (
+    event: KeyboardEvent<HTMLInputElement>,
+    inputVal: string,
+  ) => {
+    if (event.key === 'Enter' && inputVal !== '') {
+      onSuccessEventHandler(inputVal)
+    }
+  }
+
   const onCancelEventHandler = () => {
     setIsActive(false)
     setCode('')
@@ -164,5 +181,6 @@ function useInitModal(props: InitModalProps) {
     handleCode,
     code,
     setCode,
+    enterCode,
   }
 }

@@ -10,17 +10,30 @@ import { useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
 import { defaultDtRegisterItem } from '../hooks/useCreateVote'
 
+interface TeamReisterModalProps {
+  setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
+  isActive: boolean
+  setIsActive: Dispatch<SetStateAction<boolean>>
+  option?: TeamReisterModalPropsOption
+}
+type TeamReisterModalPropsOption = PropsOptionIsEdit
+
+type PropsOptionIsEdit = {
+  isEdit: true
+  dtItem: DtRegisterItem
+  index: number
+}
+
 export default function TeamRegisterModal({
   setDtItemList,
   isActive,
   setIsActive,
-}: {
-  setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
-  isActive: boolean
-  setIsActive: Dispatch<SetStateAction<boolean>>
-}) {
+  option,
+}: TeamReisterModalProps) {
   const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
-  const [dtItem, setDtItem] = useState<DtRegisterItem>(_defaultDtRegisterItem)
+  const [dtItem, setDtItem] = useState<DtRegisterItem>(
+    option?.isEdit ? option.dtItem : _defaultDtRegisterItem,
+  )
   const setAlert = useSetRecoilState(alertState)
   const clearDtItem = () => {
     setDtItem(cloneDeep(_defaultDtRegisterItem))
@@ -45,9 +58,17 @@ export default function TeamRegisterModal({
       })
       return
     }
-    setDtItemList((preList) => {
-      return [...preList, dtItem]
-    })
+    if (option?.isEdit) {
+      setDtItemList((preList) => {
+        const newdtItem = cloneDeep(preList)
+        newdtItem[option.index] = dtItem
+        return newdtItem
+      })
+    } else {
+      setDtItemList((preList) => {
+        return [...preList, dtItem]
+      })
+    }
     clearDtItem()
     setIsActive(false)
   }

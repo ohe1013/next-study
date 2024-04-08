@@ -63,7 +63,7 @@ export default function TeamInit({ initVoteProps, onNext }: TeamInitProps) {
     setInitVoteData((data) => ({ ...data, date }))
   }, [])
   return (
-    <>
+    <section css={tw`py-5 px-5`}>
       <div css={[`padding:16px`]}>
         <Input
           label={'투표명'}
@@ -109,6 +109,6 @@ export default function TeamInit({ initVoteProps, onNext }: TeamInitProps) {
       >
         다음
       </BottomCTA>
-    </>
+    </section>
   )
 }

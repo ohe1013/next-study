@@ -5,12 +5,16 @@ import { Dispatch, SetStateAction, useState } from 'react'
 
 type DeleteFn = (idx: number) => void
 
+type EditFn = (item: DtRegisterItem, idx: number) => void
+
 export default function TeamRegisterList({
   dTItemList,
   setDtItemList,
+  onEdit,
 }: {
   dTItemList: DtRegisterItem[]
   setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
+  onEdit: EditFn
 }) {
   const deleteFn: DeleteFn = (idx: number) => {
     const newDtItemList = [...dTItemList]
@@ -19,11 +23,12 @@ export default function TeamRegisterList({
   }
 
   return (
-    <div className="flex">
+    <div>
       {dTItemList.map((item, idx) => (
         <DtRegisterItemComponent
           key={item.storeName.value + idx}
           item={item}
+          onEditFn={() => onEdit(item, idx)}
           deleteFn={() => deleteFn(idx)}
         ></DtRegisterItemComponent>
       ))}
@@ -33,20 +38,23 @@ export default function TeamRegisterList({
 
 function DtRegisterItemComponent({
   item,
+  onEditFn,
   deleteFn,
 }: {
   item: DtRegisterItem
+  onEditFn: any
   deleteFn: DeleteFn
 }) {
   const [onEdit, setOnEdit] = useState(false)
 
   const onDeleteHandler = () => {}
   const onEditHandler = (type: boolean) => {
+    onEditFn()
     setOnEdit(type)
   }
 
   return (
-    <div className="p-4 w-1/3 relative">
+    <div className="w-full">
       <CardHeader deleteCb={deleteFn} editCb={onEditHandler} />
       <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
         <div className="p-6">

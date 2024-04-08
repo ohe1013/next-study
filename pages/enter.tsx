@@ -57,8 +57,8 @@ export default function Enter() {
       <section className="flex min-h-fit flex-col items-center text-gray-600 body-font">
         <div className="container mx-auto flex px-5 py-24 flex-col items-center">
           <section className="text-gray-600 body-font">
-            <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-              <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
+            <div className="container mx-auto flex px-5 py-24 flex-col  items-center">
+              <div className="w-1/2 mb-0">
                 <Image
                   unoptimized
                   height={200}
@@ -68,12 +68,12 @@ export default function Enter() {
                   priority={false}
                 ></Image>
               </div>
-              <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
+              <div className=" px-8 py-5  flex-col items-start text-left  ">
                 <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
                   {config.teamName}
                 </h1>
 
-                <h2 className="title-font sm:text-xl text-l mb-4 font-medium text-gray-900">
+                <h2 className="title-font text-xl  mb-4 font-medium text-gray-900">
                   날짜 : {config.date}
                 </h2>
                 <div className="leading-relaxed">
@@ -82,8 +82,8 @@ export default function Enter() {
                 <div className="mb-8 leading-relaxed text-red-500">
                   *추천은 1회만 가능하며, 변경은 불가능합니다.*
                 </div>
-                <div className="flex w-full md:justify-start justify-center items-end">
-                  <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4">
+                <div className="flex w-full justify-start  items-end">
+                  <div className="relative mr-4  w-2/4">
                     <Input
                       label={'이름'}
                       onChange={onChangeUserName}

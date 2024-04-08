@@ -358,7 +358,7 @@ const DatePicker = ({ setDate }: { setDate: (date: string) => void }) => {
 
   return (
     <div className="antialiased sans-serif">
-      <div className="container mx-auto px-4 py-2 md:py-10">
+      <div className="container mx-auto px-4  ">
         <div className="mb-5 w-64">
           <label
             htmlFor="datepicker"
