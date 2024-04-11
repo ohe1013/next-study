@@ -11,9 +11,16 @@ interface TeamRegisterProps {
 }
 
 export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
-  const { dtItemList, setDtItemList } = teamRegisterProps
+  const { dtItemList, setDtItemList, onNext } = teamRegisterProps
   const [isActive, setIsActive] = useState(false)
-  const { onNext } = teamRegisterProps
+  const [editData, setEditData] = useState<{
+    dtItem: DtRegisterItem | null
+    index: number
+  }>({
+    dtItem: null,
+    index: 0,
+  })
+  const [isEdit, setIsEdit] = useState(false)
   const checkValid = (item: DtRegisterItem[]) => {
     if (item.length === 0) return false
     return true
@@ -21,17 +28,34 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
   const onNextButtonHandler = () => {
     if (checkValid(dtItemList)) onNext({ itemKey: 'fix it' })
   }
+  const handleComplete = (isComplete: boolean) => {
+    setIsEdit(isComplete)
+    setIsActive(isComplete)
+  }
   return (
     <>
       <TeamRegisterList
         dTItemList={dtItemList}
         setDtItemList={setDtItemList}
-        onEdit={() => {}}
+        onEdit={(item, idx) => {
+          setEditData({ dtItem: item, index: idx })
+          setIsEdit(true)
+          setIsActive(true)
+        }}
       />
       <TeamRegisterModal
         isActive={isActive}
-        setIsActive={setIsActive}
+        setIsActive={handleComplete}
         setDtItemList={setDtItemList}
+        option={
+          isEdit
+            ? {
+                dtItem: editData.dtItem,
+                index: editData.index,
+                isEdit: true,
+              }
+            : { isEdit: false }
+        }
       />
       <BottomCTATypeTwo
         propsA={{ onClick: () => setIsActive(true), children: '등록하기' }}

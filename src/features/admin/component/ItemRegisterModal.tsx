@@ -13,15 +13,18 @@ import { defaultDtRegisterItem } from '../hooks/useCreateVote'
 interface TeamReisterModalProps {
   setDtItemList: Dispatch<SetStateAction<DtRegisterItem[]>>
   isActive: boolean
-  setIsActive: Dispatch<SetStateAction<boolean>>
+  setIsActive: (isActive: boolean) => void
   option?: TeamReisterModalPropsOption
 }
-type TeamReisterModalPropsOption = PropsOptionIsEdit
+type TeamReisterModalPropsOption = PropsOptionIsEdit | PropsOptionIsRegister
 
 type PropsOptionIsEdit = {
   isEdit: true
-  dtItem: DtRegisterItem
+  dtItem: DtRegisterItem | null
   index: number
+}
+type PropsOptionIsRegister = {
+  isEdit: false
 }
 
 export default function TeamRegisterModal({
@@ -32,7 +35,11 @@ export default function TeamRegisterModal({
 }: TeamReisterModalProps) {
   const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
   const [dtItem, setDtItem] = useState<DtRegisterItem>(
-    option?.isEdit ? option.dtItem : _defaultDtRegisterItem,
+    option?.isEdit
+      ? !!option.dtItem
+        ? option.dtItem
+        : _defaultDtRegisterItem
+      : _defaultDtRegisterItem,
   )
   const setAlert = useSetRecoilState(alertState)
   const clearDtItem = () => {
