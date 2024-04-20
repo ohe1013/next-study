@@ -45,22 +45,20 @@ function DtRegisterItemComponent({
   onEditFn: any
   deleteFn: DeleteFn
 }) {
-  const [onEdit, setOnEdit] = useState(false)
-
   const onDeleteHandler = () => {}
-  const onEditHandler = (type: boolean) => {
+  const onEditHandler = (isEdit: boolean) => {
     onEditFn()
-    setOnEdit(type)
   }
 
   return (
-    <div className="w-full">
-      <CardHeader deleteCb={deleteFn} editCb={onEditHandler} />
-      <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+    <div className="w-full border-2 border-gray-200 border-opacity-60">
+      <CardHeader
+        title={item.storeName.value}
+        deleteCb={deleteFn}
+        editCb={onEditHandler}
+      />
+      <div className="h-full  rounded-lg overflow-hidden">
         <div className="p-6">
-          <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
-            {item.storeName.value}
-          </h1>
           <span className="dark:text-white">
             {' '}
             {item.representNameList.label}{' '}
@@ -72,7 +70,7 @@ function DtRegisterItemComponent({
                 ))
               : ''}
           </h2>
-          {/* <span className="text-green-600"> {item.advantageList.label} </span>
+          <span className="text-green-600"> {item.advantageList.label} </span>
           <div className="ml-2 leading-relaxed mb-3">
             {item.advantageList
               ? Array.from(item.advantageList.value).map((item) => (
@@ -125,7 +123,7 @@ function DtRegisterItemComponent({
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
             </Link>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

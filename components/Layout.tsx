@@ -17,14 +17,13 @@ export default function Layout({ children }: any) {
     <div
       css={tw`relative mx-auto dark:[background-color: #1e293b] [min-height: 100vh] `}
     >
-      <div css={tw`w-80 `}></div>
       <DesktopTemplate>
         <Header />
-        <div
+        <main
           css={tw`[max-width: 1280px] mx-auto [border: 1px outset gray] [border-radius: 3px]`}
         >
           {children}
-        </div>
+        </main>
         <Alert />
         {/* {!isAdmin && <Footer />} */}
       </DesktopTemplate>
@@ -32,7 +31,7 @@ export default function Layout({ children }: any) {
   )
 }
 
-const DesktopTemplate = styled.div(() => {
+const DesktopTemplate = styled.section(() => {
   return [
     tw`absolute left-1/2  [max-width: 480px] [width: 480px] [min-height: 100vh]`,
   ]

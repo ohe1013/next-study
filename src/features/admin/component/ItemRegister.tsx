@@ -43,20 +43,22 @@ export function ItemRegister(teamRegisterProps: TeamRegisterProps) {
           setIsActive(true)
         }}
       />
-      <TeamRegisterModal
-        isActive={isActive}
-        setIsActive={handleComplete}
-        setDtItemList={setDtItemList}
-        option={
-          isEdit
-            ? {
-                dtItem: editData.dtItem,
-                index: editData.index,
-                isEdit: true,
-              }
-            : { isEdit: false }
-        }
-      />
+      {isActive ? (
+        <TeamRegisterModal
+          isActive={isActive}
+          setIsActive={handleComplete}
+          setDtItemList={setDtItemList}
+          option={
+            isEdit
+              ? {
+                  dtItem: editData.dtItem,
+                  index: editData.index,
+                  isEdit: true,
+                }
+              : { isEdit: false }
+          }
+        />
+      ) : null}
       <BottomCTATypeTwo
         propsA={{ onClick: () => setIsActive(true), children: '등록하기' }}
         propsB={{

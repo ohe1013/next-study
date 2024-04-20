@@ -4,7 +4,7 @@ import TagList from 'components/basic/TagList'
 import { Entries } from 'types/util'
 import { DtRegisterItem } from 'pages/admin'
 import tw from 'twin.macro'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { cloneDeep } from 'lodash'
 import { useSetRecoilState } from 'recoil'
 import { alertState } from 'src/recoil/alert/alert'
@@ -27,74 +27,15 @@ type PropsOptionIsRegister = {
   isEdit: false
 }
 
-export default function TeamRegisterModal({
-  setDtItemList,
-  isActive,
-  setIsActive,
-  option,
-}: TeamReisterModalProps) {
-  const _defaultDtRegisterItem = cloneDeep(defaultDtRegisterItem)
-  const [dtItem, setDtItem] = useState<DtRegisterItem>(
-    option?.isEdit
-      ? !!option.dtItem
-        ? option.dtItem
-        : _defaultDtRegisterItem
-      : _defaultDtRegisterItem,
-  )
-  const setAlert = useSetRecoilState(alertState)
-  const clearDtItem = () => {
-    setDtItem(cloneDeep(_defaultDtRegisterItem))
-  }
-  const isValid = (item: DtRegisterItem) => {
-    const entries = Object.entries(item) as Entries<DtRegisterItem>
-    for (const [, value] of entries) {
-      if (value.value instanceof Set) {
-        if (value.value.size === 0) return false
-      } else {
-        if (value.value === '') return false
-      }
-    }
-    return true
-  }
-  const onSuccessEventHandler = () => {
-    if (!isValid(dtItem)) {
-      setAlert({
-        type: 'danger',
-        message: '입력란을 모두 채워주세요.',
-        visible: true,
-      })
-      return
-    }
-    if (option?.isEdit) {
-      setDtItemList((preList) => {
-        const newdtItem = cloneDeep(preList)
-        newdtItem[option.index] = dtItem
-        return newdtItem
-      })
-    } else {
-      setDtItemList((preList) => {
-        return [...preList, dtItem]
-      })
-    }
-    clearDtItem()
-    setIsActive(false)
-  }
-  const onCancelEventHandler = () => {
-    clearDtItem()
-    setIsActive(false)
-  }
-  const handleOnChange = <T extends keyof DtRegisterItem>(
-    key: T,
-    newValue: DtRegisterItem[T]['value'],
-  ) => {
-    setDtItem((state) => ({
-      ...state,
-      [key]: {
-        ...state[key],
-        value: newValue,
-      },
-    }))
-  }
+export default function TeamRegisterModal(props: TeamReisterModalProps) {
+  const {
+    dtItem,
+    handleOnChange,
+    isActive,
+    onCancelEventHandler,
+    onSuccessEventHandler,
+  } = useItemRegisterModal(props)
+
   return (
     <Modal
       title={'등록하기'}
@@ -126,7 +67,7 @@ export default function TeamRegisterModal({
                 case 'tag':
                 case 'tag/link': {
                   return (
-                    <div key={key} className="relative z-0 w-full mb-5 group">
+                    <div key={key} className="relative z-0 w-full mb-0 group">
                       <TagList
                         tagList={value.value}
                         setTagList={(newValue) => handleOnChange(key, newValue)}
@@ -152,6 +93,76 @@ export default function TeamRegisterModal({
       </div>
     </Modal>
   )
+}
+
+const useItemRegisterModal = (props: TeamReisterModalProps) => {
+  const { isActive, setDtItemList, setIsActive, option } = props
+  const initValue = option?.isEdit
+    ? option.dtItem!
+    : cloneDeep(defaultDtRegisterItem)
+
+  const [dtItem, setDtItem] = useState<DtRegisterItem>(initValue)
+  const setAlert = useSetRecoilState(alertState)
+  const isValid = (item: DtRegisterItem) => {
+    const entries = Object.entries(item) as Entries<DtRegisterItem>
+    for (const [, value] of entries) {
+      if (value.value instanceof Set) {
+        if (value.value.size === 0) return false
+      } else {
+        if (value.value === '') return false
+      }
+    }
+    return true
+  }
+  const onSuccessEventHandler = () => {
+    if (!isValid(dtItem)) {
+      setAlert({
+        type: 'danger',
+        message: '입력란을 모두 채워주세요.',
+        visible: true,
+      })
+      return
+    }
+    if (option?.isEdit) {
+      setDtItemList((preList) => {
+        const newdtItem = cloneDeep(preList)
+        newdtItem[option.index] = dtItem
+        return newdtItem
+      })
+    } else {
+      setDtItemList((preList) => {
+        return [...preList, dtItem]
+      })
+    }
+    setIsActive(false)
+  }
+  const onCancelEventHandler = () => {
+    setIsActive(false)
+  }
+  const handleOnChange = <T extends keyof DtRegisterItem>(
+    key: T,
+    newValue: DtRegisterItem[T]['value'],
+  ) => {
+    setDtItem((state) => ({
+      ...state,
+      [key]: {
+        ...state[key],
+        value: newValue,
+      },
+    }))
+  }
+
+  return {
+    isActive,
+    onSuccessEventHandler,
+    onCancelEventHandler,
+    dtItem,
+    handleOnChange,
+    setDtItem,
+    setIsActive,
+    setAlert,
+    isValid,
+  }
 }
 
 // interface FileInputProps {

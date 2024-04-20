@@ -17,7 +17,7 @@ import { defaultDtRegisterItem } from '../hooks/useCreateVote'
 interface InitModalProps {
   isActive: boolean
   setIsActive: Dispatch<SetStateAction<boolean>>
-  onSuccess: (props: OnSuccessProps) => void
+  onSuccessSetDt: (props: OnSuccessProps) => void
   onNext: (type: 'create' | 'update') => void
 }
 
@@ -32,7 +32,7 @@ export default function InitModal(props: InitModalProps) {
 
   return (
     <Modal
-      title={'등록하기'}
+      title={'수정하기'}
       isActive={props.isActive}
       onSuccess={() => onSuccessEventHandler(code)}
       onCancel={onCancelEventHandler}
@@ -102,7 +102,7 @@ function useInitModal(props: InitModalProps) {
           })
           return _defaultDtRegisterItem
         })
-        props.onSuccess({
+        props.onSuccessSetDt({
           type: 'item',
           data: proccessedData,
         })
@@ -124,7 +124,7 @@ function useInitModal(props: InitModalProps) {
             value: item['이름'].rich_text[0].text.content,
           }),
         )
-        props.onSuccess({
+        props.onSuccessSetDt({
           type: 'user',
           data: proccessedData,
         })
@@ -148,6 +148,8 @@ function useInitModal(props: InitModalProps) {
             params: { type: 'QUERY', database_id: data.data.userKey },
           }),
         ]).then(() => {
+          setIsActive(false)
+          setCode('')
           props.onNext('update')
         })
       }
@@ -159,8 +161,6 @@ function useInitModal(props: InitModalProps) {
   }
   const onSuccessEventHandler = (code: string) => {
     handleCode(code)
-    setIsActive(false)
-    setCode('')
   }
   const enterCode = (
     event: KeyboardEvent<HTMLInputElement>,

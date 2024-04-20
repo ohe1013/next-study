@@ -2,6 +2,7 @@ import { useState } from 'react'
 import tw from 'twin.macro'
 
 interface CardHeaderProps {
+  title: string
   deleteCb: (...args: any) => void
   editCb: (...args: any) => void
 }
@@ -15,20 +16,23 @@ export default function CardHeader(props: CardHeaderProps) {
     deleteCb()
     setShow(false)
   }
-  const onEditHandler = (type: boolean) => {
+  const onEditHandler = (isEdit: boolean) => {
     editCb()
-    setOnEdit(type)
+    setOnEdit(isEdit)
     setShow(false)
   }
   return (
     <div css={tw`flex justify-between px-4 pt-4 relative`}>
-      <span>{onEdit ? '🛠️' : ''}</span>
+      <span>
+        {onEdit ? '🛠️' : ''}
+        {props.title}
+      </span>
       <button
         id="dropdownButton"
         data-dropdown-toggle="dropdown"
         css={tw`inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5`}
         type="button"
-        onClick={() => setShow(true)}
+        onClick={() => setShow(!show)}
       >
         <span css={tw`sr-only`}>open dropdown</span>
         <svg

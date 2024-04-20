@@ -33,7 +33,7 @@ export default function Init(props: InitProps) {
 
   const [active, setActive] = useState(false)
 
-  const onSuccess = (props: OnSuccessProps) => {
+  const onSuccessSetDt = (props: OnSuccessProps) => {
     if (props.type === 'item') {
       itemList.setDtItemList(props.data)
     } else {
@@ -57,7 +57,7 @@ export default function Init(props: InitProps) {
       <InitModal
         isActive={active}
         setIsActive={setActive}
-        onSuccess={onSuccess}
+        onSuccessSetDt={onSuccessSetDt}
         onNext={onNext}
       />
       <BottomCTATypeTwo
